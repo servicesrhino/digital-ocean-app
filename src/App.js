@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './Components/Home';
 import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 function App() {
   return (
@@ -12,7 +13,9 @@ function App() {
     <header>
     <Navbar bg='dark' variant='dark' >
       <Container>
-        <Navbar.Brand>Rhino</Navbar.Brand>
+        <LinkContainer to='/parse-excel'>
+        <Navbar.Brand>Rhino parse excel</Navbar.Brand>
+        </LinkContainer>
       </Container>
       </Navbar>
   </header>

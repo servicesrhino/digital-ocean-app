@@ -5,17 +5,29 @@ import Home from './Components/Home';
 import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useContext } from 'react';
+import { Store } from './Store';
 
 function App() {
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
   return (
     <div>
 
     <header>
     <Navbar bg='dark' variant='dark' >
       <Container>
-        <LinkContainer to='/parse-excel'>
+        <LinkContainer to='/'>
         <Navbar.Brand>Rhino parse excel</Navbar.Brand>
         </LinkContainer>
+
+        {userInfo ? (
+          <div className='phone-header'>{userInfo.phone}</div>
+        ): (
+          <div>Sign in</div>
+        )}
+
       </Container>
       </Navbar>
   </header>

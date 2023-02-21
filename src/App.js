@@ -25,8 +25,9 @@ function App() {
         {userInfo ? (
           <div className='phone-header'>{userInfo.phone}</div>
         ): (
-          <div>Sign in</div>
+          <div className='phone-header' >Пожалуйста, авторизуйтесь</div>
         )}
+        <button bg='dark' >Sign out</button>
 
       </Container>
       </Navbar>

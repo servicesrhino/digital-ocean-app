@@ -6,7 +6,7 @@ import { Store } from '../Store';
 
 const Home = () => {
     const navigate = useNavigate();
-    const [phone, setPhone] = useState('')
+    const [phone, setPhone] = useState('+')
     const [password, setPassword] = useState('')
 
     const { state, dispatch: ctxDispatch } = useContext(Store);

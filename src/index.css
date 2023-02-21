@@ -15,3 +15,12 @@ code {
 .small-container {
   max-width: 600px;
 }
+
+.table-header {
+  font-size: small;
+  font-weight: bold;
+}
+
+.table-body {
+  font-size: small;
+}

@@ -11,6 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.filename {
+  /* align-items: space-between; */
+  margin-left: 2rem;
+  
+}
+
+.input-style {
+  align-items: space-between;
+}
 
 .small-container {
   max-width: 600px;
@@ -19,6 +28,7 @@ code {
 .table-header {
   font-size: small;
   font-weight: bold;
+  margin-top: 2rem;
 }
 
 .table-body {

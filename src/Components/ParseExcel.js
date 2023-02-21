@@ -63,13 +63,13 @@ const ParseExcel = () => {
       {!fileName && <div>Пожалуйста, загрузите файл</div>}
       {fileName && (
         <p>
-            File name: <span>{fileName}</span>
+            File name: <span className='filename'>{" "}{fileName}</span>
         </p>
       )}
-      <input type="file" onChange={(e) => handleFile(e)} />
+      <input className='input-style' type="file" onChange={(e) => handleFile(e)} />
       <Row>
         <Col md={12}>
-            <Table bordered className='border'>
+            <Table bordered className='border my-4'>
                 <thead className='text-primary table-header'>
                     <tr>
                     {columns.map(c => (

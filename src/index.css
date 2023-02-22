@@ -14,11 +14,16 @@ code {
 .filename {
   /* align-items: space-between; */
   margin-left: 2rem;
+  /* color: gray; */
   
+}
+.filename2 {
+  color: gray;
 }
 
 .input-style {
   align-items: space-between;
+  color: gray;
 }
 
 .small-container {

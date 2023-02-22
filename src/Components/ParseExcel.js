@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Row, Table, Col, Label } from 'react-bootstrap';
 import { read, utils, writeFileXLSX } from "xlsx";
+import CloseButton from 'react-bootstrap/CloseButton';
+
 
 
 
@@ -11,7 +13,12 @@ import { read, utils, writeFileXLSX } from "xlsx";
 
 const ParseExcel = () => {
 
+    const acceptableFileName = ["xlsx", "xls"];
+
+
     const [fileName, setFileName] = useState(null);
+    const fileRef = useRef();
+
     const [allFile, setAllFile] = useState(null);
     const [other, setOther] = useState(null);
 
@@ -21,9 +28,18 @@ const ParseExcel = () => {
     const [columns, setColumns] = useState([]);
     const [body, setBody] = useState([]);
 
+    const checkFileName = (name) => {
+        return acceptableFileName.includes(name.split(".")[1]);
+      }
+
     const handleFile = async (e) => {
         const file = e.target.files[0];
         if (!file ) return;
+
+        if (!checkFileName(file.name)) {
+            alert("Invalid File Type");
+            return; 
+          }
 
         setFileName(file.name);
         setAllFile(file);
@@ -57,6 +73,11 @@ const ParseExcel = () => {
 
         console.log(jsonData);
     }
+    const handleRemove = () => {
+        setFileName(null);
+        fileRef.current.value = "";
+      }
+
   return (
     <div>
       <h1>Parse Excel</h1>
@@ -66,10 +87,27 @@ const ParseExcel = () => {
             File name: <span className='filename'>{" "}{fileName}</span>
         </p>
       )}
-      <input className='input-style' type="file" onChange={(e) => handleFile(e)} />
+      <input className='filename2'
+       type="file" accept='xlsx, xls'
+       multiple={false}
+       ref={fileRef}
+       onChange={(e) => handleFile(e)} />
+
+      { fileName && 
+      <i
+      className='now-ui-icon ui-1_simple-remove align-middle'
+      onClick={handleRemove}
+      >
+        <div className="bg-gray  p-2">
+      <CloseButton variant="black" />
+      {/* <CloseButton variant="white" disabled /> */}
+    </div>
+      </i>
+      
+      }
       <Row>
         <Col md={12}>
-            <Table bordered className='border my-4'>
+            <Table bordered className='border my-3'>
                 <thead className='text-primary table-header'>
                     <tr>
                     {columns.map(c => (

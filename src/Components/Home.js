@@ -3,10 +3,11 @@ import { Button, Container, Form, FormGroup, Navbar } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Store } from '../Store';
+import { toast } from 'react-toastify';
 
 const Home = () => {
     const navigate = useNavigate();
-    const [phone, setPhone] = useState('+')
+    const [phone, setPhone] = useState('+380970698133')
     const [password, setPassword] = useState('')
 
     const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -26,7 +27,8 @@ const Home = () => {
           console.log(data);
           
         } catch (err) {
-          alert('Invalid email or password')
+          //alert('Invalid email or password')
+          toast.error('Invalid email or password');
         }
       }
 
@@ -44,7 +46,9 @@ const Home = () => {
           console.log(data);
           
         } catch (err) {
-          alert('Invalid email or password')
+          //alert('Invalid email or password')
+          toast.error('Invalid email or password');
+
     
         }
       }

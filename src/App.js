@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import  { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Home from './Components/Home';
 import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
@@ -9,12 +11,19 @@ import { useContext } from 'react';
 import { Store } from './Store';
 
 function App() {
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
+  const navigate = useNavigate();
+
+  const signoutHandler = () => {
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    navigate('/');
+  }
 
   return (
     <div>
-
+      <ToastContainer position='bottom-center' limit={1} />
     <header>
     <Navbar bg='dark' variant='dark' >
       <Container>
@@ -27,7 +36,13 @@ function App() {
         ): (
           <div className='phone-header' >Пожалуйста, авторизуйтесь</div>
         )}
-        <button bg='dark' >Sign out</button>
+        {userInfo ? (
+        <button onClick={signoutHandler} bg='dark' >Sign out</button>
+
+        ) : (
+        <button disabled onClick={signoutHandler} bg='dark' >Sign out</button>
+
+        )}
 
       </Container>
       </Navbar>

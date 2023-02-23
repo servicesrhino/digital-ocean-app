@@ -76,6 +76,8 @@ const ParseExcel = () => {
     const handleRemove = () => {
         setFileName(null);
         fileRef.current.value = "";
+        setSheetData([])
+        setColumns([])
       }
 
   return (

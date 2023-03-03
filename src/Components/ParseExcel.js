@@ -1,9 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Row, Table, Col, Label } from 'react-bootstrap';
+import {
+  Row,
+  Table,
+  Col,
+  Label,
+  Form,
+  FormGroup,
+  Button,
+} from 'react-bootstrap';
 import { read, utils, writeFileXLSX } from 'xlsx';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
+import axios from 'axios';
+//import $api from '../http';
 
 // /* load the codepage support library for extended support with older formats  */
 // import { set_cptable } from "xlsx";
@@ -30,17 +40,18 @@ const ParseExcel = () => {
   const [columns, setColumns] = useState([]);
   const [body, setBody] = useState([]);
 
-  const [category, setCategoy] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [searchCategory, setSearchCategory] = useState('');
 
-  useEffect(() => {
-    if (setSheetData2) {
-      const newData = sheetData2.map((row) => {
-        return { ...row, id: uuid() };
-      });
-      console.log(newData);
-      setSheetData2(newData);
-    }
-  }, [setSheetData2]);
+  //   useEffect(() => {
+  //     if (setSheetData2) {
+  //       const newData = sheetData2.map((row) => {
+  //         return { ...row, id: uuid() };
+  //       });
+  //       console.log(newData);
+  //       setSheetData2(newData);
+  //     }
+  //   }, [setSheetData2]);
 
   const checkFileName = (name) => {
     return acceptableFileName.includes(name.split('.')[1]);
@@ -185,6 +196,84 @@ const ParseExcel = () => {
     navigate('/barcode');
   };
 
+  const submitHandler2 = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios
+        .post(
+          'https://rhino-api-alquo.ondigitalocean.app/Catalog/get-parts-catalog',
+          {
+            //phone,
+            //password,
+            //udid: 'test',
+            parentId: '',
+          },
+          {
+            headers: {
+              Authorization:
+                'Bearer ' +
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjY0MDFmZWI3NDcxMzIwNDIwNjA2YTU2ZCIsInJvbGUiOiJVc2VyIiwianRpIjoiMzhiNWI1MmYtMmNiNC00ZmE3LTk0OGEtNDFhODhjNmM2ZmYzIiwiaWQiOiI2NDAxZmViNzQ3MTMyMDQyMDYwNmE1NmQiLCJuYmYiOjE2Nzc4NjI0NzYsImV4cCI6MTY3Nzg2Mjc3NiwiaWF0IjoxNjc3ODYyNDc2fQ.owfZ6MttNnrrDd2FffLUBC-ToeGuoFHKgdssyJpUUNA',
+            },
+          }
+        )
+        .then((res) => {
+          const persons = res.data;
+          console.log(persons);
+          setCategory(persons);
+        });
+      //console.log(category);
+      //ctxDispatch({type: 'USER_SIGNIN', payload: data});
+      const token = localStorage.getItem('token', JSON.stringify(token));
+      //navigate('/parse-excel');
+      console.log(token);
+
+      console.table(data);
+      console.log(data[0].id);
+
+      for (var value of data) {
+        console.log(value);
+      }
+
+      // const result = data.map((item) => ({ id: item.id }));
+      // console.log(result);
+      //   data.forEach((element) => {
+      //     console.log(element);
+      //   });
+    } catch (err) {
+      alert('Invalid email or password');
+    }
+  };
+
+  const setCategory2 = () => {
+    const searchTerm = 'bumper';
+    console.log(searchCategory);
+    console.log(category);
+    let cityId = category.find(
+      (category) => category.name === searchCategory
+    ).id;
+    console.log(cityId);
+
+    const correctData = category.filter(function (part) {
+      return part.name == searchCategory;
+    });
+    console.log(correctData);
+
+    const newData = sheetData2.map((row) => {
+      //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+      return {
+        ...row,
+        catalogParts: {
+          id2: correctData[0].id,
+          Name: correctData[0].name,
+          Parents: correctData[0].parents,
+          LocalizedName: correctData[0].localizedName,
+        },
+      };
+    });
+    console.log(newData);
+    setSheetData2(newData);
+  };
+
   return (
     // <div>
     //   <h1>Parse Excel</h1>
@@ -283,6 +372,26 @@ const ParseExcel = () => {
       <input type="checkbox" onChange={handleCategory} />
       <input type="checkbox" onChange={newFunc} />
       <input type="checkbox" onChange={newFunc2} />
+
+      <input type="checkbox" onChange={setCategory2} />
+
+      <Form onSubmit={submitHandler2}>
+        <FormGroup className="mb-3" controlId="searchCategory">
+          <Form.Label>Категория</Form.Label>
+          <Form.Control
+            type="searchCategory"
+            required
+            onChange={(e) => setSearchCategory(e.target.value)}
+          />
+        </FormGroup>
+
+        <div className="mb-3">
+          <Button type="submit">Получить категорию</Button>
+          <Button className="mx-2" onClick={setCategory2} type="submit">
+            Установить категорию
+          </Button>
+        </div>
+      </Form>
 
       <Row>
         <Col md={12}>

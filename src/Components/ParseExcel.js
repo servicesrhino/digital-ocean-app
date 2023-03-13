@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {
   Row,
   Table,
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
 import axios from 'axios';
 import $api from './http';
+import { Store } from '../Store';
 //import $api from '../http';
 
 // /* load the codepage support library for extended support with older formats  */
@@ -46,9 +47,12 @@ const ParseExcel = () => {
   const [columns, setColumns] = useState([]);
   const [body, setBody] = useState([]);
 
-  const [category, setCategory] = useState([]);
+  //const [category, setCategory] = useState([]);
   const [searchCategory, setSearchCategory] = useState('');
   const [searchCategory1, setSearchCategory1] = useState('');
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { category } = state;
 
   //   useEffect(() => {
   //     if (setSheetData2) {
@@ -111,19 +115,25 @@ const ParseExcel = () => {
     console.log(jsonData);
     console.log(jsonData2);
 
-    setSheetData2(
-      JSON.parse(
-        JSON.stringify(jsonData2)
-          .replaceAll('"Авто"', '"vehicle"')
-          .replaceAll('"Наименование"', '"name"')
-          .replaceAll('"цена входящая"', '"incomePrice"')
-          .replaceAll('"цена со склада"', '"stockPrice"')
-          .replaceAll('"цена с амотизацией"', '"priceWithDepreciation"')
-          .replaceAll('"номер Rhino"', '"rhinoID"')
-          .replaceAll('"оригинальный номер"', '"originalID"')
-          .replaceAll('"Дата завоза"', '"deliveryInfo"')
-      )
+    const finalData = JSON.parse(
+      JSON.stringify(jsonData2)
+        .replaceAll('"Авто"', '"vehicle"')
+        .replaceAll('"Наименование"', '"name"')
+        .replaceAll('"цена входящая"', '"incomePrice"')
+        .replaceAll('"цена со склада"', '"stockPrice"')
+        .replaceAll('"цена с амотизацией"', '"priceWithDepreciation"')
+        .replaceAll('"номер Rhino"', '"rhinoID"')
+        .replaceAll('"оригинальный номер"', '"originalID"')
+        .replaceAll('"Дата завоза"', '"deliveryInfo"')
     );
+
+    // Ниже логика создания уникальных id
+    const newData = finalData.map((row) => {
+      //return { ...row, someCategory, id: uuid() };
+      return { ...row, id: uuid() };
+    });
+    console.log(newData);
+    setSheetData2(newData);
   };
 
   const handleRemove = () => {
@@ -192,7 +202,7 @@ const ParseExcel = () => {
   const handleChange = (e) => {
     const { name, checked } = e.target;
     //uniqueId()
-    alert('hello selected');
+    //alert('hello selected');
     console.log(name);
     if (name === 'allselect') {
       const checkedValue = sheetData2.map((row) => {
@@ -203,7 +213,9 @@ const ParseExcel = () => {
     } else {
       console.log(name);
       const checkedValue = sheetData2.map((row) =>
-        row.id === name ? { ...row, defect: checked } : row
+        row.id === name
+          ? { ...row, defect: checked }
+          : { ...row, defect: false }
       );
       console.log(checkedValue);
       setSheetData2(checkedValue);
@@ -259,7 +271,7 @@ const ParseExcel = () => {
         .then((res) => {
           const parts = res;
           console.log(parts.data);
-          setCategory(parts.data);
+          //setCategory(parts.data);
         });
       //console.log(category);
       //ctxDispatch({type: 'USER_SIGNIN', payload: data});
@@ -286,6 +298,11 @@ const ParseExcel = () => {
 
   const setCategory2 = () => {
     // const searchTerm = 'bumper';
+
+    // if (catalogData) {
+    //   setCategory(catalogData);
+    // }
+
     console.log(searchCategory);
     console.log(category);
 
@@ -644,9 +661,150 @@ const ParseExcel = () => {
       )
       .then((res) => console.log(res.data));
   };
+  const saveData3 = () => {
+    console.log(sheetData2);
+
+    const model = {
+      items: [
+        {
+          id: sheetData2.map((row) => row.id),
+          vehicle: sheetData2.map((row) => row.vehicle),
+          name: sheetData2.map((row) => row.name),
+          rhinoID: sheetData2.map((row) => row.rhinoID),
+          originalID: sheetData2.map((row) => row.originalID),
+          stockPrice: sheetData2.map((row) => row.stockPrice),
+          incomePrice: sheetData2.map((row) => row.incomePrice),
+          priceWithDepreciation: sheetData2.map(
+            (row) => row.priceWithDepreciation
+          ),
+          deliveryInfo: sheetData2.map((row) => row.deliveryInfo),
+          defect: sheetData2.map((row) => row.defect),
+          catalogPart: {
+            id: sheetData2.map((row) => row.catalogPart.id),
+            Name: sheetData2.map((row) => row.catalogPart.Name),
+            Parents: sheetData2.map((row) => row.catalogPart.Parents),
+            LocalizedName: sheetData2.map(
+              (row) => row.catalogPart.LocalizedName
+            ),
+          },
+        },
+      ],
+    };
+    console.log(model);
+
+    // const sendData = () => {
+    //   for (let index = 0; index < sheetData2.length; index++) {
+    //     const element = sheetData2[index];
+    //     console.log(sheetData2[index]);
+
+    //     if (index) {
+    //       items: [
+    //         {
+    //           id: sheetData2[0].id,
+    //           vehicle: sheetData2[0].vehicle,
+    //           name: sheetData2[0].name,
+    //           rhinoID: sheetData2[0].rhinoID,
+    //           originalID: `${sheetData2[0].originalID}`,
+    //           stockPrice: sheetData2[0].stockPrice,
+    //           incomePrice: sheetData2[0].incomePrice,
+    //           priceWithDepreciation: sheetData2[0].priceWithDepreciation,
+    //           deliveryInfo: sheetData2[0].deliveryInfo,
+    //           defect: sheetData2[0].defect,
+    //           catalogPart: {
+    //             id: sheetData2[0].catalogPart.id,
+    //             Name: sheetData2[0].catalogPart.Name,
+    //             Parents: sheetData2[0].catalogPart.Parents,
+    //             LocalizedName: sheetData2[0].catalogPart.LocalizedName,
+    //           },
+    //         },
+    //       ];
+    //     }
+    //   }
+    // };
+
+    const finalModel = {
+      items: [{ vahicle: 'some' }],
+    };
+
+    console
+      .log
+      //   Object.assign(
+      //     ...model.items.id.map(
+      //       (n, i) => (
+      //         { [n]: model.items.vehicle[i] }, { [n]: model.items.name[i] }
+      //       )
+      //     )
+      //   )
+      ();
+    //return model;
+  };
+
+  const saveData4 = () => {
+    let items = [];
+    for (let index = 0; index < sheetData2.length; index++) {
+      const element = [];
+      element.push(sheetData2[index]);
+      console.log(element);
+
+      console.log(sheetData2[index]);
+
+      let items = [];
+
+      const response = $api
+        .post(
+          `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
+          {
+            items: [
+              {
+                id: sheetData2[index].id,
+                vehicle: sheetData2[index].vehicle,
+                name: sheetData2[index].name,
+                rhinoID: sheetData2[index].rhinoID,
+                originalID: `${sheetData2[index].originalID}`,
+                stockPrice: sheetData2[index].stockPrice,
+                incomePrice: sheetData2[index].incomePrice,
+                priceWithDepreciation: sheetData2[index].priceWithDepreciation,
+                deliveryInfo: sheetData2[index].deliveryInfo,
+                defect: sheetData2[index].defect,
+                catalogPart: {
+                  id: sheetData2[index].catalogPart.id,
+                  Name: sheetData2[index].catalogPart.Name,
+                  Parents: sheetData2[index].catalogPart.Parents,
+                  LocalizedName: sheetData2[index].catalogPart.LocalizedName,
+                },
+              },
+            ],
+          }
+        )
+        .then((res) => console.log(res.data));
+
+      if (index) {
+        const newArr = {
+          id: sheetData2[0].id,
+          vehicle: sheetData2[0].vehicle,
+          name: sheetData2[0].name,
+          rhinoID: sheetData2[0].rhinoID,
+          originalID: `${sheetData2[0].originalID}`,
+          stockPrice: sheetData2[0].stockPrice,
+          incomePrice: sheetData2[0].incomePrice,
+          priceWithDepreciation: sheetData2[0].priceWithDepreciation,
+          deliveryInfo: sheetData2[0].deliveryInfo,
+          defect: sheetData2[0].defect,
+          catalogPart: {
+            id: sheetData2[0].catalogPart.id,
+            Name: sheetData2[0].catalogPart.Name,
+            Parents: sheetData2[0].catalogPart.Parents,
+            LocalizedName: sheetData2[0].catalogPart.LocalizedName,
+          },
+        };
+        console.log(newArr);
+      }
+    }
+  };
 
   const saveData2 = async () => {
     console.log(sheetData2);
+
     const sheetDataFinal = sheetData2.map((row) => {
       return { ...row, originalID: `${row.originalID}` };
     });
@@ -660,9 +818,10 @@ const ParseExcel = () => {
         {
           items: [
             //{
-            {
-              sheetDataFinal,
-            },
+
+            // {
+            //   sheetDataFinal,
+            // },
 
             //   id: sheetData2[0].id,
             //   vehicle: sheetData2[0].vehicle,
@@ -679,13 +838,13 @@ const ParseExcel = () => {
             //     Name: sheetData2[0].catalogParts.Name,
             //     Parents: sheetData2[0].catalogParts.Parents,
             //     LocalizedName: sheetData2[0].catalogParts.LocalizedName,
-            // {
-            //   //sheetData2,
-            //   id: sheetData2.map((row) => row.id)[0],
-            //   vehicle: sheetData2.map((row, index) => {
-            //     return row.vehicle[index];
-            //   }),
-            // },
+            {
+              //sheetData2,
+              id: sheetData2.map((row) => row.id)[0],
+              vehicle: sheetData2.map((row, index) => {
+                return row.vehicle;
+              }),
+            },
             //   id: sheetData2[0].id,
             //   vehicle: sheetData2[0].vehicle,
             //   name: sheetData2[0].name,
@@ -836,7 +995,7 @@ const ParseExcel = () => {
           <Form.Label>Категория</Form.Label>
           <Form.Control
             type="searchCategory"
-            required
+            //required
             onChange={(e) => setSearchCategory(e.target.value)}
           />
         </FormGroup>
@@ -850,7 +1009,7 @@ const ParseExcel = () => {
       </Form>
 
       <div>
-        <button onClick={saveData}>Сохранить</button>
+        <button onClick={saveData4}>Сохранить</button>
       </div>
 
       <Row>
@@ -867,15 +1026,7 @@ const ParseExcel = () => {
                     onChange={handleChange}
                   />
                 </th>
-                <th>
-                  <input
-                    type="search"
-                    name="allselect"
-                    placeholder="some"
-                    checked={!sheetData2.some((row) => row.defect !== true)}
-                    onChange={handleChange}
-                  />
-                </th>
+
                 <th>Авто</th>
                 <th>Наименование</th>
                 <th>НомерRhino</th>
@@ -884,6 +1035,16 @@ const ParseExcel = () => {
                 <th>цена входящая</th>
                 <th>цена с амортизацией</th>
                 <th>дата завоза</th>
+                <th>
+                  {/* <input
+                    type="search"
+                    name="allselect"
+                    placeholder="some"
+                    checked={!sheetData2.some((row) => row.defect !== true)}
+                    onChange={handleChange}
+                  /> */}
+                  категория
+                </th>
                 <th>штрих код</th>
 
                 {/* {sheetData[0].map(h => <td>{h}</td>)} */}

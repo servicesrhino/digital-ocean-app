@@ -762,64 +762,87 @@ const ParseExcel = () => {
   };
 
   const saveData4 = () => {
-    let items = [];
-    for (let index = 0; index < sheetData2.length; index++) {
-      const element = [];
-      element.push(sheetData2[index]);
-      console.log(element);
+    const correctData2 = category.filter(function (part) {
+      return part.localizedName.includes('Engine');
+    });
+    console.log(correctData2);
 
-      console.log(sheetData2[index]);
+    const newData = sheetData2.map((row) => {
+      //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+      return {
+        ...row,
+        catalogPart: {
+          id: correctData2[0].id,
+          Name: correctData2[0].name,
+          Parents: correctData2[0].parents,
+          LocalizedName: correctData2[0].localizedName,
+        },
+      };
+    });
+    console.log(newData);
+    setSheetData2(newData);
 
+    if (newData) {
+      console.log(newData);
       let items = [];
+      for (let index = 0; index < newData.length; index++) {
+        const element = [];
+        element.push(newData[index]);
+        console.log(element);
 
-      const response = $api
-        .post(
-          `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
-          {
-            items: [
-              {
-                id: sheetData2[index].id,
-                vehicle: sheetData2[index].vehicle,
-                name: sheetData2[index].name,
-                rhinoID: sheetData2[index].rhinoID,
-                originalID: `${sheetData2[index].originalID}`,
-                stockPrice: sheetData2[index].stockPrice,
-                incomePrice: sheetData2[index].incomePrice,
-                priceWithDepreciation: sheetData2[index].priceWithDepreciation,
-                deliveryInfo: sheetData2[index].deliveryInfo,
-                defect: sheetData2[index].defect,
-                catalogPart: {
-                  id: sheetData2[index].catalogPart.id,
-                  Name: sheetData2[index].catalogPart.Name,
-                  Parents: sheetData2[index].catalogPart.Parents,
-                  LocalizedName: sheetData2[index].catalogPart.LocalizedName,
+        console.log(newData[index]);
+
+        let items = [];
+
+        const response = $api
+          .post(
+            `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
+            {
+              items: [
+                {
+                  id: newData[index].id,
+                  vehicle: newData[index].vehicle,
+                  name: newData[index].name,
+                  rhinoID: newData[index].rhinoID,
+                  originalID: `${newData[index].originalID}`,
+                  stockPrice: newData[index].stockPrice,
+                  incomePrice: newData[index].incomePrice,
+                  priceWithDepreciation: newData[index].priceWithDepreciation,
+                  deliveryInfo: newData[index].deliveryInfo,
+                  defect: newData[index].defect,
+                  catalogPart: {
+                    id: newData[index].catalogPart.id,
+                    Name: newData[index].catalogPart.Name,
+                    Parents: newData[index].catalogPart.Parents,
+                    LocalizedName: newData[index].catalogPart.LocalizedName,
+                  },
                 },
-              },
-            ],
-          }
-        )
-        .then((res) => console.log(res.data));
+              ],
+            }
+          )
+          .then((res) => console.log(res));
 
-      if (index) {
-        const newArr = {
-          id: sheetData2[0].id,
-          vehicle: sheetData2[0].vehicle,
-          name: sheetData2[0].name,
-          rhinoID: sheetData2[0].rhinoID,
-          originalID: `${sheetData2[0].originalID}`,
-          stockPrice: sheetData2[0].stockPrice,
-          incomePrice: sheetData2[0].incomePrice,
-          priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-          deliveryInfo: sheetData2[0].deliveryInfo,
-          defect: sheetData2[0].defect,
-          catalogPart: {
-            id: sheetData2[0].catalogPart.id,
-            Name: sheetData2[0].catalogPart.Name,
-            Parents: sheetData2[0].catalogPart.Parents,
-            LocalizedName: sheetData2[0].catalogPart.LocalizedName,
-          },
-        };
-        console.log(newArr);
+        // if (index) {
+        //   const newArr = {
+        //     id: sheetData2[0].id,
+        //     vehicle: sheetData2[0].vehicle,
+        //     name: sheetData2[0].name,
+        //     rhinoID: sheetData2[0].rhinoID,
+        //     originalID: `${sheetData2[0].originalID}`,
+        //     stockPrice: sheetData2[0].stockPrice,
+        //     incomePrice: sheetData2[0].incomePrice,
+        //     priceWithDepreciation: sheetData2[0].priceWithDepreciation,
+        //     deliveryInfo: sheetData2[0].deliveryInfo,
+        //     defect: sheetData2[0].defect,
+        //     catalogPart: {
+        //       id: sheetData2[0].catalogPart.id,
+        //       Name: sheetData2[0].catalogPart.Name,
+        //       Parents: sheetData2[0].catalogPart.Parents,
+        //       LocalizedName: sheetData2[0].catalogPart.LocalizedName,
+        //     },
+        //   };
+        //   console.log(newArr);
+        // }
       }
     }
   };
@@ -1006,31 +1029,32 @@ const ParseExcel = () => {
         <button onClick={newFunc2}>Отобразить данные</button>
       </div> */}
 
-      <input type="checkbox" onChange={handleCategory} />
-      <input type="checkbox" onChange={hangleInput} />
+      {/* <input type="checkbox" onChange={handleCategory} /> */}
+      {/* <input type="checkbox" onChange={hangleInput} /> */}
+
       {/* <input type="checkbox" onChange={newFunc2} /> */}
 
-      <input type="checkbox" onChange={refresh} />
+      {/* <input type="checkbox" onChange={refresh} /> */}
 
       <Form onSubmit={submitHandler2}>
-        <FormGroup className="mb-3" controlId="searchCategory">
+        {/* <FormGroup className="mb-3" controlId="searchCategory">
           <Form.Label>Категория</Form.Label>
           <Form.Control
             type="searchCategory"
             //required
             onChange={(e) => setSearchCategory(e.target.value)}
           />
-        </FormGroup>
+        </FormGroup> */}
 
         <div className="mb-3">
-          <Button type="submit">Получить категорию</Button>
-          <Button className="mx-2" onClick={setCategory2} type="submit">
+          {/* <Button type="submit">Получить категорию</Button> */}
+          {/* <Button className="mx-2" onClick={setCategory2} type="submit">
             Установить категорию
-          </Button>
+          </Button> */}
         </div>
       </Form>
 
-      <div>
+      <div className="m-3">
         <button onClick={saveData4}>Сохранить</button>
       </div>
 

@@ -9,6 +9,9 @@ const initialState = {
 
   category: [],
 
+  id: '',
+  rhinoID: '',
+
   // cart: {
   //     cartItems: [],
   // }
@@ -25,6 +28,10 @@ function reducer(state, action) {
       return { ...state, userInfo: null };
     case 'GET_CATALOG':
       return { ...state, category: action.payload };
+    case 'BARCODE_ID':
+      return { ...state, id: action.payload };
+    case 'BARCODE_RHINOID':
+      return { ...state, rhinoID: action.payload };
 
     default:
       return state;

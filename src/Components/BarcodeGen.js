@@ -1,9 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Barcode from 'react-barcode';
+import { Store } from '../Store';
+import { nanoid } from 'nanoid';
 
-const BarcodeGen = () => {
-  const [text, setText] = useState();
-  const [barcode, setBarcode] = useState();
+function BarcodeGen() {
+  //const { id, name } = props;
+  //console.log(id);
+  //console.log(name);
+  //const id = props.navigation.getParam('id');
+  //console.log(id);
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { id, rhinoID } = state;
+  console.log(id);
+  console.log(rhinoID);
+
+  const newID = localStorage.getItem('id');
+  const newRhinoID = localStorage.getItem('rhinoID');
+  console.log(newID);
+  console.log(newRhinoID);
+
+  //const testid = nanoid(10); //=> "V1StGXR8_Z5jdHi6B-myT"
+  //console.log(testid);
+
+  const [text, setText] = useState(`${newID}_${newRhinoID}`);
+  const [barcode, setBarcode] = useState(`${newID}_${newRhinoID}`);
   const generateBarcode = () => {
     //e.preventDefault();
     setBarcode(text);
@@ -33,6 +54,6 @@ const BarcodeGen = () => {
       </div>
     </div>
   );
-};
+}
 
 export default BarcodeGen;

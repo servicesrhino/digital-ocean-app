@@ -12,9 +12,13 @@ import { read, utils, writeFileXLSX } from 'xlsx';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
+import { nanoid } from 'nanoid';
+
 import axios from 'axios';
 import $api from './http';
 import { Store } from '../Store';
+import BarcodeGen from './BarcodeGen';
+import { Link } from 'react-router-dom';
 //import $api from '../http';
 
 // /* load the codepage support library for extended support with older formats  */
@@ -130,7 +134,7 @@ const ParseExcel = () => {
     // Ниже логика создания уникальных id
     const newData = finalData.map((row) => {
       //return { ...row, someCategory, id: uuid() };
-      return { ...row, id: uuid() };
+      return { ...row, id: nanoid(10) };
     });
     console.log(newData);
     setSheetData2(newData);
@@ -243,9 +247,20 @@ const ParseExcel = () => {
     setSheetData2(newData);
   };
 
-  const hangleBarcode = () => {
+  const hangleBarcode = (getusers) => {
     //alert('barcode clik');
-    navigate('/barcode');
+    // console.log(sheetData2[0].id);
+    console.log(getusers);
+    ctxDispatch({ type: 'BARCODE_ID', payload: getusers.id });
+    ctxDispatch({ type: 'BARCODE_RHINOID', payload: getusers.rhinoID });
+    localStorage.setItem('id', getusers.id);
+    localStorage.setItem('rhinoID', getusers.rhinoID);
+
+    return (
+      <BarcodeGen id={getusers} />
+      //navigate('/barcode');
+    );
+    navigate('/barcode', { id: getusers });
   };
 
   const submitHandler2 = async (e) => {
@@ -1143,9 +1158,29 @@ const ParseExcel = () => {
                   </td>
 
                   <td>
-                    <button onClick={hangleBarcode} className="btn btn-danger">
-                      Barcode
-                    </button>
+                    {getusers ? (
+                      <Link to="/barcode" target="_blank">
+                        <button
+                          onClick={(e) => hangleBarcode(getusers)}
+                          className="btn btn-danger"
+                        >
+                          Barcode
+                        </button>
+                      </Link>
+                    ) : (
+                      <Link to="/barcode">
+                        <button
+                          onClick={(e) => hangleBarcode(getusers)}
+                          className="btn btn-danger"
+                        >
+                          Barcode
+                        </button>
+                      </Link>
+                    )}
+
+                    {/* <div>
+                      <BarcodeGen id={getusers.id} />
+                    </div> */}
                   </td>
                 </tr>
               ))}

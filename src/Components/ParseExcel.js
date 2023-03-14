@@ -1166,7 +1166,10 @@ const ParseExcel = () => {
 
                   <td>
                     {getusers ? (
-                      <Link to="/barcode" target="_blank">
+                      // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
+                      // target="_blank"
+
+                      <Link to="/barcode">
                         <button
                           onClick={(e) => hangleBarcode(getusers)}
                           className="btn btn-danger"

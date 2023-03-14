@@ -255,6 +255,7 @@ const ParseExcel = () => {
     ctxDispatch({ type: 'BARCODE_RHINOID', payload: getusers.rhinoID });
     localStorage.setItem('id', getusers.id);
     localStorage.setItem('rhinoID', getusers.rhinoID);
+    navigate('/barcode');
 
     return (
       <BarcodeGen id={getusers} />
@@ -321,282 +322,288 @@ const ParseExcel = () => {
     console.log(searchCategory);
     console.log(category);
 
-    // let cityId = category.find(
-    //   (category) => category.name === searchCategory
-    // ).id;
-    // console.log(cityId);
+    const valu = document.getElementById(0).value;
+    //e.preventDefault;
+    console.log(valu);
+    setSearchCategory1(valu);
+    if (searchCategory1) {
+      // let cityId = category.find(
+      //   (category) => category.name === searchCategory
+      // ).id;
+      // console.log(cityId);
 
-    // code to add
-    // main logic of extracting all values from localized names in one array of names
-    let allCategoriesObject = category.map(
-      (category) => category.localizedName
-    );
-    console.log(allCategoriesObject);
-    console.log(Object.keys(allCategoriesObject));
-    const arrayofarray = Object.values(allCategoriesObject);
+      // code to add
+      // main logic of extracting all values from localized names in one array of names
+      let allCategoriesObject = category.map(
+        (category) => category.localizedName
+      );
+      console.log(allCategoriesObject);
+      console.log(Object.keys(allCategoriesObject));
+      const arrayofarray = Object.values(allCategoriesObject);
 
-    console.log(Object.values(allCategoriesObject));
-    const finalarr = arrayofarray.flat();
-    console.log(finalarr);
+      console.log(Object.values(allCategoriesObject));
+      const finalarr = arrayofarray.flat();
+      console.log(finalarr);
 
-    // first approach
+      // first approach
 
-    // let newVarFinished = [];
-    // const newVar = category.splice(0, 1);
-    // console.log(newVar);
-    // newVarFinished = newVar.map((val) => val.localizedName);
-    // console.log(newVarFinished);
+      // let newVarFinished = [];
+      // const newVar = category.splice(0, 1);
+      // console.log(newVar);
+      // newVarFinished = newVar.map((val) => val.localizedName);
+      // console.log(newVarFinished);
 
-    // получить все ключи
-    //console.log(Object.keys(newVarFinished));
+      // получить все ключи
+      //console.log(Object.keys(newVarFinished));
 
-    // получить все значения
-    //console.log(Object.values(newVarFinished));
+      // получить все значения
+      //console.log(Object.values(newVarFinished));
 
-    // const newVarnew = category.filter(function (part) {
-    //   return part.localizedName == 'localizedName';
-    // });
+      // const newVarnew = category.filter(function (part) {
+      //   return part.localizedName == 'localizedName';
+      // });
 
-    // const newVarnew = newVar.filter(
-    //   (val) => val.localizedName === localizedName
-    // );
-    //console.log(newVarnew);
+      // const newVarnew = newVar.filter(
+      //   (val) => val.localizedName === localizedName
+      // );
+      //console.log(newVarnew);
 
-    // const newVar2 = category.splice(1, 1);
-    // console.log(newVar2);
-    // const newvarnewnew = newVar2.map((val) => val.localizedName);
-    // console.log(newvarnewnew);
+      // const newVar2 = category.splice(1, 1);
+      // console.log(newVar2);
+      // const newvarnewnew = newVar2.map((val) => val.localizedName);
+      // console.log(newvarnewnew);
 
-    // let finalArray = [];
-    // // finalArray = { ...newVarFinished, ...newvarnewnew };
-    // finalArray.concat(newVarFinished);
-    // console.log(finalArray);
+      // let finalArray = [];
+      // // finalArray = { ...newVarFinished, ...newvarnewnew };
+      // finalArray.concat(newVarFinished);
+      // console.log(finalArray);
 
-    // здесь начинается кусок кода, который позволяет брать с инпута значение на любом языке
-    const testCool = category.filter((i) =>
-      i.localizedName.includes(searchCategory1)
-    );
-    console.log(testCool);
-    let testCool2 = testCool.find(function (part) {
-      return part.localizedName.includes(searchCategory1);
-    });
-    console.log(testCool2);
-    let testCool3 = testCool2.localizedName;
-    console.log(testCool3);
-    // здесь заканчивается кусок кода, который позволяет брать с инпута значение на любом языке
-
-    if (testCool3.includes('Двигатель')) {
-      console.log('ok1');
-      const correctData2 = category.filter(function (part) {
+      // здесь начинается кусок кода, который позволяет брать с инпута значение на любом языке
+      const testCool = category.filter((i) =>
+        i.localizedName.includes(searchCategory1)
+      );
+      console.log(testCool);
+      let testCool2 = testCool.find(function (part) {
         return part.localizedName.includes(searchCategory1);
       });
-      console.log(correctData2);
+      console.log(testCool2);
+      let testCool3 = testCool2.localizedName;
+      console.log(testCool3);
+      // здесь заканчивается кусок кода, который позволяет брать с инпута значение на любом языке
 
-      const newData = sheetData2.map((row) => {
-        //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-        return {
-          ...row,
-          catalogPart: {
-            id: correctData2[0].id,
-            Name: correctData2[0].name,
-            Parents: correctData2[0].parents,
-            LocalizedName: correctData2[0].localizedName,
-          },
-        };
-      });
-      console.log(newData);
-      setSheetData2(newData);
+      if (testCool3.includes('Двигатель')) {
+        console.log('ok1');
+        const correctData2 = category.filter(function (part) {
+          return part.localizedName.includes(searchCategory1);
+        });
+        console.log(correctData2);
+
+        const newData = sheetData2.map((row) => {
+          //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+          return {
+            ...row,
+            catalogPart: {
+              id: correctData2[0].id,
+              Name: correctData2[0].name,
+              Parents: correctData2[0].parents,
+              LocalizedName: correctData2[0].localizedName,
+            },
+          };
+        });
+        console.log(newData);
+        setSheetData2(newData);
+      }
+      if (testCool3.includes('Бампер')) {
+        console.log('ok12');
+
+        const correctData2 = category.filter(function (part) {
+          return part.localizedName.includes(searchCategory1);
+        });
+        console.log(correctData2);
+
+        const newData = sheetData2.map((row) => {
+          //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+          return {
+            ...row,
+            catalogPart: {
+              id: correctData2[0].id,
+              Name: correctData2[0].name,
+              Parents: correctData2[0].parents,
+              LocalizedName: correctData2[0].localizedName,
+            },
+          };
+        });
+        console.log(newData);
+        setSheetData2(newData);
+      }
+      if (testCool3.includes('Электрика')) {
+        console.log('ok123');
+
+        const correctData2 = category.filter(function (part) {
+          return part.localizedName.includes(searchCategory);
+        });
+        console.log(correctData2);
+
+        const newData = sheetData2.map((row) => {
+          //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+          return {
+            ...row,
+            catalogPart: {
+              id: correctData2[0].id,
+              Name: correctData2[0].name,
+              Parents: correctData2[0].parents,
+              LocalizedName: correctData2[0].localizedName,
+            },
+          };
+        });
+        console.log(newData);
+        setSheetData2(newData);
+      }
+      if (testCool3.includes('Трансмиссия')) {
+        console.log('ok1234');
+
+        const correctData2 = category.filter(function (part) {
+          return part.localizedName.includes(searchCategory);
+        });
+        console.log(correctData2);
+
+        const newData = sheetData2.map((row) => {
+          //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+          return {
+            ...row,
+            catalogPart: {
+              id: correctData2[0].id,
+              Name: correctData2[0].name,
+              Parents: correctData2[0].parents,
+              LocalizedName: correctData2[0].localizedName,
+            },
+          };
+        });
+        console.log(newData);
+        setSheetData2(newData);
+      }
+
+      if (testCool3.includes('Кузов')) {
+        console.log('ok12345');
+
+        const correctData2 = category.filter(function (part) {
+          return part.localizedName.includes(searchCategory);
+        });
+        console.log(correctData2);
+
+        const newData = sheetData2.map((row) => {
+          //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+          return {
+            ...row,
+            catalogPart: {
+              id: correctData2[0].id,
+              Name: correctData2[0].name,
+              Parents: correctData2[0].parents,
+              LocalizedName: correctData2[0].localizedName,
+            },
+          };
+        });
+        console.log(newData);
+        setSheetData2(newData);
+      }
+      console.log(inputVal);
+
+      // // extracting of value from search category values
+      // const tempvar = category.find(
+      //   (category) => category.name === searchCategory
+      // ).localizedName;
+      // console.log(tempvar);
+
+      // let value = tempvar.includes('Двигатель');
+      // console.log(value);
+      // if (tempvar.includes('Двигатель')) {
+      //   console.log('ok');
+      // }
+      // if (tempvar.includes('Бампер')) {
+      //   console.log('ok2');
+      // }
+      // if (tempvar.includes('Электрика')) {
+      //   console.log('ok3');
+      // }
+
+      // const tempvarOther = category.find((category) =>
+      //   category.localizedName.includes('Двигатель')
+      // );
+      // console.log(tempvarOther);
+
+      // let res = finalarr.find((category) => category.indexOf(tempvar[0]));
+      // let res2_1 = finalarr.indexOf(tempvar[0], tempvar[1], tempvar[2]);
+      // console.log(res2_1); // logic here is working
+
+      // console.log(res);
+      // const tempvar2 = `${tempvar}`.toUpperCase();
+      // console.log(tempvar2);
+      // //console.log('алфавит'.toUpperCase()); // 'АЛФАВИТ'
+
+      // let res2 = finalarr.indexOf('Двигатель', 'Бампер');
+      // let res3 = finalarr.indexOf(tempvar.join(','));
+      // const res3_1 = tempvar.join(" '' ");
+      // console.log(res3_1);
+
+      // let res4 = finalarr.indexOf(tempvar[0], tempvar[1]);
+      // console.log(res4);
+
+      // console.log(res2);
+      // console.log(res3);
+
+      //console.log(finalarr.find((val) => val.includes(tempvar)));
+      // if (finalarr.(tempvar)) {
+      //   console.log('yes');
+      // }
+
+      // let cityId = category.find(
+      //   (category) => category.name === searchCategory
+      // ).id;
+
+      // for (const iterator of allCategories) {
+      //   console.log(allCategories[0]);
+      // }
+
+      // let allCategories3 = [];
+      // allCategories3 = allCategoriesObject[0].pop();
+      // console.log(allCategories3);
+
+      const allCategoriesArray = [];
+      allCategoriesArray.concat(allCategoriesObject);
+      console.log(allCategoriesArray);
+
+      // for (let category of allCategories) {
+
+      // }
+
+      // let local = category.find(
+      //   (category) => category.name === searchCategory
+      // ).localizedName;
+      // console.log(local);
+
+      // const correctData = category.filter(function (part) {
+      //   return part.name == searchCategory;
+      // });
+      // console.log(correctData);
+
+      // const newData = sheetData2.map((row) => {
+      //   //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+      //   return {
+      //     ...row,
+      //     catalogPart: {
+      //       id: correctData[0].id,
+      //       Name: correctData[0].name,
+      //       Parents: correctData[0].parents,
+      //       LocalizedName: correctData[0].localizedName,
+      //     },
+      //   };
+      // });
+      // console.log(newData);
+      // const token = localStorage.getItem('token');
+      // const newToken = token.replace(/['"«»]/g, '');
+      // console.log(newToken);
+      // setSheetData2(newData);
     }
-    if (testCool3.includes('Бампер')) {
-      console.log('ok12');
-
-      const correctData2 = category.filter(function (part) {
-        return part.localizedName.includes(searchCategory1);
-      });
-      console.log(correctData2);
-
-      const newData = sheetData2.map((row) => {
-        //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-        return {
-          ...row,
-          catalogPart: {
-            id: correctData2[0].id,
-            Name: correctData2[0].name,
-            Parents: correctData2[0].parents,
-            LocalizedName: correctData2[0].localizedName,
-          },
-        };
-      });
-      console.log(newData);
-      setSheetData2(newData);
-    }
-    if (testCool3.includes('Электрика')) {
-      console.log('ok123');
-
-      const correctData2 = category.filter(function (part) {
-        return part.localizedName.includes(searchCategory);
-      });
-      console.log(correctData2);
-
-      const newData = sheetData2.map((row) => {
-        //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-        return {
-          ...row,
-          catalogPart: {
-            id: correctData2[0].id,
-            Name: correctData2[0].name,
-            Parents: correctData2[0].parents,
-            LocalizedName: correctData2[0].localizedName,
-          },
-        };
-      });
-      console.log(newData);
-      setSheetData2(newData);
-    }
-    if (testCool3.includes('Трансмиссия')) {
-      console.log('ok1234');
-
-      const correctData2 = category.filter(function (part) {
-        return part.localizedName.includes(searchCategory);
-      });
-      console.log(correctData2);
-
-      const newData = sheetData2.map((row) => {
-        //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-        return {
-          ...row,
-          catalogPart: {
-            id: correctData2[0].id,
-            Name: correctData2[0].name,
-            Parents: correctData2[0].parents,
-            LocalizedName: correctData2[0].localizedName,
-          },
-        };
-      });
-      console.log(newData);
-      setSheetData2(newData);
-    }
-
-    if (testCool3.includes('Кузов')) {
-      console.log('ok12345');
-
-      const correctData2 = category.filter(function (part) {
-        return part.localizedName.includes(searchCategory);
-      });
-      console.log(correctData2);
-
-      const newData = sheetData2.map((row) => {
-        //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-        return {
-          ...row,
-          catalogPart: {
-            id: correctData2[0].id,
-            Name: correctData2[0].name,
-            Parents: correctData2[0].parents,
-            LocalizedName: correctData2[0].localizedName,
-          },
-        };
-      });
-      console.log(newData);
-      setSheetData2(newData);
-    }
-    console.log(inputVal);
-
-    // // extracting of value from search category values
-    // const tempvar = category.find(
-    //   (category) => category.name === searchCategory
-    // ).localizedName;
-    // console.log(tempvar);
-
-    // let value = tempvar.includes('Двигатель');
-    // console.log(value);
-    // if (tempvar.includes('Двигатель')) {
-    //   console.log('ok');
-    // }
-    // if (tempvar.includes('Бампер')) {
-    //   console.log('ok2');
-    // }
-    // if (tempvar.includes('Электрика')) {
-    //   console.log('ok3');
-    // }
-
-    // const tempvarOther = category.find((category) =>
-    //   category.localizedName.includes('Двигатель')
-    // );
-    // console.log(tempvarOther);
-
-    // let res = finalarr.find((category) => category.indexOf(tempvar[0]));
-    // let res2_1 = finalarr.indexOf(tempvar[0], tempvar[1], tempvar[2]);
-    // console.log(res2_1); // logic here is working
-
-    // console.log(res);
-    // const tempvar2 = `${tempvar}`.toUpperCase();
-    // console.log(tempvar2);
-    // //console.log('алфавит'.toUpperCase()); // 'АЛФАВИТ'
-
-    // let res2 = finalarr.indexOf('Двигатель', 'Бампер');
-    // let res3 = finalarr.indexOf(tempvar.join(','));
-    // const res3_1 = tempvar.join(" '' ");
-    // console.log(res3_1);
-
-    // let res4 = finalarr.indexOf(tempvar[0], tempvar[1]);
-    // console.log(res4);
-
-    // console.log(res2);
-    // console.log(res3);
-
-    //console.log(finalarr.find((val) => val.includes(tempvar)));
-    // if (finalarr.(tempvar)) {
-    //   console.log('yes');
-    // }
-
-    // let cityId = category.find(
-    //   (category) => category.name === searchCategory
-    // ).id;
-
-    // for (const iterator of allCategories) {
-    //   console.log(allCategories[0]);
-    // }
-
-    // let allCategories3 = [];
-    // allCategories3 = allCategoriesObject[0].pop();
-    // console.log(allCategories3);
-
-    const allCategoriesArray = [];
-    allCategoriesArray.concat(allCategoriesObject);
-    console.log(allCategoriesArray);
-
-    // for (let category of allCategories) {
-
-    // }
-
-    // let local = category.find(
-    //   (category) => category.name === searchCategory
-    // ).localizedName;
-    // console.log(local);
-
-    // const correctData = category.filter(function (part) {
-    //   return part.name == searchCategory;
-    // });
-    // console.log(correctData);
-
-    // const newData = sheetData2.map((row) => {
-    //   //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-    //   return {
-    //     ...row,
-    //     catalogPart: {
-    //       id: correctData[0].id,
-    //       Name: correctData[0].name,
-    //       Parents: correctData[0].parents,
-    //       LocalizedName: correctData[0].localizedName,
-    //     },
-    //   };
-    // });
-    // console.log(newData);
-    // const token = localStorage.getItem('token');
-    // const newToken = token.replace(/['"«»]/g, '');
-    // console.log(newToken);
-    // setSheetData2(newData);
   };
 
   const hangleInput = (e) => {

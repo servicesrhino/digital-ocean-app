@@ -23,8 +23,8 @@ function BarcodeGen() {
   //const testid = nanoid(10); //=> "V1StGXR8_Z5jdHi6B-myT"
   //console.log(testid);
 
-  const [text, setText] = useState(`${newID}_${newRhinoID}`);
-  const [barcode, setBarcode] = useState(`${newID}_${newRhinoID}`);
+  const [text, setText] = useState(`${newRhinoID}_${newID}`);
+  const [barcode, setBarcode] = useState(`${newRhinoID}_${newID}`);
   const generateBarcode = () => {
     //e.preventDefault();
     setBarcode(text);

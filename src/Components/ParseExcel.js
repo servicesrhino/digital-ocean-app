@@ -134,7 +134,11 @@ const ParseExcel = () => {
     // Ниже логика создания уникальных id
     const newData = finalData.map((row) => {
       //return { ...row, someCategory, id: uuid() };
-      return { ...row, id: nanoid(10) };
+      return {
+        ...row,
+        incomePrice: row.incomePrice.toFixed(2),
+        id: nanoid(10),
+      };
     });
     console.log(newData);
     setSheetData2(newData);
@@ -782,9 +786,11 @@ const ParseExcel = () => {
     console.log(newData);
     setSheetData2(newData);
 
+    let items = [];
+
     if (newData) {
       console.log(newData);
-      let items = [];
+      //let items = [];
       for (let index = 0; index < newData.length; index++) {
         const element = [];
         element.push(newData[index]);
@@ -820,7 +826,12 @@ const ParseExcel = () => {
               ],
             }
           )
-          .then((res) => console.log(res));
+          .then((res) => {
+            const response = res.data;
+            //console.log(res);
+            items.push(res.data.success);
+            //console.log(items);
+          });
 
         // if (index) {
         //   const newArr = {
@@ -844,7 +855,25 @@ const ParseExcel = () => {
         //   console.log(newArr);
         // }
       }
+
+      //alert('ok');
     }
+
+    // if (items.length <= 40) {
+    //   alert('123');
+    // }
+    const final = items.every(function (e) {
+      return e === true;
+    });
+    console.log(final);
+
+    if (final) {
+      alert('Data succesfully saved');
+    }
+
+    // if (items.every == true) {
+    //   alert('456');
+    // }
   };
 
   const saveData5 = () => {

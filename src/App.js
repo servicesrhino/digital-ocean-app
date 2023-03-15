@@ -10,6 +10,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
 import { Store } from './Store';
 import BarcodeGen from './Components/BarcodeGen';
+import AllParts from './Components/AllParts';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -59,6 +60,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/parse-excel" element={<ParseExcel />} />
             <Route path="/barcode" element={<BarcodeGen />} />
+            <Route path="/allparts" element={<AllParts />} />
           </Routes>
         </Container>
       </main>

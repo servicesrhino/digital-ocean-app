@@ -847,6 +847,94 @@ const ParseExcel = () => {
     }
   };
 
+  const saveData5 = () => {
+    const correctData2 = category.filter(function (part) {
+      return part.localizedName.includes('Engine');
+    });
+    console.log(correctData2);
+
+    const newData = sheetData2.map((row) => {
+      //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
+      return {
+        ...row,
+        originalID: `${sheetData2[0].originalID}`,
+        catalogPart: {
+          id: correctData2[0].id,
+          Name: correctData2[0].name,
+          Parents: correctData2[0].parents,
+          LocalizedName: correctData2[0].localizedName,
+        },
+      };
+    });
+    console.log(newData);
+    setSheetData2(newData);
+
+    if (newData) {
+      console.log(newData);
+      let items = [];
+      //for (let index = 0; index < newData.length; index++) {
+      const element = [];
+      //element.push(newData[index]);
+      //console.log(element);
+
+      //console.log(newData[index]);
+
+      //let items = [];
+
+      const response = $api
+        .post(
+          `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
+          {
+            items: [
+              //{
+              newData,
+              //   id: newData[index].id,
+              //   vehicle: newData[index].vehicle,
+              //   name: newData[index].name,
+              //   rhinoID: newData[index].rhinoID,
+              //   originalID: `${newData[index].originalID}`,
+              //   stockPrice: newData[index].stockPrice,
+              //   incomePrice: newData[index].incomePrice,
+              //   priceWithDepreciation: newData[index].priceWithDepreciation,
+              //   deliveryInfo: newData[index].deliveryInfo,
+              //   defect: newData[index].defect,
+              //   catalogPart: {
+              //     id: newData[index].catalogPart.id,
+              //     Name: newData[index].catalogPart.Name,
+              //     Parents: newData[index].catalogPart.Parents,
+              //     LocalizedName: newData[index].catalogPart.LocalizedName,
+              //   },
+              //},
+            ],
+          }
+        )
+        .then((res) => console.log(res));
+
+      // if (index) {
+      //   const newArr = {
+      //     id: sheetData2[0].id,
+      //     vehicle: sheetData2[0].vehicle,
+      //     name: sheetData2[0].name,
+      //     rhinoID: sheetData2[0].rhinoID,
+      //     originalID: `${sheetData2[0].originalID}`,
+      //     stockPrice: sheetData2[0].stockPrice,
+      //     incomePrice: sheetData2[0].incomePrice,
+      //     priceWithDepreciation: sheetData2[0].priceWithDepreciation,
+      //     deliveryInfo: sheetData2[0].deliveryInfo,
+      //     defect: sheetData2[0].defect,
+      //     catalogPart: {
+      //       id: sheetData2[0].catalogPart.id,
+      //       Name: sheetData2[0].catalogPart.Name,
+      //       Parents: sheetData2[0].catalogPart.Parents,
+      //       LocalizedName: sheetData2[0].catalogPart.LocalizedName,
+      //     },
+      //   };
+      //   console.log(newArr);
+      // }
+    }
+  };
+  //};
+
   const saveData2 = async () => {
     console.log(sheetData2);
 
@@ -930,6 +1018,10 @@ const ParseExcel = () => {
         const response = res.data;
         console.log(response);
       });
+  };
+
+  const handleParts = () => {
+    navigate('/allparts');
   };
   return (
     // <div>
@@ -1054,8 +1146,12 @@ const ParseExcel = () => {
         </div>
       </Form>
 
-      <div className="m-3">
+      <div className="my-3">
         <button onClick={saveData4}>Сохранить</button>
+      </div>
+
+      <div className="my-3">
+        <button onClick={handleParts}>Get Parts</button>
       </div>
 
       <Row>
@@ -1081,16 +1177,10 @@ const ParseExcel = () => {
                 <th>цена входящая</th>
                 <th>цена с амортизацией</th>
                 <th>дата завоза</th>
-                <th>
-                  {/* <input
-                    type="search"
-                    name="allselect"
-                    placeholder="some"
-                    checked={!sheetData2.some((row) => row.defect !== true)}
-                    onChange={handleChange}
-                  /> */}
+                {/* <th>
+                 
                   категория
-                </th>
+                </th> */}
                 <th>штрих код</th>
 
                 {/* {sheetData[0].map(h => <td>{h}</td>)} */}
@@ -1154,7 +1244,7 @@ const ParseExcel = () => {
                   <td>{getusers.incomePrice}</td>
                   <td>{getusers.priceWithDepreciation}</td>
                   <td>{getusers.deliveryInfo}</td>
-                  <td>
+                  {/* <td>
                     <form>
                       <input
                         type="text"
@@ -1186,7 +1276,7 @@ const ParseExcel = () => {
                         }}
                       />
                     </form>
-                  </td>
+                  </td> */}
 
                   <td>
                     {getusers ? (
@@ -1216,6 +1306,9 @@ const ParseExcel = () => {
                       <BarcodeGen id={getusers.id} />
                     </div> */}
                   </td>
+                  {/* <td>
+                    <button onClick={handleParts}>Parts</button>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

@@ -45,13 +45,16 @@ const Home = () => {
         {
           phone,
           password,
-          udid: 'test',
+          udid: 'test67',
         }
       );
+      const token = data.jwtToken;
+      console.log(token);
+      ctxDispatch({ type: 'IS_AUTH' });
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      localStorage.setItem('token', JSON.stringify(data.jwtToken));
-      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+      localStorage.setItem('token', data.jwtToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
       navigate('/parse-excel');
       console.log(data);
@@ -72,8 +75,6 @@ const Home = () => {
         .post(
           '/Catalog/get-parts-catalog',
           {
-            //phone,
-            //password,
             //udid: 'test',
             parentId: '',
           }
@@ -98,7 +99,31 @@ const Home = () => {
       console.log(token);
     } catch (e) {
       // console.log(e);
+      checkAuth();
     }
+  };
+
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token');
+    const newToken = token.replace(/['"«»]/g, '');
+
+    const token2 = localStorage.getItem('refreshToken');
+    const newToken2 = token2.replace(/['"«»]/g, '');
+    const response2 = await $api
+      .post(`/Users/refresh-token`, {
+        token: newToken,
+        //password,
+        refreshToken: newToken2,
+        udid: 'test67',
+        //parentId: '',
+      })
+      .then((res) => {
+        const response = res.data;
+        localStorage.setItem('token', response.jwtToken);
+        ctxDispatch({ type: 'IS_AUTH' });
+
+        console.log(response);
+      });
   };
 
   //   useEffect(() => {

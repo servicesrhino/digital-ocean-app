@@ -11,6 +11,7 @@ const initialState = {
 
   id: '',
   rhinoID: '',
+  isAuth: false,
 
   // cart: {
   //     cartItems: [],
@@ -28,6 +29,10 @@ function reducer(state, action) {
       return { ...state, userInfo: null };
     case 'GET_CATALOG':
       return { ...state, category: action.payload };
+    case 'IS_AUTH':
+      return { ...state, isAuth: true };
+    case 'IS_NO_AUTH':
+      return { ...state, isAuth: false };
     case 'BARCODE_ID':
       return { ...state, id: action.payload };
     case 'BARCODE_RHINOID':

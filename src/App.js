@@ -7,15 +7,53 @@ import Home from './Components/Home';
 import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Store } from './Store';
 import BarcodeGen from './Components/BarcodeGen';
 import AllParts from './Components/AllParts';
+import axios from 'axios';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo, isAuth } = state;
   const navigate = useNavigate();
+
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token');
+    //const newToken = token.replace(/['"«»]/g, '');
+
+    const token2 = localStorage.getItem('refreshToken');
+    //const newToken2 = token2.replace(/['"«»]/g, '');
+    try {
+      const response = await axios
+        .post(
+          `https://rhino-api-alquo.ondigitalocean.app/Users/refresh-token`,
+          {
+            token: token,
+            //password,
+            refreshToken: token2,
+            udid: 'test67',
+            //parentId: '',
+          }
+        )
+        .then((res) => {
+          const response = res.data;
+          localStorage.setItem('token', response.jwtToken);
+          ctxDispatch({ type: 'IS_AUTH' });
+          console.log(isAuth);
+
+          console.log(response);
+        });
+    } catch (e) {
+      console.log(e.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      checkAuth();
+    }
+  }, []);
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });

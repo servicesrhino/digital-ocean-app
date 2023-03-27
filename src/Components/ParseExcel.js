@@ -1,34 +1,21 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import {
-  Row,
-  Table,
-  Col,
-  Label,
-  Form,
-  FormGroup,
-  Button,
-} from 'react-bootstrap';
-import { read, utils, writeFileXLSX } from 'xlsx';
+import { Row, Table, Col, Label, Form, Button } from 'react-bootstrap';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { useNavigate } from 'react-router-dom';
-import uuid from 'react-uuid';
 import { nanoid } from 'nanoid';
-
-import axios from 'axios';
 import $api from './http';
 import { Store } from '../Store';
 import BarcodeGen from './BarcodeGen';
 import { Link } from 'react-router-dom';
-//import $api from '../http';
-
-// /* load the codepage support library for extended support with older formats  */
-// import { set_cptable } from "xlsx";
-// import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
-// set_cptable(cptable);
+import CheckedService from '../services/CheckedService';
+import KeyValueStreamlineService from '../services/KeyValueStreamlineService';
+import ParseService from '../services/ParseService';
+import SaveHelperService from '../services/SaveHelperService';
+import SaveService from '../services/SaveService';
+import SaveHelperService2 from '../services/SaveHelperService2';
 
 const ParseExcel = () => {
   const acceptableFileName = ['xlsx', 'xls'];
-
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
@@ -44,10 +31,8 @@ const ParseExcel = () => {
 
   const [sheetData, setSheetData] = useState([]);
   const [sheetData2, setSheetData2] = useState([]);
-  const [sheetData3, setSheetData3] = useState([]);
 
   const [sheet, setSheet] = useState(null);
-
   const [columns, setColumns] = useState([]);
   const [body, setBody] = useState([]);
 
@@ -57,16 +42,6 @@ const ParseExcel = () => {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { category } = state;
-
-  //   useEffect(() => {
-  //     if (setSheetData2) {
-  //       const newData = sheetData2.map((row) => {
-  //         return { ...row, id: uuid() };
-  //       });
-  //       console.log(newData);
-  //       setSheetData2(newData);
-  //     }
-  //   }, [setSheetData2]);
 
   const checkFileName = (name) => {
     return acceptableFileName.includes(name.split('.')[1]);
@@ -82,58 +57,17 @@ const ParseExcel = () => {
     }
 
     setFile(myFile);
-
     setFileName(myFile.name);
     setAllFile(myFile);
-    console.log(myFile);
 
-    const data = await myFile.arrayBuffer();
-    console.log(data);
-    const workbook = read(data);
-    setOther(workbook.Sheet);
-    console.log(workbook.Sheet);
-
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    console.log(worksheet);
-    const jsonData = utils.sheet_to_json(worksheet, {
-      blankrows: '',
-      header: 1,
-    });
-
-    const jsonData2 = utils.sheet_to_json(worksheet);
-
-    setSheet(Object.keys(e)[0]);
-    setSheetData(jsonData);
-    //setSheetData2(jsonData2);
-
-    setColumns(jsonData[0]);
-    setBody(jsonData.shift());
-
-    // e.stopPropagation(); e.preventDefault();
-    // const f = e.dataTransfer.files[0];
-    // /* f is a File */
-    // const data = await f.arrayBuffer();
-    // /* data is an ArrayBuffer */
-    // const workbook = utils.sheet_to_json(data);
-
-    console.log(jsonData);
+    const jsonData2 = await ParseService.parse(myFile);
     console.log(jsonData2);
 
-    const finalData = JSON.parse(
-      JSON.stringify(jsonData2)
-        .replaceAll('"Авто"', '"vehicle"')
-        .replaceAll('"Наименование"', '"name"')
-        .replaceAll('"цена входящая"', '"incomePrice"')
-        .replaceAll('"цена со склада"', '"stockPrice"')
-        .replaceAll('"цена с амотизацией"', '"priceWithDepreciation"')
-        .replaceAll('"номер Rhino"', '"rhinoID"')
-        .replaceAll('"оригинальный номер"', '"originalID"')
-        .replaceAll('"Дата завоза"', '"deliveryInfo"')
-    );
+    // Ниже логика по изменению ключа/значения в нужный формат
+    const finalData = KeyValueStreamlineService.stremline(jsonData2);
 
-    // Ниже логика создания уникальных id
+    // Ниже логика создания уникальных id и округления цены
     const newData = finalData.map((row) => {
-      //return { ...row, someCategory, id: uuid() };
       return {
         ...row,
         incomePrice: row.incomePrice.toFixed(2),
@@ -150,167 +84,40 @@ const ParseExcel = () => {
     fileRef.current.value = '';
     setSheetData([]);
     setSheetData2([]);
-
-    setColumns([]);
   };
 
-  const newFunc = () => {
-    //const data = sheetData2
-    // const newData = sheetData2.map((row) => {
-    //   if (row.value === 'Номер Rhino') {
-    //     row.value = row.номерRhino;
-    //   }
-    //   return { ...row };
-    // });
-    //console.log('newfunc ' + newData);
-
-    // const newData = JSON.parse(
-    //   JSON.stringify(sheetData2).replaceAll('"Авто"', '"Авто2"')
-    // );
-
-    // setSheetData2(newData);
-
-    const newDat = sheetData2.map(function (obj) {
-      return { auto: obj.Авто, name: obj.Наименование };
-    });
-    console.log(newDat);
-  };
-
-  //   const newFunc2 = () => {
-  //     setSheetData2(
-  //       JSON.parse(
-  //         JSON.stringify(sheetData2)
-  //           .replaceAll('"Авто"', '"Авто2"')
-  //           .replaceAll('"цена входящая"', '"ценаВходящая"')
-  //           .replaceAll('"цена со склада"', '"ценаCоCклада"')
-  //           .replaceAll('"цена с амотизацией"', '"ценаСамотизацией"')
-  //           .replaceAll('"номер Rhino"', '"номерRhino"')
-  //           .replaceAll('"оригинальный номер"', '"оригинальныйномер"')
-  //           .replaceAll('"Дата завоза"', '"ДатаЗавоза"')
-  //       )
-  //     );
-  //   };
-
-  const newFunc2 = () => {
-    setSheetData2(
-      JSON.parse(
-        JSON.stringify(sheetData2)
-          .replaceAll('"Авто"', '"vehicle"')
-          .replaceAll('"Наименование"', '"name"')
-          .replaceAll('"цена входящая"', '"incomePrice"')
-          .replaceAll('"цена со склада"', '"stockPrice"')
-          .replaceAll('"цена с амотизацией"', '"priceWithDepreciation"')
-          .replaceAll('"номер Rhino"', '"rhinoID"')
-          .replaceAll('"оригинальный номер"', '"originalID"')
-          .replaceAll('"Дата завоза"', '"deliveryInfo"')
-      )
-    );
-  };
-
-  const handleChange = (e) => {
+  const handleChecked = (e) => {
     const { name, checked } = e.target;
-    //uniqueId()
-    //alert('hello selected');
     console.log(name);
-    if (name === 'allselect') {
-      const checkedValue = sheetData2.map((row) => {
-        return { ...row, defect: true };
-      });
-      console.log(checkedValue);
-      setSheetData2(checkedValue);
-    } else {
-      console.log(name);
-      const checkedValue = sheetData2.map((row) =>
-        row.id === name
-          ? { ...row, defect: checked }
-          : { ...row, defect: false }
-      );
-      console.log(checkedValue);
-      setSheetData2(checkedValue);
-    }
-  };
-
-  const handleChangeInputCategory = (e) => {};
-
-  const handleCategory = () => {
-    const someCategory = 'car';
-    //console.log(category)
-    const newData = sheetData2.map((row) => {
-      //return { ...row, someCategory, id: uuid() };
-      return { ...row, id: uuid() };
-    });
-    console.log(newData);
-    setSheetData2(newData);
-  };
-
-  const uniqueId = () => {
-    const newData = sheetData2.map((row) => {
-      return { ...row, id: uuid() };
-    });
-    console.log(newData);
-    setSheetData2(newData);
+    const value = CheckedService.handleCheckedFunc(name, checked, sheetData2);
+    setSheetData2(value);
   };
 
   const hangleBarcode = (getusers) => {
-    //alert('barcode clik');
-    // console.log(sheetData2[0].id);
     console.log(getusers);
     ctxDispatch({ type: 'BARCODE_ID', payload: getusers.id });
     ctxDispatch({ type: 'BARCODE_RHINOID', payload: getusers.rhinoID });
     localStorage.setItem('id', getusers.id);
     localStorage.setItem('rhinoID', getusers.rhinoID);
     navigate('/barcode');
-
-    return (
-      <BarcodeGen id={getusers} />
-      //navigate('/barcode');
-    );
-    navigate('/barcode', { id: getusers });
+    return <BarcodeGen id={getusers} />;
   };
 
   const submitHandler2 = async (e) => {
     e.preventDefault();
     try {
       const res = await $api
-        .post(
-          '/Catalog/get-parts-catalog',
-          {
-            //phone,
-            //password,
-            //udid: 'test',
-            parentId: '',
-          }
-          //   {
-          //     headers: {
-          //       Authorization:
-          //         'Bearer ' +
-          //         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjY0MDFmZWI3NDcxMzIwNDIwNjA2YTU2ZCIsInJvbGUiOiJVc2VyIiwianRpIjoiMjQyYjRhMTUtM2FiMS00NTc4LThhY2EtNzBkZTlhYzBiNjk2IiwiaWQiOiI2NDAxZmViNzQ3MTMyMDQyMDYwNmE1NmQiLCJuYmYiOjE2Nzc5NjMzNTQsImV4cCI6MTY3Nzk2MzY1NCwiaWF0IjoxNjc3OTYzMzU0fQ.L6-XANKSu8nLoEAUQVKHbbyGDH6DKGb_ZZdjh_wyvoI',
-          //     },
-          //   }
-        )
+        .post('/Catalog/get-parts-catalog', {
+          parentId: '',
+        })
         .then((res) => {
           const parts = res;
           console.log(parts.data);
           //setCategory(parts.data);
         });
-      //console.log(category);
       //ctxDispatch({type: 'USER_SIGNIN', payload: data});
       const token = localStorage.getItem('token');
-      //navigate('/parse-excel');
       console.log(token);
-
-      //console.table(data);
-      //console.log(data[0].id);
-
-      //   for (var value of data) {
-      //     console.log(value);
-      //   }
-
-      // const result = data.map((item) => ({ id: item.id }));
-      // console.log(result);
-      //   data.forEach((element) => {
-      //     console.log(element);
-      //   });
     } catch (e) {
       console.log(e);
     }
@@ -615,253 +422,17 @@ const ParseExcel = () => {
     //e.preventDefault;
     console.log(valu);
     setSearchCategory1(valu);
-    if (searchCategory1) {
-    }
-
-    const newPhield = document.createElement('input');
-    newPhield.type = 'text';
-    //newPhield.setAttribute('name', )
-  };
-
-  const saveData = async () => {
-    console.log(sheetData2);
-    const response = await $api
-      .post(
-        `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
-        {
-          items: [
-            //{
-            //sheetData2,
-
-            //   id: sheetData2[0].id,
-            //   vehicle: sheetData2[0].vehicle,
-            //   name: sheetData2[0].name,
-            //   rhinoID: sheetData2[0].rhinoID,
-            //   originalID: sheetData2[0].originalID,
-            //   stockPrice: sheetData2[0].stockPrice,
-            //   incomePrice: sheetData2[0].incomePrice,
-            //   priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-            //   deliveryInfo: sheetData2[0].deliveryInfo,
-            //   defect: sheetData2[0].defect,
-            //   catalogPart: {
-            //     id: sheetData2[0].catalogParts.id2,
-            //     Name: sheetData2[0].catalogParts.Name,
-            //     Parents: sheetData2[0].catalogParts.Parents,
-            //     LocalizedName: sheetData2[0].catalogParts.LocalizedName,
-            {
-              id: sheetData2[0].id,
-              vehicle: sheetData2[0].vehicle,
-              name: sheetData2[0].name,
-              rhinoID: sheetData2[0].rhinoID,
-              originalID: `${sheetData2[0].originalID}`,
-              stockPrice: sheetData2[0].stockPrice,
-              incomePrice: sheetData2[0].incomePrice,
-              priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-              deliveryInfo: sheetData2[0].deliveryInfo,
-              defect: sheetData2[0].defect,
-              catalogPart: {
-                id: sheetData2[0].catalogPart.id,
-                Name: sheetData2[0].catalogPart.Name,
-                Parents: sheetData2[0].catalogPart.Parents,
-                LocalizedName: sheetData2[0].catalogPart.LocalizedName,
-              },
-            },
-          ],
-          // id: sheetData2.id,
-          // vehicle: sheetData2.vehicle,
-          // name: sheetData2.name,
-          // rhinoID: sheetData2.rhinoID,
-          // originalID: sheetData2.originalID,
-          // stockPrice: sheetData2.stockPrice,
-          // incomePrice: sheetData2.incomePrice,
-          // priceWithDepreciation: sheetData2.priceWithDepreciation,
-          // deliveryInfo: sheetData2.deliveryInfo,
-          // defect: sheetData2.defect,
-          // catalogPart: {
-          //   id: sheetData2.catalogParts.id2,
-          //   Name: sheetData2.catalogParts.Name,
-          //   Parents: sheetData2.catalogParts.Parents,
-          //   LocalizedName: sheetData2.catalogParts.LocalizedName,
-          // },
-        }
-      )
-      .then((res) => console.log(res.data));
-  };
-  const saveData3 = () => {
-    console.log(sheetData2);
-
-    const model = {
-      items: [
-        {
-          id: sheetData2.map((row) => row.id),
-          vehicle: sheetData2.map((row) => row.vehicle),
-          name: sheetData2.map((row) => row.name),
-          rhinoID: sheetData2.map((row) => row.rhinoID),
-          originalID: sheetData2.map((row) => row.originalID),
-          stockPrice: sheetData2.map((row) => row.stockPrice),
-          incomePrice: sheetData2.map((row) => row.incomePrice),
-          priceWithDepreciation: sheetData2.map(
-            (row) => row.priceWithDepreciation
-          ),
-          deliveryInfo: sheetData2.map((row) => row.deliveryInfo),
-          defect: sheetData2.map((row) => row.defect),
-          catalogPart: {
-            id: sheetData2.map((row) => row.catalogPart.id),
-            Name: sheetData2.map((row) => row.catalogPart.Name),
-            Parents: sheetData2.map((row) => row.catalogPart.Parents),
-            LocalizedName: sheetData2.map(
-              (row) => row.catalogPart.LocalizedName
-            ),
-          },
-        },
-      ],
-    };
-    console.log(model);
-
-    // const sendData = () => {
-    //   for (let index = 0; index < sheetData2.length; index++) {
-    //     const element = sheetData2[index];
-    //     console.log(sheetData2[index]);
-
-    //     if (index) {
-    //       items: [
-    //         {
-    //           id: sheetData2[0].id,
-    //           vehicle: sheetData2[0].vehicle,
-    //           name: sheetData2[0].name,
-    //           rhinoID: sheetData2[0].rhinoID,
-    //           originalID: `${sheetData2[0].originalID}`,
-    //           stockPrice: sheetData2[0].stockPrice,
-    //           incomePrice: sheetData2[0].incomePrice,
-    //           priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-    //           deliveryInfo: sheetData2[0].deliveryInfo,
-    //           defect: sheetData2[0].defect,
-    //           catalogPart: {
-    //             id: sheetData2[0].catalogPart.id,
-    //             Name: sheetData2[0].catalogPart.Name,
-    //             Parents: sheetData2[0].catalogPart.Parents,
-    //             LocalizedName: sheetData2[0].catalogPart.LocalizedName,
-    //           },
-    //         },
-    //       ];
-    //     }
-    //   }
-    // };
-
-    const finalModel = {
-      items: [{ vahicle: 'some' }],
-    };
-
-    console
-      .log
-      //   Object.assign(
-      //     ...model.items.id.map(
-      //       (n, i) => (
-      //         { [n]: model.items.vehicle[i] }, { [n]: model.items.name[i] }
-      //       )
-      //     )
-      //   )
-      ();
-    //return model;
   };
 
   const saveData4 = () => {
-    const correctData2 = category.filter(function (part) {
-      return part.localizedName.includes('Engine');
-    });
-    console.log(correctData2);
-
-    const newData = sheetData2.map((row) => {
-      //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-      return {
-        ...row,
-        catalogPart: {
-          id: correctData2[0].id,
-          Name: correctData2[0].name,
-          Parents: correctData2[0].parents,
-          LocalizedName: correctData2[0].localizedName,
-        },
-      };
-    });
-    console.log(newData);
-    setSheetData2(newData);
-
+    const newData = SaveHelperService.save(category, sheetData2);
     let items = [];
 
     if (newData) {
       console.log(newData);
-      //let items = [];
-      for (let index = 0; index < newData.length; index++) {
-        const element = [];
-        element.push(newData[index]);
-        console.log(element);
-
-        console.log(newData[index]);
-
-        let items = [];
-
-        const response = $api
-          .post(
-            `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
-            {
-              items: [
-                {
-                  id: newData[index].id,
-                  vehicle: newData[index].vehicle,
-                  name: newData[index].name,
-                  rhinoID: newData[index].rhinoID,
-                  originalID: `${newData[index].originalID}`,
-                  stockPrice: newData[index].stockPrice,
-                  incomePrice: newData[index].incomePrice,
-                  priceWithDepreciation: newData[index].priceWithDepreciation,
-                  deliveryInfo: newData[index].deliveryInfo,
-                  defect: newData[index].defect,
-                  catalogPart: {
-                    id: newData[index].catalogPart.id,
-                    Name: newData[index].catalogPart.Name,
-                    Parents: newData[index].catalogPart.Parents,
-                    LocalizedName: newData[index].catalogPart.LocalizedName,
-                  },
-                },
-              ],
-            }
-          )
-          .then((res) => {
-            const response = res.data;
-            //console.log(res);
-            items.push(res.data.success);
-            //console.log(items);
-          });
-
-        // if (index) {
-        //   const newArr = {
-        //     id: sheetData2[0].id,
-        //     vehicle: sheetData2[0].vehicle,
-        //     name: sheetData2[0].name,
-        //     rhinoID: sheetData2[0].rhinoID,
-        //     originalID: `${sheetData2[0].originalID}`,
-        //     stockPrice: sheetData2[0].stockPrice,
-        //     incomePrice: sheetData2[0].incomePrice,
-        //     priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-        //     deliveryInfo: sheetData2[0].deliveryInfo,
-        //     defect: sheetData2[0].defect,
-        //     catalogPart: {
-        //       id: sheetData2[0].catalogPart.id,
-        //       Name: sheetData2[0].catalogPart.Name,
-        //       Parents: sheetData2[0].catalogPart.Parents,
-        //       LocalizedName: sheetData2[0].catalogPart.LocalizedName,
-        //     },
-        //   };
-        //   console.log(newArr);
-        // }
-      }
-
-      //alert('ok');
+      SaveService.mainSave(newData);
     }
 
-    // if (items.length <= 40) {
-    //   alert('123');
-    // }
     const final = items.every(function (e) {
       return e === true;
     });
@@ -870,163 +441,34 @@ const ParseExcel = () => {
     if (final) {
       alert('Data succesfully saved');
     }
-
-    // if (items.every == true) {
-    //   alert('456');
-    // }
   };
 
   const saveData5 = () => {
-    const correctData2 = category.filter(function (part) {
-      return part.localizedName.includes('Engine');
-    });
-    console.log(correctData2);
+    const items = SaveHelperService2.save(category, sheetData2);
+    console.log(items);
+    setSheetData2(items);
 
-    const newData = sheetData2.map((row) => {
-      //return { ...row, catalogParts: { id2: cityId, Name: searchCategory } };
-      return {
-        ...row,
-        originalID: `${sheetData2[0].originalID}`,
-        catalogPart: {
-          id: correctData2[0].id,
-          Name: correctData2[0].name,
-          Parents: correctData2[0].parents,
-          LocalizedName: correctData2[0].localizedName,
-        },
-      };
-    });
-    console.log(newData);
-    setSheetData2(newData);
+    if (items) {
+      console.log(items);
 
-    if (newData) {
-      console.log(newData);
-      let items = [];
-      //for (let index = 0; index < newData.length; index++) {
-      const element = [];
-      //element.push(newData[index]);
-      //console.log(element);
-
-      //console.log(newData[index]);
-
-      //let items = [];
-
+      let items2 = [];
       const response = $api
         .post(
           `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
           {
-            items: [
-              //{
-              newData,
-              //   id: newData[index].id,
-              //   vehicle: newData[index].vehicle,
-              //   name: newData[index].name,
-              //   rhinoID: newData[index].rhinoID,
-              //   originalID: `${newData[index].originalID}`,
-              //   stockPrice: newData[index].stockPrice,
-              //   incomePrice: newData[index].incomePrice,
-              //   priceWithDepreciation: newData[index].priceWithDepreciation,
-              //   deliveryInfo: newData[index].deliveryInfo,
-              //   defect: newData[index].defect,
-              //   catalogPart: {
-              //     id: newData[index].catalogPart.id,
-              //     Name: newData[index].catalogPart.Name,
-              //     Parents: newData[index].catalogPart.Parents,
-              //     LocalizedName: newData[index].catalogPart.LocalizedName,
-              //   },
-              //},
-            ],
+            items,
           }
         )
-        .then((res) => console.log(res));
+        .then((res) => {
+          console.log(res);
+          const response = res.data;
+          items2.push(res.data.success);
+        });
 
-      // if (index) {
-      //   const newArr = {
-      //     id: sheetData2[0].id,
-      //     vehicle: sheetData2[0].vehicle,
-      //     name: sheetData2[0].name,
-      //     rhinoID: sheetData2[0].rhinoID,
-      //     originalID: `${sheetData2[0].originalID}`,
-      //     stockPrice: sheetData2[0].stockPrice,
-      //     incomePrice: sheetData2[0].incomePrice,
-      //     priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-      //     deliveryInfo: sheetData2[0].deliveryInfo,
-      //     defect: sheetData2[0].defect,
-      //     catalogPart: {
-      //       id: sheetData2[0].catalogPart.id,
-      //       Name: sheetData2[0].catalogPart.Name,
-      //       Parents: sheetData2[0].catalogPart.Parents,
-      //       LocalizedName: sheetData2[0].catalogPart.LocalizedName,
-      //     },
-      //   };
-      //   console.log(newArr);
-      // }
+      if (items2) {
+        alert('Data succesfully saved');
+      }
     }
-  };
-  //};
-
-  const saveData2 = async () => {
-    console.log(sheetData2);
-
-    const sheetDataFinal = sheetData2.map((row) => {
-      return { ...row, originalID: `${row.originalID}` };
-    });
-
-    // for (let i = 0; i < sheetDataFinal.length; i++) {
-    //   text += cars[i] + '<br>';
-    // }
-    const response = await $api
-      .post(
-        `https://rhino-api-alquo.ondigitalocean.app/Parts/add-to-warehouse`,
-        {
-          items: [
-            //{
-
-            // {
-            //   sheetDataFinal,
-            // },
-
-            //   id: sheetData2[0].id,
-            //   vehicle: sheetData2[0].vehicle,
-            //   name: sheetData2[0].name,
-            //   rhinoID: sheetData2[0].rhinoID,
-            //   originalID: sheetData2[0].originalID,
-            //   stockPrice: sheetData2[0].stockPrice,
-            //   incomePrice: sheetData2[0].incomePrice,
-            //   priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-            //   deliveryInfo: sheetData2[0].deliveryInfo,
-            //   defect: sheetData2[0].defect,
-            //   catalogPart: {
-            //     id: sheetData2[0].catalogParts.id2,
-            //     Name: sheetData2[0].catalogParts.Name,
-            //     Parents: sheetData2[0].catalogParts.Parents,
-            //     LocalizedName: sheetData2[0].catalogParts.LocalizedName,
-            {
-              //sheetData2,
-              id: sheetData2.map((row) => row.id)[0],
-              vehicle: sheetData2.map((row, index) => {
-                return row.vehicle;
-              }),
-            },
-            //   id: sheetData2[0].id,
-            //   vehicle: sheetData2[0].vehicle,
-            //   name: sheetData2[0].name,
-            //   rhinoID: sheetData2[0].rhinoID,
-            //originalID: '51117307993',
-            //   stockPrice: sheetData2[0].stockPrice,
-            //   incomePrice: sheetData2[0].incomePrice,
-            //   priceWithDepreciation: sheetData2[0].priceWithDepreciation,
-            //   deliveryInfo: sheetData2[0].deliveryInfo,
-            //   defect: sheetData2[0].defect,
-            //   catalogPart: {
-            //     id: sheetData2[0].catalogParts.id2,
-            //     Name: sheetData2[0].catalogParts.Name,
-            //     Parents: sheetData2[0].catalogParts.Parents,
-            //     LocalizedName: sheetData2[0].catalogParts.LocalizedName,
-            //   },
-          ],
-        }
-      )
-      .then((res) => console.log(res.data));
   };
 
   const refresh = async () => {
@@ -1038,10 +480,8 @@ const ParseExcel = () => {
     const response2 = await $api
       .post(`/Users/refresh-token`, {
         token: newToken,
-        //password,
         refreshToken: newToken2,
         udid: 'test67',
-        //parentId: '',
       })
       .then((res) => {
         const response = res.data;
@@ -1052,64 +492,8 @@ const ParseExcel = () => {
   const handleParts = () => {
     navigate('/allparts');
   };
+
   return (
-    // <div>
-    //   <h1>Parse Excel</h1>
-    //   {!fileName && <div>Пожалуйста, загрузите файл</div>}
-    //   {fileName && (
-    //     <p>
-    //         File name: <span className='filename'>{" "}{fileName}</span>
-    //     </p>
-    //   )}
-    //   <input className='filename2'
-    //    type="file" accept='xlsx, xls'
-    //    multiple={false}
-    //    ref={fileRef}
-    //    onChange={(e) => handleFile(e)} />
-
-    //   { fileName &&
-    //   <i
-    //   className='now-ui-icon ui-1_simple-remove align-middle'
-    //   onClick={handleRemove}
-    //   >
-    //     <div className="bg-gray  p-2">
-    //   <CloseButton variant="black" />
-    //   {/* <CloseButton variant="white" disabled /> */}
-    // </div>
-    //   </i>
-
-    //   }
-    //   <Row>
-    //     <Col md={12}>
-    //         <Table bordered className='border my-3'>
-    //             <thead className='text-primary table-header'>
-    //                 <tr>
-    //                 {columns.map(c => (
-    //                 // <div key={c}>{c}</div>
-    //                 <td key={c}>{c}</td>
-    //                      ))}
-    //                 </tr>
-
-    //             </thead>
-
-    //             <tbody className='table-body'>
-    //           {/* <tr> */}
-    //           {sheetData.slice(1).map((row) => (
-    //         // <div key={c}>{c}</div>
-    //         <tr >
-    //           {row.map(c => <td>{c} </td> )}
-    //         </tr>
-    //       ))}
-
-    //           {/* </tr> */}
-    //         </tbody>
-
-    //         </Table>
-
-    //     </Col>
-    //   </Row>
-    // </div>
-
     <div>
       <h1>Parse Excel</h1>
       {!fileName && <div className="filename">Пожалуйста, загрузите файл.</div>}
@@ -1118,8 +502,6 @@ const ParseExcel = () => {
           File name: <span className="filename">{fileName}</span>
         </p>
       )}
-
-      {other}
       <div className="row-rev">
         <div>
           <input
@@ -1140,43 +522,24 @@ const ParseExcel = () => {
             >
               <div className="bg-gray   ">
                 <CloseButton />
-                {/* <CloseButton variant="white" disabled /> */}
               </div>
             </i>
           )}
         </div>
       </div>
-      {/* <div className="my-3">
-        <button onClick={newFunc2}>Отобразить данные</button>
-      </div> */}
-
-      {/* <input type="checkbox" onChange={handleCategory} /> */}
       {/* <input type="checkbox" onChange={hangleInput} /> */}
 
-      {/* <input type="checkbox" onChange={newFunc2} /> */}
-
-      {/* <input type="checkbox" onChange={refresh} /> */}
-
-      <Form onSubmit={submitHandler2}>
-        {/* <FormGroup className="mb-3" controlId="searchCategory">
-          <Form.Label>Категория</Form.Label>
-          <Form.Control
-            type="searchCategory"
-            //required
-            onChange={(e) => setSearchCategory(e.target.value)}
-          />
-        </FormGroup> */}
-
-        <div className="mb-3">
-          {/* <Button type="submit">Получить категорию</Button> */}
-          {/* <Button className="mx-2" onClick={setCategory2} type="submit">
+      {/* <Form onSubmit={submitHandler2}> */}
+      {/* <div className="mb-3"> */}
+      {/* <Button type="submit">Получить категорию</Button> */}
+      {/* <Button className="mx-2" onClick={setCategory2} type="submit">
             Установить категорию
           </Button> */}
-        </div>
-      </Form>
+      {/* </div> */}
+      {/* </Form> */}
 
       <div className="my-3">
-        <button onClick={saveData4}>Сохранить</button>
+        <button onClick={saveData5}>Сохранить</button>
       </div>
 
       <div className="my-3">
@@ -1194,10 +557,9 @@ const ParseExcel = () => {
                     name="allselect"
                     placeholder="some"
                     checked={!sheetData2.some((row) => row.defect !== true)}
-                    onChange={handleChange}
+                    onChange={handleChecked}
                   />
                 </th>
-
                 <th>Авто</th>
                 <th>Наименование</th>
                 <th>НомерRhino</th>
@@ -1207,13 +569,11 @@ const ParseExcel = () => {
                 <th>цена с амортизацией</th>
                 <th>дата завоза</th>
                 {/* <th>
-                 
                   категория
                 </th> */}
                 <th>штрих код</th>
 
                 {/* {sheetData[0].map(h => <td>{h}</td>)} */}
-
                 {/* comented to check */}
 
                 {/* {columns.map(c => (
@@ -1222,11 +582,9 @@ const ParseExcel = () => {
         ))} */}
 
                 {/* {sheetData} */}
-
                 {/* {sheet.map(h => <td>{h}</td>)} */}
               </tr>
             </thead>
-
             <tbody>
               {sheetData2.map((getusers, index) => (
                 <tr key={index}>
@@ -1236,7 +594,7 @@ const ParseExcel = () => {
                       type="checkbox"
                       name={getusers.id}
                       checked={getusers?.defect || false}
-                      onChange={handleChange}
+                      onChange={handleChecked}
                     />
                   </th>
 
@@ -1311,7 +669,6 @@ const ParseExcel = () => {
                     {getusers ? (
                       // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
                       // target="_blank"
-
                       <Link to="/barcode">
                         <button
                           onClick={(e) => hangleBarcode(getusers)}
@@ -1330,18 +687,13 @@ const ParseExcel = () => {
                         </button>
                       </Link>
                     )}
-
                     {/* <div>
                       <BarcodeGen id={getusers.id} />
                     </div> */}
                   </td>
-                  {/* <td>
-                    <button onClick={handleParts}>Parts</button>
-                  </td> */}
                 </tr>
               ))}
             </tbody>
-
             {/* <tbody className='table-body'> */}
             {/* <tr> */}
             {/* {sheetData.slice(1).map((row) => ( */}

@@ -8,7 +8,7 @@ export default class KeyValueStreamlineService {
         .replaceAll('"цена со склада"', '"stockPrice"')
         .replaceAll('"цена с амотизацией"', '"priceWithDepreciation"')
         .replaceAll('"номер Rhino"', '"rhinoID"')
-        .replaceAll('"оригинальный номер"', '"originalID"')
+        .replaceAll('"оригинальный номер"', '"originalIDs"')
         .replaceAll('"Дата завоза"', '"deliveryInfo"')
     );
 

@@ -13,8 +13,10 @@ export default class SaveHelperService2 {
         id: sheetData2[index].id,
         vehicle: sheetData2[index].vehicle,
         name: sheetData2[index].name,
-        rhinoID: sheetData2[index].rhinoID,
-        originalID: `${sheetData2[index].originalID}`,
+        rhinoID: sheetData2[index].rhinoID ? sheetData2[index].rhinoID : '0',
+        originalIDs: [`${sheetData2[index].originalIDs}`], //i need to remove back ticks for very big file
+        originalID: 'null', //i need to remove back ticks for very big file
+
         stockPrice: sheetData2[index].stockPrice,
         incomePrice: sheetData2[index].incomePrice,
         priceWithDepreciation: sheetData2[index].priceWithDepreciation,

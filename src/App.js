@@ -12,6 +12,11 @@ import { Store } from './Store';
 import BarcodeGen from './Components/BarcodeGen';
 import AllParts from './Components/AllParts';
 import axios from 'axios';
+import GetDocuments from './Components/GetDocuments/GetDocuments';
+import GetDocumentsPrint from './Components/GetDocumentsPrint/GetDocumentsPrint';
+import GetRouteSheet from './Components/RouteSheet/GetRouteSheet/GetRouteSheet';
+import AddRouteSheet from './Components/RouteSheet/AddRouteSheet/AddRouteSheet';
+import GetRouteSheetData from './Components/RouteSheet/GetRouteSheet/data/GetRouteSheetData';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -99,6 +104,14 @@ function App() {
             <Route path="/parse-excel" element={<ParseExcel />} />
             <Route path="/barcode" element={<BarcodeGen />} />
             <Route path="/allparts" element={<AllParts />} />
+            <Route path="/get-documents" element={<GetDocuments />} />
+            <Route path="get-documents/:id" element={<GetDocumentsPrint />} />
+            <Route path="/get-route-sheet" element={<GetRouteSheet />} />
+            <Route path="/add-route-sheet" element={<AddRouteSheet />} />
+            <Route
+              path="get-route-sheet-data"
+              element={<GetRouteSheetData />}
+            />
           </Routes>
         </Container>
       </main>

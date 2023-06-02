@@ -13,10 +13,12 @@ import BarcodeGen from './Components/BarcodeGen';
 import AllParts from './Components/AllParts';
 import axios from 'axios';
 import GetDocuments from './Components/GetDocuments/GetDocuments';
+
 import GetDocumentsPrint from './Components/GetDocumentsPrint/GetDocumentsPrint';
 import GetRouteSheet from './Components/RouteSheet/GetRouteSheet/GetRouteSheet';
 import AddRouteSheet from './Components/RouteSheet/AddRouteSheet/AddRouteSheet';
 import GetRouteSheetData from './Components/RouteSheet/GetRouteSheet/data/GetRouteSheetData';
+import AddDocuments from './Components/AddDocuments/AddDocuments';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -105,6 +107,7 @@ function App() {
             <Route path="/barcode" element={<BarcodeGen />} />
             <Route path="/allparts" element={<AllParts />} />
             <Route path="/get-documents" element={<GetDocuments />} />
+            <Route path="/add-documents" element={<AddDocuments />} />
             <Route path="get-documents/:id" element={<GetDocumentsPrint />} />
             <Route path="/get-route-sheet" element={<GetRouteSheet />} />
             <Route path="/add-route-sheet" element={<AddRouteSheet />} />

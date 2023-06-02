@@ -18,7 +18,7 @@ function Sidebar() {
           <Link to="/get-documents">Отримати дані по документу</Link>
         </div>
         <div className="link">
-          <Link>Загрузити дані з документу</Link>
+          <Link to="/add-documents">Загрузити дані з документу</Link>
         </div>
         <div className="link">
           <Link to="/get-route-sheet">Отримати дані по маршрутному листу</Link>

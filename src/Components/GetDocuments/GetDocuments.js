@@ -14,6 +14,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import './GetDocuments.css';
 import BarcodeGen from '../BarcodeGen';
 import { Store } from '../../Store';
+import axios from 'axios';
 
 function GetDocuments() {
   const [data, setData] = useState([]);
@@ -95,6 +96,21 @@ function GetDocuments() {
     }
   };
 
+  const getData4 = (item) => {
+    try {
+      const res = axios
+        .get(
+          `https://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+        )
+        .then((res) => {
+          const response = res.data;
+          console.log(response);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const hangleBarcode = (item) => {
     console.log(item);
     ctxDispatch({ type: 'BARCODE_ID', payload: item.id });
@@ -103,7 +119,8 @@ function GetDocuments() {
     localStorage.setItem('rhinoID', item.rhinoID);
     //navigate('/barcode');
     // getData2(item);
-    getData3(item);
+    //getData3(item);
+    getData4(item);
 
     // http://localhost:5000?id={код баркода}&veh={имя авто}&name={наименование товара}
 

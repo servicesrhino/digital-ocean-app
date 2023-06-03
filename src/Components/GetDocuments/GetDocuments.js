@@ -100,7 +100,7 @@ function GetDocuments() {
     try {
       const res = axios
         .get(
-          `https://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+          `http://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
         )
         .then((res) => {
           const response = res.data;

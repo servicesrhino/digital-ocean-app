@@ -30,8 +30,11 @@ function AddDocuments() {
           }
         })
         .catch((error) => {
-          console.log(error);
-          alert('Document already exist');
+          console.log(error.response.status);
+
+          if (error.response.status === 400) {
+            alert('Document already exist');
+          }
         });
     } catch (response) {
       console.log(response.data);

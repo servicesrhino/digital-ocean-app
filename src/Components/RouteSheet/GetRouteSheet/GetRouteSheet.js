@@ -10,6 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import $api from '../../http';
+import Sidebar from '../../Sidebar/Sidebar';
 import './GetRouteSheet.css';
 
 function GetRouteSheet() {
@@ -112,32 +113,37 @@ function GetRouteSheet() {
   // console.log(managerName);
 
   return (
-    <div>
-      <Container className="small-container">
-        <h1 className="my-3">Отримати дані по маршрутному листу</h1>
-        <Form onSubmit={getData}>
-          <FormGroup className="mb-3" controlId="documentID">
-            <Form.Label>documentID</Form.Label>
-            <Form.Control
-              // type="phone"
-              required
-              onChange={(e) => setDocumentID(e.target.value)}
-            />
-          </FormGroup>
+    <div className="app">
+      <div className="app__body">
+        <Sidebar />
+        <div className="app__other">
+          <div className="form">
+            <Container className="small-container">
+              <h4 className="my-1">Отримати дані по маршрутному листу</h4>
+              <Form onSubmit={getData}>
+                <FormGroup className="mb-1" controlId="documentID">
+                  <Form.Label>documentID</Form.Label>
+                  <Form.Control
+                    // type="phone"
+                    required
+                    onChange={(e) => setDocumentID(e.target.value)}
+                  />
+                </FormGroup>
 
-          <FormGroup className="mb-3" controlId="sheetID">
-            <Form.Label>SheetID</Form.Label>
-            <Form.Control
-              // type="password"
-              onChange={(e) => setSheetID(e.target.value)}
-            />
-          </FormGroup>
-          <div className="mb-3">
-            <Button type="submit">Відправити</Button>
+                <FormGroup className="mb-2" controlId="sheetID">
+                  <Form.Label>SheetID</Form.Label>
+                  <Form.Control
+                    // type="password"
+                    onChange={(e) => setSheetID(e.target.value)}
+                  />
+                </FormGroup>
+                <div className="mb-2">
+                  <Button type="submit">Відправити</Button>
+                </div>
+              </Form>
+            </Container>
           </div>
-        </Form>
-      </Container>
-      {/* <form className="form">
+          {/* <form className="form">
         <input
           type="text"
           placeholde  r="documentID"
@@ -150,126 +156,163 @@ function GetRouteSheet() {
         </button>
       </form> */}
 
-      <Row>
-        <Col>
-          <Table>
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>date</th>
-                {/* <th>updateTimeDate</th>
+          <Row>
+            <Col>
+              <Table>
+                <thead>
+                  {/* <tc> */}
+                  <tr>
+                    <th>id</th>
+
+                    <th>date</th>
+                  </tr>
+                  {/* <th>updateTimeDate</th>
                 <th>documentId</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {/* {data.map((item, index) => {
+                  {/* </tc> */}
+                </thead>
+                <tbody>
+                  {/* {data.map((item, index) => {
                 <tr>
                   <td>{item.id}</td>
                 </tr>;
               })} */}
-              <tr>
-                <td>{data.id}</td>
-                <td>{data.date}</td>
-                {/* {final.map((item) => (
+                  <tr>
+                    <td>{data.id}</td>
+                    {/* {final.map((item) => (
                   <div>{item}</div>
                 ))} */}
 
-                {/* <td>{data.updateTimeDate}</td>
+                    {/* <td>{data.updateTimeDate}</td>
                 <td>{data.documentId}</td> */}
 
-                {/* {data.id} */}
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
+                    {/* {data.id} */}
 
-      {/* {final.map((item) => (
+                    <td>{data.date}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+
+          {/* {final.map((item) => (
         <div>
           <p>{item}</p>
         </div>
       ))} */}
 
-      {/* { final2.map((item) => (
+          {/* { final2.map((item) => (
         <div> {item.vehicleName}</div>
       ))} */}
 
-      <Row>
-        <Col>
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>New phields2</th>
-                <th>New phields3</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {routeListItems.map((item, index) => {
+          <Row>
+            <Col>
+              <Table data-toggle="table">
+                <thead className="text-small">
+                  <tr>
+                    <th>Name</th>
+                    <th data-width="3800" data-width-unit="px">
+                      vehicleName
+                    </th>
+                    <th>endPoint</th>
+                    <th>startPoint</th>
+                    <th>comments</th>
+                    <th>originalId</th>
+                    <th>originalPrice</th>
+                    <th>partName</th>
+                    <th>qnt</th>
+                  </tr>
+                </thead>
+                <tbody className="text-small table-body">
+                  {/* {routeListItems.map((item, index) => {
                 <tr>
                   <td>{item.managerName}</td>
                 </tr>;
               })} */}
-              <tr>
-                {final.map((item) => (
-                  <tr key={item}>
-                    <td>{item}</td>
-                    {final2.map((item) => (
-                      <tr key={item}>
-                        <td>{item[0].vehicleName}</td>
-                        <td>{item[0].endPoint}</td>
-                        <td>{item[0].partName}</td>
-                        <td>{item[0].originalId}</td>
-                        <td>{item[0].qnt}</td>
-                      </tr>
-                    ))}
-                  </tr>
-                ))}
-              </tr>
-              some words
-              {/* {
-                // Object.values(first).map((item) => console.log(item.managerName))
-                Object.values(final).map((item) => {
-                  <tr>
-                    <td>{item.managerName}</td>
-                  </tr>;
-                })
-              } */}
-              {/* {data &&
-                data.routeListItems.map((item, index) => {
-                  <tr>
-                    <td>{item}</td>
-                  </tr>;
-                })} */}
-              {/* {routeListItems.map((item, index) => {
-                <tr>
-                  <th>{item.managerName}</th>
-                </tr>;
-              })} */}
-              {final2.map((item) => (
-                <tr key={item}>
-                  <td>{item[0].vehicleName}</td>
-                  <td>{item[0].endPoint}</td>
-                  <td>{item[0].partName}</td>
-                  <td>{item[0].originalId}</td>
-                  <td>{item[0].qnt}</td>
-                </tr>
-              ))}
-              {/* {final2.map(({ vehicleName }) => (
+
+                  {routeListItems.map((item) => (
+                    <tr>
+                      <td>{item.managerName}</td>
+                      <td data-width="3600" data-width-unit="px">
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index} className="test">
+                            <td className="test">
+                              {item.vehicleName ? item.vehicleName : 'n/a'}
+                            </td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index} className="test">
+                            <td className="test">
+                              {item.endPoint ? item.endPoint : 'n/a'}
+                            </td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.startPoint ? item.startPoint : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.comments ? item.comments : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.originalId ? item.originalId : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>
+                              {item.originalPrice ? item.originalPrice : 'n/a'}
+                            </td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.partName ? item.partName : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td>
+                      <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.qnt ? item.qnt : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
+                  {/* {final2.map(({ vehicleName }) => (
                 <tr>
                   <td>{vehicleName}</td>
                 </tr>
               ))} */}
-              {/* {Object.values(final2).map((item) => <td>{item}</td>))} */}
-              {/* {Object.keys(final2).map((item) => (
+                  {/* {Object.values(final2).map((item) => <td>{item}</td>))} */}
+                  {/* {Object.keys(final2).map((item) => (
                 <tr>
                   <td>{item}</td>
                 </tr>
               ))} */}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </div>
+      </div>
     </div>
   );
 }

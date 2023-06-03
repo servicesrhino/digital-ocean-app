@@ -93,100 +93,101 @@ function GetDocuments() {
     <div className="app">
       <div className="app__body">
         <Sidebar />
+        <div className="app__other">
+          <Container className="small-container">
+            <h1 className="my-3">Отримати дані по документу</h1>
+            <Form onSubmit={getDocument}>
+              <FormGroup className="mb-3" controlId="documentID">
+                <Form.Label>documentID</Form.Label>
+                <Form.Control
+                  // type="phone"
+                  required
+                  onChange={(e) => setDocumentID(e.target.value)}
+                />
+              </FormGroup>
 
-        <Container className="small-container">
-          <h1 className="my-3">Отримати дані по документу</h1>
-          <Form onSubmit={getDocument}>
-            <FormGroup className="mb-3" controlId="documentID">
-              <Form.Label>documentID</Form.Label>
-              <Form.Control
-                // type="phone"
-                required
-                onChange={(e) => setDocumentID(e.target.value)}
-              />
-            </FormGroup>
-
-            <FormGroup className="mb-3" controlId="sheetID">
-              <Form.Label>SheetID</Form.Label>
-              <Form.Control
-                // type="password"
-                onChange={(e) => setSheetID(e.target.value)}
-              />
-            </FormGroup>
-            <div className="mb-3">
-              <Button type="submit">Отримати дані по документу</Button>
-            </div>
-          </Form>
-        </Container>
-        <div>
-          {/* Get documents is here */}
-          <div className="button">
-            {/* <button className="btn btn-primary" onClick={getDocument}>
+              <FormGroup className="mb-3" controlId="sheetID">
+                <Form.Label>SheetID</Form.Label>
+                <Form.Control
+                  // type="password"
+                  onChange={(e) => setSheetID(e.target.value)}
+                />
+              </FormGroup>
+              <div className="mb-3">
+                <Button type="submit">Отримати дані по документу</Button>
+              </div>
+            </Form>
+          </Container>
+          <div>
+            {/* Get documents is here */}
+            <div className="button">
+              {/* <button className="btn btn-primary" onClick={getDocument}>
             Отримати дані по документу
           </button> */}
-          </div>
-          <div>
-            <Row>
-              <Col md={12}>
-                <Table bordered className="border">
-                  <thead className="text-black table-header">
-                    <tr>
-                      <th>vehicle</th>
-                      <th>name</th>
-                      <th>rhinoID</th>
-                      {/* <th>origonalID</th> */}
-                      <th>stock price</th>
-                      <th>income price</th>
-                      <th>price with depreciation</th>
-                      <th>delivery info</th>
-                      <th>id</th>
-                      <th>barcode</th>
-                      {/* <th>марштрутный лист</th> */}
-                    </tr>
-                  </thead>
-                  <tbody className="text-secondary table-body">
-                    {data.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.vehicle}</td>
-                        <td>{item.name}</td>
-                        <td>{item.rhinoID}</td>
-                        {/* <th>{item.originalIDs.join(', ')}</th> */}
-                        <td>{item.stockPrice}</td>
-                        <td>{item.incomePrice}</td>
-                        <td>{item.priceWithDepreciation}</td>
-                        <td>{item.deliveryInfo}</td>
-                        {/* <th>{item.id}</th> */}
-                        {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
-                        <td>{item.id}</td>
-                        {/* </Link> */}
-                        <td>
-                          {item ? (
-                            // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
-                            // target="_blank"
-
-                            <button
-                              onClick={(e) => hangleBarcode(item)}
-                              className="btn btn-danger"
-                            >
-                              Barcode
-                            </button>
-                          ) : (
-                            // <Link to="/barcode">
-                            <button
-                              onClick={(e) => hangleBarcode(item)}
-                              className="btn btn-danger"
-                            >
-                              Barcode
-                            </button>
-                            // </Link>
-                          )}
-                        </td>
+            </div>
+            <div>
+              <Row>
+                <Col md={12}>
+                  <Table bordered className="border">
+                    <thead className="text-black table-header">
+                      <tr>
+                        <th>vehicle</th>
+                        <th>name</th>
+                        <th>rhinoID</th>
+                        {/* <th>origonalID</th> */}
+                        <th>stock price</th>
+                        <th>income price</th>
+                        <th>price with depreciation</th>
+                        <th>delivery info</th>
+                        <th>id</th>
+                        <th>barcode</th>
+                        {/* <th>марштрутный лист</th> */}
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
+                    </thead>
+                    <tbody className="text-secondary table-body">
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.vehicle}</td>
+                          <td>{item.name}</td>
+                          <td>{item.rhinoID}</td>
+                          {/* <th>{item.originalIDs.join(', ')}</th> */}
+                          <td>{item.stockPrice}</td>
+                          <td>{item.incomePrice}</td>
+                          <td>{item.priceWithDepreciation}</td>
+                          <td>{item.deliveryInfo}</td>
+                          {/* <th>{item.id}</th> */}
+                          {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
+                          <td>{item.id}</td>
+                          {/* </Link> */}
+                          <td>
+                            {item ? (
+                              // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
+                              // target="_blank"
+
+                              <button
+                                onClick={(e) => hangleBarcode(item)}
+                                className="btn btn-danger"
+                              >
+                                Barcode
+                              </button>
+                            ) : (
+                              // <Link to="/barcode">
+                              <button
+                                onClick={(e) => hangleBarcode(item)}
+                                className="btn btn-danger"
+                              >
+                                Barcode
+                              </button>
+                              // </Link>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            </div>
           </div>
         </div>
       </div>

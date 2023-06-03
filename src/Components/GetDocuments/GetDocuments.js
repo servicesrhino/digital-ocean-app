@@ -21,6 +21,10 @@ function GetDocuments() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
+  let { printerUrl } = userInfo;
+  printerUrl =
+    'http://desktop-an879b6/Integration/WebServiceIntegration/Execute';
+  // let userInfo.printerUrl = 'http://desktop-an879b6/Integration/WebServiceIntegration/Execute'
   console.log(userInfo.printerUrl);
 
   const [documentID, setDocumentID] = useState('');
@@ -65,7 +69,22 @@ function GetDocuments() {
     try {
       const res = $api
         .get(
-          `http://${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+          `http://${printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+        )
+        .then((res) => {
+          const response = res.data;
+          console.log(response);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getData3 = (item) => {
+    try {
+      const res = $api
+        .get(
+          `http://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
         )
         .then((res) => {
           const response = res.data;
@@ -83,7 +102,9 @@ function GetDocuments() {
     localStorage.setItem('id', item.id);
     localStorage.setItem('rhinoID', item.rhinoID);
     //navigate('/barcode');
-    getData2(item);
+    // getData2(item);
+    getData3(item);
+
     // http://localhost:5000?id={код баркода}&veh={имя авто}&name={наименование товара}
 
     //return <BarcodeGen id={item} />;

@@ -52,19 +52,19 @@ function GetDocuments() {
     }
   };
 
-  const newID = localStorage.getItem('id');
-  const newRhinoID = localStorage.getItem('rhinoID');
-  console.log(newID);
-  console.log(newRhinoID);
+  // const newID = localStorage.getItem('id');
+  // const newRhinoID = localStorage.getItem('rhinoID');
+  // console.log(newID);
+  // console.log(newRhinoID);
 
-  const [text, setText] = useState(`${newID}`);
-  const [barcode, setBarcode] = useState(`${newID}`);
+  // const [text, setText] = useState(`${newID}`);
+  // const [barcode, setBarcode] = useState(`${newID}`);
 
-  const generateBarcode = () => {
-    //e.preventDefault();
-    setBarcode(text);
-  };
-  console.log(barcode);
+  // const generateBarcode = () => {
+  //   //e.preventDefault();
+  //   setBarcode(text);
+  // };
+  // console.log(barcode);
 
   const getData2 = (item) => {
     try {
@@ -111,7 +111,25 @@ function GetDocuments() {
     }
   };
 
-  const hangleBarcode = (item) => {
+  const barcodeNew = async (e, item) => {
+    e.preventDefault();
+    try {
+      const res = $api
+        .get(
+          `http://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+        )
+        .then((res) => {
+          const response = res.data;
+          // setData(response);
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const hangleBarcode = (e, item) => {
+    e.preventDefault();
     console.log(item);
     ctxDispatch({ type: 'BARCODE_ID', payload: item.id });
     ctxDispatch({ type: 'BARCODE_RHINOID', payload: item.rhinoID });
@@ -203,7 +221,7 @@ function GetDocuments() {
                               // target="_blank"
 
                               <button
-                                onClick={(e) => hangleBarcode(item)}
+                                onClick={(e) => barcodeNew(e, item)}
                                 className="btn btn-danger"
                               >
                                 Barcode
@@ -211,7 +229,7 @@ function GetDocuments() {
                             ) : (
                               // <Link to="/barcode">
                               <button
-                                onClick={(e) => hangleBarcode(item)}
+                                onClick={(e) => barcodeNew(e, item)}
                                 className="btn btn-danger"
                               >
                                 Barcode

@@ -1,5 +1,5 @@
 .sidebar {
-  position: sticky;
+  position: static;
   top: 80px;
   flex: 0.4;
   background-color: whitesmoke;
@@ -10,7 +10,8 @@
   margin-right: 10px;
   /* margin-left: 10px; */
   font-size: 14px;
-  /* width: 200px; */
+  width: 100px;
+  max-width: 100px;
 }
 
 .sidebar-links {

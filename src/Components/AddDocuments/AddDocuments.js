@@ -55,7 +55,7 @@ function AddDocuments() {
           <h1 className="my-3">Загрузити дані по документу</h1>
           <Form onSubmit={getData}>
             <FormGroup className="mb-3" controlId="documentID">
-              <Form.Label>documentID</Form.Label>
+              <Form.Label>urlID</Form.Label>
               <Form.Control
                 // type="phone"
                 required

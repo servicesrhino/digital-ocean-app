@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import $api from './http';
+import './Home.css';
+import Sidebar from './Sidebar/Sidebar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ const Home = () => {
       localStorage.setItem('token', data.jwtToken);
       localStorage.setItem('refreshToken', data.refreshToken);
 
-      navigate('/parse-excel');
+      navigate('/get-documents');
       console.log(data);
 
       if (data) {
@@ -140,31 +142,36 @@ const Home = () => {
   }, [navigate, userInfo]);
 
   return (
-    <div>
-      <Container className="small-container">
-        <h1 className="my-3">Логин</h1>
-        <Form onSubmit={submitHandler2}>
-          <FormGroup className="mb-3" controlId="phone">
-            <Form.Label>Номер телефона</Form.Label>
-            <Form.Control
-              type="phone"
-              required
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </FormGroup>
+    <div className="app">
+      <div className="app__body">
+        {/* <Sidebar /> */}
+        {/* <div className="app__other"> */}
+        <Container className="small-container ">
+          <h1 className="my-3 test">Логин</h1>
+          <Form onSubmit={submitHandler2} className="test">
+            <FormGroup className="mb-3" controlId="phone">
+              <Form.Label>Номер телефона</Form.Label>
+              <Form.Control
+                type="phone"
+                required
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </FormGroup>
 
-          <FormGroup className="mb-3" controlId="password">
-            <Form.Label>Пароль</Form.Label>
-            <Form.Control
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormGroup>
-          <div className="mb-3">
-            <Button type="submit">Логин</Button>
-          </div>
-        </Form>
-      </Container>
+            <FormGroup className="mb-3" controlId="password">
+              <Form.Label>Пароль</Form.Label>
+              <Form.Control
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormGroup>
+            <div className="mb-3">
+              <Button type="submit">Логин</Button>
+            </div>
+          </Form>
+        </Container>
+        {/* </div> */}
+      </div>
     </div>
   );
 };

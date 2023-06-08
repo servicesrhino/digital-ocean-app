@@ -122,7 +122,7 @@ function GetRouteSheet() {
               <h4 className="my-1">Отримати дані по маршрутному листу</h4>
               <Form onSubmit={getData}>
                 <FormGroup className="mb-1" controlId="documentID">
-                  <Form.Label>documentID</Form.Label>
+                  <Form.Label>urlID</Form.Label>
                   <Form.Control
                     // type="phone"
                     required
@@ -163,12 +163,8 @@ function GetRouteSheet() {
                   {/* <tc> */}
                   <tr>
                     <th>id</th>
-
                     <th>date</th>
                   </tr>
-                  {/* <th>updateTimeDate</th>
-                <th>documentId</th> */}
-                  {/* </tc> */}
                 </thead>
                 <tbody>
                   {/* {data.map((item, index) => {
@@ -203,16 +199,14 @@ function GetRouteSheet() {
           {/* { final2.map((item) => (
         <div> {item.vehicleName}</div>
       ))} */}
-
+          {final[0]}
           <Row>
             <Col>
-              <Table data-toggle="table">
+              <Table>
                 <thead className="text-small">
-                  <tr>
+                  {/* <tr>
                     <th>Name</th>
-                    <th data-width="3800" data-width-unit="px">
-                      vehicleName
-                    </th>
+                    <th>vehicleName</th>
                     <th>endPoint</th>
                     <th>startPoint</th>
                     <th>comments</th>
@@ -220,58 +214,65 @@ function GetRouteSheet() {
                     <th>originalPrice</th>
                     <th>partName</th>
                     <th>qnt</th>
-                  </tr>
+                  </tr> */}
                 </thead>
                 <tbody className="text-small table-body">
-                  {/* {routeListItems.map((item, index) => {
-                <tr>
-                  <td>{item.managerName}</td>
-                </tr>;
-              })} */}
-
                   {routeListItems.map((item) => (
                     <tr>
-                      <td>{item.managerName}</td>
-                      <td data-width="3600" data-width-unit="px">
+                      {/* <td>{item.managerName}</td> */}
+                      {/* <tr> */}
+                      <td>
                         {item.routeItems.map((item, index) => (
-                          <tr key={index} className="test">
-                            <td className="test">
+                          <tr key={index}>
+                            <td>
                               {item.vehicleName ? item.vehicleName : 'n/a'}
                             </td>
-                          </tr>
-                        ))}
-                      </td>
-                      <td>
-                        {item.routeItems.map((item, index) => (
-                          <tr key={index} className="test">
-                            <td className="test">
-                              {item.endPoint ? item.endPoint : 'n/a'}
+                            <td>{item.endPoint ? item.endPoint : 'n/a'}</td>
+                            <td>{item.startPoint ? item.startPoint : 'n/a'}</td>
+                            <td>{item.comments ? item.comments : 'n/a'}</td>
+                            <td>{item.originalId ? item.originalId : 'n/a'}</td>
+                            <td>
+                              {item.originalPrice ? item.originalPrice : 'n/a'}
                             </td>
+                            <td>{item.partName ? item.partName : 'n/a'}</td>
+                            <td>{item.qnt ? item.qnt : 'n/a'}</td>
                           </tr>
                         ))}
                       </td>
-                      <td>
+                      {/* <td>
+                        {item.routeItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.endPoint ? item.endPoint : 'n/a'}</td>
+                          </tr>
+                        ))}
+                      </td> */}
+                      {/* </tr> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>{item.startPoint ? item.startPoint : 'n/a'}</td>
                           </tr>
                         ))}
-                      </td>
-                      <td>
+                      </td> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>{item.comments ? item.comments : 'n/a'}</td>
                           </tr>
                         ))}
-                      </td>
-                      <td>
+                      </td> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>{item.originalId ? item.originalId : 'n/a'}</td>
                           </tr>
                         ))}
-                      </td>
-                      <td>
+                      </td> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>
@@ -279,21 +280,23 @@ function GetRouteSheet() {
                             </td>
                           </tr>
                         ))}
-                      </td>
-                      <td>
+                      </td> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>{item.partName ? item.partName : 'n/a'}</td>
                           </tr>
                         ))}
-                      </td>
-                      <td>
+                      </td> */}
+
+                      {/* <td>
                         {item.routeItems.map((item, index) => (
                           <tr key={index}>
                             <td>{item.qnt ? item.qnt : 'n/a'}</td>
                           </tr>
                         ))}
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                   {/* {final2.map(({ vehicleName }) => (

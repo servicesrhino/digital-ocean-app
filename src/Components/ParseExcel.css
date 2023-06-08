@@ -12,4 +12,6 @@
 .app__other {
   display: 0.6;
   /* width: 700px; */
+  margin-left: 20px;
+  width: 100%;
 }

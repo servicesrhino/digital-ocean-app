@@ -1,0 +1,30 @@
+.app {
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: flex-start;
+  margin: auto;
+  flex-shrink: initial; */
+}
+
+.app__body {
+  display: flex;
+  margin-top: 25px;
+  margin-left: 10px;
+  /* width: 100%; */
+}
+
+.app__other {
+  display: 0.6;
+  /* width: 700px; */
+  align-self: auto;
+}
+
+.test {
+  width: 110%;
+  margin-left: 400px;
+  /* margin: auto; */
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: stretch; */
+}

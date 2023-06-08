@@ -19,6 +19,7 @@ import GetRouteSheet from './Components/RouteSheet/GetRouteSheet/GetRouteSheet';
 import AddRouteSheet from './Components/RouteSheet/AddRouteSheet/AddRouteSheet';
 import GetRouteSheetData from './Components/RouteSheet/GetRouteSheet/data/GetRouteSheetData';
 import AddDocuments from './Components/AddDocuments/AddDocuments';
+import Header from './Components/Header/Header';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -72,13 +73,13 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app">
       <ToastContainer position="bottom-center" limit={1} />
-      <header>
+      {/* <header>
         <Navbar bg="dark" variant="dark">
           <Container>
             <LinkContainer to="/">
-              <Navbar.Brand>Rhino parse excel</Navbar.Brand>
+              <Navbar.Brand>Rhino</Navbar.Brand>
             </LinkContainer>
 
             {userInfo ? (
@@ -98,8 +99,9 @@ function App() {
             )}
           </Container>
         </Navbar>
-      </header>
-      <main>
+      </header> */}
+      <Header />
+      <main className="app__body">
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />

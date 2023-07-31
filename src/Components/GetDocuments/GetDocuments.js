@@ -116,6 +116,7 @@ function GetDocuments() {
   const barcodeNew = async (e, item) => {
   e.preventDefault();
   try {
+    console.log(${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name});
     await fetch(`${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`).then(res => {
       console.log(res.data);
     });

@@ -112,22 +112,18 @@ function GetDocuments() {
     }
   };
 
-  const barcodeNew = (e, item) => {
-    e.preventDefault();
-    try {
-      const res = axios
-        .get(
-          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
-        )
-        .then((res) => {
-          const response = res.data;
-          // setData(response);
-          console.log(res.data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  const barcodeNew = async (e, item) => {
+  e.preventDefault();
+  try {
+    await fetch(`${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`).then(res => {
+      console.log(res.data);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   const barcodeNew2 = async (e, item) => {
     const response = await axios.get(

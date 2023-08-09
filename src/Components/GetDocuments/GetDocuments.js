@@ -120,14 +120,7 @@ function GetDocuments() {
     console.log(${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name});
     
     await fetch(
-      `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`,
-      {
-  headers: {
-    Access-Control-Allow-Origin: 'http://desktop-tku076r'
-  }
-}
-    
-    ).then(res => {
+      `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`).then(res => {
       console.log(res.data);
     });
   } catch (error) {

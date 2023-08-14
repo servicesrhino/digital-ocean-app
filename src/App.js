@@ -20,6 +20,7 @@ import AddRouteSheet from './Components/RouteSheet/AddRouteSheet/AddRouteSheet';
 import GetRouteSheetData from './Components/RouteSheet/GetRouteSheet/data/GetRouteSheetData';
 import AddDocuments from './Components/AddDocuments/AddDocuments';
 import Header from './Components/Header/Header';
+import GetLastRouteSheet from './Components/RouteSheet/GetLastRouteSheet/GetLastRouteSheet';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -116,6 +117,10 @@ function App() {
             <Route
               path="get-route-sheet-data"
               element={<GetRouteSheetData />}
+            />
+            <Route
+              path="get-last-route-sheet"
+              element={<GetLastRouteSheet />}
             />
           </Routes>
         </Container>

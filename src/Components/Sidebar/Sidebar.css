@@ -32,4 +32,5 @@
 .link {
   margin-top: 15px;
   margin-bottom: 15px;
+  word-wrap: break-word;
 }

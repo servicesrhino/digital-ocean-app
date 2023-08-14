@@ -27,6 +27,9 @@ function Sidebar() {
           <Link to="/add-route-sheet">Загрузити дані по маршрутному листу</Link>
         </div>
         <div className="link">
+          <Link to="/get-last-route-sheet">Отримати останні дані по листу</Link>
+        </div>
+        <div className="link">
           <Link to="/allparts">Get all parts</Link>
         </div>
 

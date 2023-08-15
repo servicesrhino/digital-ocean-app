@@ -514,7 +514,7 @@ function GetLastRouteSheet() {
         <Sidebar />
         <div className="app__other">
           <h1>Отримати останні дані по листу</h1>
-          <button onClick={getData}>Get data last</button>
+          <button onClick={getData}>Отримати останні данні</button>
 
           <p>
             {/* <form> */}
@@ -525,7 +525,6 @@ function GetLastRouteSheet() {
               <option value="3">Vue.js</option>
               <option value="4">Ember.js</option>
             </select> */}
-
             <select id="framework">
               {documentName.map((c, i) => (
                 <option id="list" value={c}>
@@ -533,6 +532,7 @@ function GetLastRouteSheet() {
                 </option>
               ))}
             </select>
+            {'  '}
             <button onClick={selectList2} id="btn">
               Вибрати лист
             </button>
@@ -568,7 +568,7 @@ function GetLastRouteSheet() {
           <Row>
             <Col md={12}>
               <Table hover bordered className="border">
-                <thead className="text-primary table-header">
+                <thead className="text-right table-header text-header">
                   <tr>
                     {/* <th>
                   <input
@@ -600,7 +600,7 @@ function GetLastRouteSheet() {
                     {/* {sheet.map(h => <td>{h}</td>)} */}
                   </tr>
                 </thead>
-                <tbody className="text-secondary table-body">
+                <tbody className="text-secondary table-body test-size">
                   {final9
                     .flat(2)
                     .filter((item) => {

@@ -13,10 +13,8 @@ export default class CheckedService {
       return checkedValue;
     } else {
       console.log(name);
-      const checkedValue = sheetData2.map((row) =>
-        row.id === name
-          ? { ...row, defect: checked }
-          : { ...row, defect: false }
+      const checkedValue = sheetData2.map(
+        (row) => (row.id === name ? { ...row, defect: checked } : { ...row }) //  row.id === name ? { ...row, defect: true } : row
       );
       console.log(checkedValue);
       //setSheetData2(checkedValue);

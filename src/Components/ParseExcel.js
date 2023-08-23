@@ -817,6 +817,8 @@ const ParseExcel = () => {
   const handleChecked = (e) => {
     const { name, checked } = e.target;
     console.log(name);
+    console.log(checked);
+
     const value = CheckedService.handleCheckedFunc(name, checked, sheetData2);
     setSheetData2(value);
   };
@@ -1220,6 +1222,8 @@ const ParseExcel = () => {
   const handleParts = () => {
     navigate('/allparts');
   };
+
+  console.log(sheetData2);
 
   return (
     <div className="app">

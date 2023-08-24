@@ -264,6 +264,7 @@ function GetDocuments() {
                         <th>income price</th>
                         <th>price with depreciation</th>
                         <th>delivery info</th>
+                        <th>quantity</th>
                         <th>id</th>
                         <th>barcode</th>
                         {/* <th>марштрутный лист</th> */}
@@ -290,11 +291,21 @@ function GetDocuments() {
                           </td> */}
 
                           <th
+                            className="checkbox-style"
                             style={{
+                              // display: 'flex',
+                              // //flexDirection: 'column',
+                              // justifyContent: 'center',
+                              // alignItems: 'center',
                               backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary d-flex justify-content-center text-center my-auto',
+                                ? 'gray checkbox-style'
+                                : 'text-secondary checkbox-style ',
                             }}
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary d-flex justify-content-center text-center my-auto',
+                            // }}
                           >
                             <input
                               type="checkbox"
@@ -369,6 +380,7 @@ function GetDocuments() {
                           </td>
                           {/* <th>{item.id}</th> */}
                           {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
+                          <td>{item.qnt}</td>
                           <td
                             style={{
                               backgroundColor: item.printed

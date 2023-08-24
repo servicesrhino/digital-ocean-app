@@ -17,3 +17,9 @@
   /* margin-left: 40px; */
   margin-right: 40px;
 }
+
+.checkbox-style {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

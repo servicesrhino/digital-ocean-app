@@ -22,6 +22,12 @@ function GetDocuments() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
 
+  const [urlID, setUrlID] = useState([]);
+  //const [sheetID, setSheetID] = useState([])
+  const tes2 =
+    'https://docs.google.com/spreadsheets/d/1_j-WNAwx21E6XFeE2gs62eH5P2YdYASQmouMaR7dvmM/edit#gid=346077415';
+  const tes3 = '2020';
+
   const navigate = useNavigate();
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -44,8 +50,8 @@ function GetDocuments() {
         .post(
           'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-documents',
           {
-            documentId: documentID, // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
-            sheetId: sheetID, // '2020',
+            documentId: tes2, // documentID // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
+            sheetId: tes3, // sheetID   // '2020',
           }
         )
         .then((res) => {
@@ -215,8 +221,11 @@ function GetDocuments() {
                 <Form.Label>urlID</Form.Label>
                 <Form.Control
                   // type="phone"
-                  required
+                  //required
                   onChange={(e) => setDocumentID(e.target.value)}
+                  placeholder="https://docs.google.com/spreadsheets/d/1_j-WNAwx21E6XFeE2gs62eH5P2YdYASQmouMaR7dvmM/edit#gid=346077415"
+
+                  //value={urlID}
                 />
               </FormGroup>
 
@@ -225,6 +234,7 @@ function GetDocuments() {
                 <Form.Control
                   // type="password"
                   onChange={(e) => setSheetID(e.target.value)}
+                  placeholder="2020"
                 />
               </FormGroup>
               <div className="mb-3">
@@ -380,7 +390,7 @@ function GetDocuments() {
                           </td>
                           {/* <th>{item.id}</th> */}
                           {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
-                          <td>{item.qnt}</td>
+                          <td>{item.barCodePrintQnt}</td>
                           <td
                             style={{
                               backgroundColor: item.printed

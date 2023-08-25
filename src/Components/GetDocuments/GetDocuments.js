@@ -115,15 +115,46 @@ function GetDocuments() {
     //newPrintFunc2();
   };
 
-  const newPrintFunc2 = async (e) => {
+  const printAll = async (e) => {
+    e.preventDefault();
+
+  // data.forEach(item => {
+    for (const item of data) {
+   //   const contents = await fs.readFile(file, 'utf8');
+ //     console.log(contents);
+    
+  
+
+    try {
+      console.log(
+        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}'
+      );
+
+      await fetch(
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+      ).then((res) => {
+        console.log(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    await timer(1000);
+  }
+ // });
+
+    //newPrintFunc2();
+  };
+  function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
+  
+  const newPrintFunc2 = async (e, item) => {
     e.preventDefault();
     try {
       const res = $api
         .post('https://rhino-api-alquo.ondigitalocean.app/Parts/print', {
-          documentId:
-            'https://docs.google.com/spreadsheets/d/1muyRQSoOxxeweyX5ONvAhKX0JQAA0q6jiKiLAhM62-A', // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
+          documentId: tes2, // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
           sheetId: '2020', // '2020',
-          barCode: 'vV7DAICGkg',
+          barCode: item.id,
         })
         .then((res) => {
           const response = res.data;
@@ -239,6 +270,9 @@ function GetDocuments() {
               </FormGroup>
               <div className="mb-3">
                 <Button type="submit">Отримати дані по документу</Button>
+              </div>
+              <div className="mb-3">
+                <Button type="printAll" onClick={printAll}>Надрукувати все</Button>
               </div>
             </Form>
           </Container>
@@ -423,7 +457,7 @@ function GetDocuments() {
                               <button
                                 onClick={(e) => {
                                   barcodeNew(e, item);
-                                  newPrintFunc2(e);
+                                  newPrintFunc2(e, item);
                                   //handleClick();
                                 }}
                                 className="btn btn-danger"

@@ -101,11 +101,11 @@ function GetDocuments() {
     e.preventDefault();
     try {
       console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}'
+        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID+item.rhinoID}`
       ).then((res) => {
         console.log(res.data);
       });
@@ -127,11 +127,11 @@ function GetDocuments() {
 
     try {
       console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}'
+        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID}`
       ).then((res) => {
         console.log(res.data);
       });

@@ -105,7 +105,7 @@ function GetDocuments() {
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID+item.rhinoID}`
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID}`
       ).then((res) => {
         console.log(res.data);
       });

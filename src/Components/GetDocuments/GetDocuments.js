@@ -390,7 +390,15 @@ function GetDocuments() {
                           </td>
                           {/* <th>{item.id}</th> */}
                           {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
-                          <td>{item.barCodePrintQnt}</td>
+                          <td
+                            style={{
+                              backgroundColor: item.printed
+                                ? 'gray'
+                                : 'text-secondary',
+                            }}
+                          >
+                            {item.barCodePrintQnt}
+                          </td>
                           <td
                             style={{
                               backgroundColor: item.printed

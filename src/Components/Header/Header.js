@@ -13,9 +13,19 @@ function Header() {
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
+    ctxDispatch({ type: 'IS_NO_AUTH' });
+
     localStorage.removeItem('userInfo');
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+
+    // setTimeout(function () {
+    //   localStorage.removeItem('userInfo');
+    // }, 120 * 1000);
+
+    // setTimeout(function () {
+    //   localStorage.removeItem('token');
+    // }, 120 * 1000);
 
     navigate('/');
   };

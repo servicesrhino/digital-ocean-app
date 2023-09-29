@@ -16,6 +16,12 @@
   max-width: 1900px;
   /* margin-left: 40px; */
   margin-right: 40px;
+  /* width: 100%; */
+}
+
+.app__other {
+  width: 100%;
+  /* object-fit: contain; */
 }
 
 .checkbox-style {

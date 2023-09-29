@@ -21,6 +21,8 @@ import GetRouteSheetData from './Components/RouteSheet/GetRouteSheet/data/GetRou
 import AddDocuments from './Components/AddDocuments/AddDocuments';
 import Header from './Components/Header/Header';
 import GetLastRouteSheet from './Components/RouteSheet/GetLastRouteSheet/GetLastRouteSheet';
+import GetLastDocuments from './Components/GetLastDocuments/GetLastDocuments';
+import GetDocumentsFromList from './Components/GetDocumentsFromList/GetDocumentsFromList';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -73,6 +75,10 @@ function App() {
     navigate('/');
   };
 
+  // setTimeout(function () {
+  //   localStorage.removeItem('userInfo');
+  // }, 480 * 1000);
+
   return (
     <div className="app">
       <ToastContainer position="bottom-center" limit={1} />
@@ -121,6 +127,11 @@ function App() {
             <Route
               path="get-last-route-sheet"
               element={<GetLastRouteSheet />}
+            />
+            <Route path="/get-last-documents" element={<GetLastDocuments />} />
+            <Route
+              path="/get-last-documents-fromList"
+              element={<GetDocumentsFromList />}
             />
           </Routes>
         </Container>

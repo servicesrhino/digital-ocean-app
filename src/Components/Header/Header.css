@@ -5,7 +5,7 @@
   background-color: black;
   justify-content: space-evenly;
   border-bottom: 0.1px solid lightgray;
-  padding-top: 10px;
+  padding-top: 2px;
   padding-bottom: 10px;
   width: 100%;
   z-index: 999;
@@ -20,6 +20,7 @@
 }
 .header-title > h1 {
   color: white;
+  margin-top: 4px;
 }
 
 .header__left {
@@ -28,7 +29,7 @@
 
 .header__left > img {
   object-fit: contain;
-  height: 20px;
+  /* height: 20px; */
   margin-right: 10px;
   margin-left: 30px;
 }
@@ -38,11 +39,11 @@
   display: flex;
   align-items: center;
   border-radius: 5px;
-  height: 18px;
+  /* height: 18px; */
   color: gray;
   /* background-color: #eef3f8; */
-  margin-top: 16px;
-  margin-left: 90px;
+  margin-top: 6px;
+  margin-left: 92px;
 }
 
 .header__search > input {

@@ -148,7 +148,7 @@ const Home = () => {
         {/* <div className="app__other"> */}
         <Container className="small-container ">
           <h1 className="my-3 test">Логин</h1>
-          <Form onSubmit={submitHandler2} className="test">
+          <Form onSubmit={submitHandler2} className="test ">
             <FormGroup className="mb-3" controlId="phone">
               <Form.Label>Номер телефона</Form.Label>
               <Form.Control

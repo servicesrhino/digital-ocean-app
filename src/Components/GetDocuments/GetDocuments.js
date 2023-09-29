@@ -17,6 +17,8 @@ import { Store } from '../../Store';
 import axios from 'axios';
 import CheckedService from '../../services/CheckedService';
 import PrintedService from '../../services/PrintedService';
+import Checkbox from '../Checkbox/Checkbox';
+import RemoveCheckService from '../../services/RemoveCheckService';
 
 function GetDocuments() {
   const [data, setData] = useState([]);
@@ -64,6 +66,36 @@ function GetDocuments() {
     }
   };
 
+  useEffect(() => {
+    document.addEventListener('click', commit);
+
+    // return () => {
+    //   document.removeEventListener('click', commit);
+    // };
+  }, [data]);
+
+  const commit = (event) => {
+    const { name, checked } = event.target;
+    console.log(name);
+    console.log(checked);
+
+    const value = RemoveCheckService.remove(name, checked, data);
+
+    const printed = data.map((row) =>
+      row.id === name ? { ...row, printed: checked } : { ...row }
+    );
+    setData(printed);
+    console.log(printed);
+    console.log(name);
+    console.log(checked);
+    console.log(data);
+    console.log(value);
+
+    if (event.key === 'a') {
+      console.log('Enter key pressed', event.key);
+    }
+  };
+
   // const newID = localStorage.getItem('id');
   // const newRhinoID = localStorage.getItem('rhinoID');
   // console.log(newID);
@@ -99,6 +131,23 @@ function GetDocuments() {
 
   const barcodeNew = async (e, item) => {
     e.preventDefault();
+    const { name, checked } = e.target;
+    console.log(name);
+    console.log(checked);
+
+    const value = PrintedService.handlePrinted(name, checked, data);
+    console.log(name);
+    console.log(checked);
+    console.log(data);
+    //setSheetData2(value);
+
+    // const checkedValue = data.map((row) =>
+    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
+    // );
+    // console.log(checkedValue);
+
+    setData(value);
+
     try {
       console.log(
         '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
@@ -219,7 +268,7 @@ function GetDocuments() {
     console.log(name);
     console.log(checked);
 
-    const value = PrintedService.handlePrinted(name, checked, data);
+    const value = RemoveCheckService.remove(name, checked, data);
     console.log(name);
     console.log(checked);
     console.log(data);
@@ -357,12 +406,20 @@ function GetDocuments() {
                               checked={item.printed || false}
                               onChange={handleChecked}
                             />
+                            {/* <Checkbox
+                              label=""
+                              //checked={true}
+                              name={item.id}
+                              checked={item.printed || false}
+                              onChange={handleChecked}
+                            /> */}
                           </th>
                           <td
                             style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary no-wrap',
+                              backgroundColor:
+                                item.printed === true
+                                  ? 'gray'
+                                  : 'text-secondary no-wrap',
                             }}
                           >
                             {item.vehicle}
@@ -455,6 +512,9 @@ function GetDocuments() {
                               // target="_blank"
 
                               <button
+                                name={item.id}
+                                checked={item.printed || false}
+                                onChange={handleChecked}
                                 onClick={(e) => {
                                   barcodeNew(e, item);
                                   newPrintFunc2(e, item);

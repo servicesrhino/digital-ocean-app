@@ -73,7 +73,7 @@ function GetLastDocuments() {
                       <th>sheetId</th>
                     </tr>
                   </thead>
-                  <tbody className="text-secondary table-body ">
+                  <tbody className="text-primarily table-body ">
                     {data.map((item, index) => (
                       <tr key={index}>
                         <td

@@ -76,8 +76,8 @@ function GetDocuments() {
 
   const commit = (event) => {
     const { name, checked } = event.target;
-    console.log(name);
-    console.log(checked);
+ //   console.log(name);
+ //   console.log(checked);
 
     const value = RemoveCheckService.remove(name, checked, data);
 

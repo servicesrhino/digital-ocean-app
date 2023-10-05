@@ -17,7 +17,7 @@ function GetDocumentsFromList() {
 
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
-  console.log(lastDocumentsFromList);
+//  console.log(lastDocumentsFromList);
 
   // const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
@@ -34,14 +34,14 @@ function GetDocumentsFromList() {
           }
         )
         .then((res) => {
-          console.log(res.data);
+   //       console.log(res.data);
           setData(res.data);
         });
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(data);
+//  console.log(data);
   useEffect(() => {
     getDocumentsFromList();
   }, []);
@@ -65,11 +65,11 @@ function GetDocumentsFromList() {
       row.id === name ? { ...row, printed: checked } : { ...row }
     );
     setData(printed);
-    console.log(printed);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    console.log(value);
+//    console.log(printed);
+//    console.log(name);
+//    console.log(checked);
+//    console.log(data);
+//    console.log(value);
 
     if (event.key === 'a') {
       console.log('Enter key pressed', event.key);
@@ -79,13 +79,13 @@ function GetDocumentsFromList() {
   const barcodeNew = async (e, item) => {
     e.preventDefault();
     const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
+//    console.log(name);
+//    console.log(checked);
 
     const value = PrintedService.handlePrinted(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
+//    console.log(name);
+//    console.log(checked);
+//    console.log(data);
     //setSheetData2(value);
 
     // const checkedValue = data.map((row) =>
@@ -135,13 +135,13 @@ function GetDocumentsFromList() {
   function handleChecked(e) {
     //e.preventDefault();
     const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
+ //   console.log(name);
+ //   console.log(checked);
 
     const value = RemoveCheckService.remove(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
+ //   console.log(name);
+ //   console.log(checked);
+ //   console.log(data);
     //setSheetData2(value);
 
     // const checkedValue = data.map((row) =>
@@ -212,7 +212,7 @@ function GetDocumentsFromList() {
                       <th>stock price</th>
                       <th>income price</th>
                       <th>price with depreciation</th>
-                      <th>кількість</th>
+                      <th>кіл-сть стікерів</th>
                       <th>id</th>
                       <th>дефекти</th>
                       <th>баркод</th>

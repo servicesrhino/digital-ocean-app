@@ -82,7 +82,7 @@ function GetDocumentsFromList() {
 //    console.log(name);
 //    console.log(checked);
 
-    const value = PrintedService.handlePrinted(name, checked, data);
+ //   const value = PrintedService.handlePrinted(name, checked, data);
 //    console.log(name);
 //    console.log(checked);
 //    console.log(data);
@@ -93,7 +93,7 @@ function GetDocumentsFromList() {
     // );
     // console.log(checkedValue);
 
-    setData(value);
+ //   setData(value);
 
     try {
 

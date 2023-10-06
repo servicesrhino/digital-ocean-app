@@ -329,7 +329,7 @@ function GetDocumentsFromList() {
                               onChange={handleChecked}
                               onClick={(e) => {
                                 barcodeNew(e, item);
-                                newPrintFunc2(e, item);
+                            //    newPrintFunc2(e, item);
                                 //handleClick();
                               }}
                               className="btn btn-danger"

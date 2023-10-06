@@ -96,12 +96,17 @@ function GetDocumentsFromList() {
     setData(value);
 
     try {
+
+      let veh = item.vehicle.replace("#", "*");
+
+      
+      
       console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+        '${userInfo.printerUrl}?id=${item.id}&veh=${veh}&name=${item.name+item.rhinoID}'
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+        `${userInfo.printerUrl}?id=${item.id}&veh=${veh}&name=${
           item.name + ' ' + item.rhinoID
         }`
       ).then((res) => {
@@ -161,13 +166,15 @@ function GetDocumentsFromList() {
       //   const contents = await fs.readFile(file, 'utf8');
       //     console.log(contents);
 
+            let veh = item.vehicle.replace("#", "*");
+
       try {
         console.log(
-          '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+          '${userInfo.printerUrl}?id=${item.id}&veh=${veh}&name=${item.name+item.rhinoID}'
         );
 
         await fetch(
-          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+          `${userInfo.printerUrl}?id=${item.id}&veh=${veh}&name=${
             item.name + ' ' + item.rhinoID
           }`
         ).then((res) => {

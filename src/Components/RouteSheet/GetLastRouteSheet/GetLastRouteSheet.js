@@ -514,7 +514,9 @@ function GetLastRouteSheet() {
         <Sidebar />
         <div className="app__other">
           <h1>Отримати останні дані по листу</h1>
-          <button onClick={getData}>Отримати останні данні</button>
+          <button className="mb-3" onClick={getData}>
+            Отримати останні данні
+          </button>
 
           <p>
             {/* <form> */}

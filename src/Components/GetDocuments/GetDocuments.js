@@ -154,7 +154,9 @@ function GetDocuments() {
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID}`
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+          item.name + ' ' + item.rhinoID
+        }`
       ).then((res) => {
         console.log(res.data);
       });
@@ -167,35 +169,37 @@ function GetDocuments() {
   const printAll = async (e) => {
     e.preventDefault();
 
-  // data.forEach(item => {
+    // data.forEach(item => {
     for (const item of data) {
-   //   const contents = await fs.readFile(file, 'utf8');
- //     console.log(contents);
-    
-  
+      //   const contents = await fs.readFile(file, 'utf8');
+      //     console.log(contents);
 
-    try {
-      console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
-      );
+      try {
+        console.log(
+          '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+        );
 
-      await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name +" "+item.rhinoID}`
-      ).then((res) => {
-        console.log(res.data);
-      });
-    } catch (error) {
-      console.log(error);
+        await fetch(
+          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+            item.name + ' ' + item.rhinoID
+          }`
+        ).then((res) => {
+          console.log(res.data);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      await timer(1000);
     }
-
-    await timer(1000);
-  }
- // });
+    // });
 
     //newPrintFunc2();
   };
-  function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
-  
+  function timer(ms) {
+    return new Promise((res) => setTimeout(res, ms));
+  }
+
   const newPrintFunc2 = async (e, item) => {
     e.preventDefault();
     try {
@@ -290,8 +294,8 @@ function GetDocuments() {
   };
 
   return (
-    <div className="app">
-      <div className="app__body">
+    <div className="app3">
+      <div className="app__body3">
         <Sidebar />
         <div className="app__other">
           <Container className="small-container">
@@ -321,7 +325,9 @@ function GetDocuments() {
                 <Button type="submit">Отримати дані по документу</Button>
               </div>
               <div className="mb-3">
-                <Button type="printAll" onClick={printAll}>Надрукувати все</Button>
+                <Button type="printAll" onClick={printAll}>
+                  Надрукувати все
+                </Button>
               </div>
             </Form>
           </Container>

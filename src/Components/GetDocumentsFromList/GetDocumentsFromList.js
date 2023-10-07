@@ -17,11 +17,34 @@ function GetDocumentsFromList() {
 
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
-//  console.log(lastDocumentsFromList);
+  console.log(lastDocumentsFromList);
 
   // const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
   let { printerUrl } = userInfo;
+
+  const [styled, setStyled] = useState(false);
+
+  const togle = (e, item) => {
+    e.preventDefault();
+    console.log(item);
+    console.log(data);
+    console.log(data.filter((el) => el.id === item.id));
+    const newVal = data.map((el) =>
+      el.id === item.id ? { ...el, togle: true } : { ...el }
+    );
+    console.log(newVal);
+    setStyled(!styled);
+    console.log(styled);
+    return newVal;
+  };
+  const OnToggleMeHandler2 = () => {
+    console.log('handler');
+    //setStyled (styled => !styled);
+    //setStyled(!styled);
+    setStyled((styled) => (styled === 'true' ? 'false' : ''));
+    console.log('handler3');
+  };
 
   const getDocumentsFromList = () => {
     try {
@@ -34,30 +57,30 @@ function GetDocumentsFromList() {
           }
         )
         .then((res) => {
-   //       console.log(res.data);
+          console.log(res.data);
           setData(res.data);
         });
     } catch (error) {
       console.log(error);
     }
   };
-//  console.log(data);
+  console.log(data);
   useEffect(() => {
     getDocumentsFromList();
   }, []);
 
-  useEffect(() => {
-    document.addEventListener('click', commit);
+  // useEffect(() => {
+  //   document.addEventListener('click', commit);
 
-    // return () => {
-    //   document.removeEventListener('click', commit);
-    // };
-  }, [data]);
+  //   // return () => {
+  //   //   document.removeEventListener('click', commit);
+  //   // };
+  // }, [data]);
 
   const commit = (event) => {
     const { name, checked } = event.target;
-//    console.log(name);
-//    console.log(checked);
+    console.log(name);
+    console.log(checked);
 
     const value = RemoveCheckService.remove(name, checked, data);
 
@@ -65,11 +88,11 @@ function GetDocumentsFromList() {
       row.id === name ? { ...row, printed: checked } : { ...row }
     );
     setData(printed);
-//    console.log(printed);
-//    console.log(name);
-//    console.log(checked);
-//    console.log(data);
-//    console.log(value);
+    console.log(printed);
+    console.log(name);
+    console.log(checked);
+    console.log(data);
+    console.log(value);
 
     if (event.key === 'a') {
       console.log('Enter key pressed', event.key);
@@ -79,13 +102,13 @@ function GetDocumentsFromList() {
   const barcodeNew = async (e, item) => {
     e.preventDefault();
     const { name, checked } = e.target;
-//    console.log(name);
-//    console.log(checked);
+    console.log(name);
+    console.log(checked);
 
- //   const value = PrintedService.handlePrinted(name, checked, data);
-//    console.log(name);
-//    console.log(checked);
-//    console.log(data);
+    const value = PrintedService.handlePrinted(name, checked, data);
+    console.log(name);
+    console.log(checked);
+    console.log(data);
     //setSheetData2(value);
 
     // const checkedValue = data.map((row) =>
@@ -93,20 +116,15 @@ function GetDocumentsFromList() {
     // );
     // console.log(checkedValue);
 
- //   setData(value);
+    setData(value);
 
     try {
-
-      let veh1 = item.vehicle.replace("#", "*");
-
-      
-      
       console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${veh1}&name=${item.name+item.rhinoID}'
+        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
       );
 
       await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${veh1}&name=${
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
           item.name + ' ' + item.rhinoID
         }`
       ).then((res) => {
@@ -140,13 +158,13 @@ function GetDocumentsFromList() {
   function handleChecked(e) {
     //e.preventDefault();
     const { name, checked } = e.target;
- //   console.log(name);
- //   console.log(checked);
+    console.log(name);
+    console.log(checked);
 
     const value = RemoveCheckService.remove(name, checked, data);
- //   console.log(name);
- //   console.log(checked);
- //   console.log(data);
+    console.log(name);
+    console.log(checked);
+    console.log(data);
     //setSheetData2(value);
 
     // const checkedValue = data.map((row) =>
@@ -166,15 +184,13 @@ function GetDocumentsFromList() {
       //   const contents = await fs.readFile(file, 'utf8');
       //     console.log(contents);
 
-            let veh1 = item.vehicle.replace("#", "*");
-
       try {
         console.log(
-          '${userInfo.printerUrl}?id=${item.id}&veh=${veh1}&name=${item.name+item.rhinoID}'
+          '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
         );
 
         await fetch(
-          `${userInfo.printerUrl}?id=${item.id}&veh=${veh1}&name=${
+          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
             item.name + ' ' + item.rhinoID
           }`
         ).then((res) => {
@@ -196,8 +212,8 @@ function GetDocumentsFromList() {
   }
 
   return (
-    <div className="app">
-      <div className="app__body">
+    <div className="appss">
+      <div className="appss__body">
         <Sidebar />
         <div className="app__other">
           <h1>Отримати дані з листа</h1>
@@ -213,13 +229,14 @@ function GetDocumentsFromList() {
                 <Table bordered className="border">
                   <thead className="text-black table-header">
                     <tr>
+                      <th>printed</th>
                       <th>машина</th>
                       <th>назва </th>
                       <th>rhinoID</th>
                       <th>stock price</th>
                       <th>income price</th>
                       <th>price with depreciation</th>
-                      <th>кіл-сть стікерів</th>
+                      <th>кількість</th>
                       <th>id</th>
                       <th>дефекти</th>
                       <th>баркод</th>
@@ -230,94 +247,147 @@ function GetDocumentsFromList() {
                   </thead>
                   <tbody className="text-primarily table-body">
                     {data.map((item, index) => (
-                      <tr key={index}>
-                        <td
+                      // <div className={`post card ${styled ? 'styled' : ''}`}>
+
+                      <tr
+                        className={`${item.togle ? 'styled' : ''}`}
+                        key={index}
+                      >
+                        <th
+                          className="checkbox-style"
                           style={{
+                            // display: 'flex',
+                            // //flexDirection: 'column',
+                            // justifyContent: 'center',
+                            // alignItems: 'center',
                             backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
+                              ? 'gray checkbox-style'
+                              : 'text-secondary checkbox-style ',
+                          }}
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary d-flex justify-content-center text-center my-auto',
+                          // }}
+                        >
+                          <input
+                            type="checkbox"
+                            name={item.id}
+                            checked={item.printed || false}
+                            onChange={handleChecked}
+                          />
+                          {/* <Checkbox
+                              label=""
+                              //checked={true}
+                              name={item.id}
+                              checked={item.printed || false}
+                              onChange={handleChecked}
+                            /> */}
+                        </th>
+                        <td
+                          className={`${item.printed ? 'styled' : ''}`}
+                          style={{
+                            backgroundColor:
+                              item.printed && item.togle
+                                ? 'gray'
+                                : 'text-secondary',
                           }}
                         >
                           {item.vehicle}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.name}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.rhinoID}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.stockPrice}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.incomePrice}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.priceWithDepreciation}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.barCodePrintQnt}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.id}
                         </td>
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item.defect}
                         </td>
+                        {/* <div> */}
                         <td
-                          style={{
-                            backgroundColor: item.printed
-                              ? 'gray'
-                              : 'text-secondary',
-                          }}
+                          className={`${item.printed ? 'styled' : ''}`}
+                          // style={{
+                          //   backgroundColor: item.printed
+                          //     ? 'gray'
+                          //     : 'text-secondary',
+                          // }}
                         >
                           {item ? (
                             // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
@@ -329,15 +399,20 @@ function GetDocumentsFromList() {
                               onChange={handleChecked}
                               onClick={(e) => {
                                 barcodeNew(e, item);
-                            //    newPrintFunc2(e, item);
+                                newPrintFunc2(e, item);
+                                togle(e, item);
                                 //handleClick();
                               }}
-                              className="btn btn-danger"
-                              style={{
-                                backgroundColor: item.printed
-                                  ? 'gray'
-                                  : 'btn btn-danger',
-                              }}
+                              // className="btn btn-danger"
+                              // style={{
+                              //   backgroundColor:
+                              //     item.printed && styled
+                              //       ? 'styled'
+                              //       : 'btn btn-danger',
+                              // }}
+                              className={`btn btn-danger${
+                                item.printed ? 'styled' : 'btn btn-danger'
+                              }`}
                             >
                               Barcode
                             </button>
@@ -351,6 +426,10 @@ function GetDocumentsFromList() {
                             </button>
                             // </Link>
                           )}
+                        </td>
+                        {/* </div> */}
+                        <td>
+                          <button onClick={OnToggleMeHandler2}>delete</button>
                         </td>
                         {/* <td>{item.stock}</td> */}
                         {/* <td>{item.originaID}</td> */}

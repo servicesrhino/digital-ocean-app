@@ -20,13 +20,17 @@
   white-space: nowrap;
   padding: 7px;
   width: 100%;
-  margin-top: -50px;
+  margin-top: -47px;
   margin-left: -20px;
+  /* height: 100vh; */
+  /* flex: 1; */
 }
 
 .sidebar-links {
   color: gray;
   margin-top: 80px;
+  margin-bottom: 100px;
+  height: 100vh;
 }
 
 .link {

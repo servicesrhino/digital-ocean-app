@@ -54,7 +54,7 @@ function GetLastDocuments() {
   // },)
 
   return (
-    <div className="app">
+    <div className="app2">
       <div className="app__body">
         <Sidebar />
         <div className="app__other mx-4">

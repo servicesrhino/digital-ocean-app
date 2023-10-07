@@ -142,7 +142,7 @@ const Home = () => {
   }, [navigate, userInfo]);
 
   return (
-    <div className="app">
+    <div className="apps">
       <div className="app__body">
         {/* <Sidebar /> */}
         {/* <div className="app__other"> */}

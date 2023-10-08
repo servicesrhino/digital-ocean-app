@@ -428,9 +428,9 @@ function GetDocumentsFromList() {
                           )}
                         </td>
                         {/* </div> */}
-                        <td>
+                        {/* <td>
                           <button onClick={OnToggleMeHandler2}>delete</button>
-                        </td>
+                        </td> */}
                         {/* <td>{item.stock}</td> */}
                         {/* <td>{item.originaID}</td> */}
                         {/* <td>{item.deliveryInfo}</td> */}

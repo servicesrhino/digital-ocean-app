@@ -10,6 +10,9 @@ import RemoveCheckService from '../../services/RemoveCheckService';
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
+  const [name, setName] = useState([]);
 
   const tes2 =
     'https://docs.google.com/spreadsheets/d/1_j-WNAwx21E6XFeE2gs62eH5P2YdYASQmouMaR7dvmM';
@@ -59,6 +62,7 @@ function GetDocumentsFromList() {
         .then((res) => {
           console.log(res.data);
           setData(res.data);
+          setData2(res.data);
         });
     } catch (error) {
       console.log(error);
@@ -211,6 +215,87 @@ function GetDocumentsFromList() {
     return new Promise((res) => setTimeout(res, ms));
   }
 
+  // useEffect(() => {
+  //   filtration();
+  // }, [vehicle]);
+
+  const filtration = (e) => {
+    e.preventDefault();
+    console.log(vehicle.length);
+    let res = [];
+    // console.log(
+    //   data.filter((item) => {
+    //     console.log(item.vehicle.toLowerCase());
+    //     if (item.vehicle === vehicle) {
+    //       res.push(item);
+    //     }
+    //     return item.vehicle === vehicle;
+    //   })
+    // );
+    const oldData = [...data];
+    console.log(oldData);
+    console.log(
+      data.filter((item) => {
+        console.log(item.vehicle.toLowerCase());
+        if (item.vehicle.toLowerCase().includes(vehicle.toLowerCase())) {
+          res.push(item);
+        }
+        return item.vehicle === vehicle;
+      })
+    );
+    console.log(data2);
+    if (res) {
+      setData(res);
+    } else if (vehicle.length === 0) {
+      res = [];
+      setData(data2);
+    }
+    if (!vehicle) {
+      getDocumentsFromList();
+    }
+
+    console.log(vehicle.length);
+    console.log(res);
+
+    // console.log(
+    //   data.map((item) =>
+    //     item.map((item2) => (item2.startsWith(vehicle) ? item : '123'))
+    //   )
+    // );
+
+    console.log(
+      data
+        .map((item) => item.vehicle)
+        .filter((item2) =>
+          item2.toLowerCase().startsWith(vehicle.toLowerCase())
+        )
+    );
+  };
+
+  const filtration2 = (e) => {
+    e.preventDefault();
+    console.log(name);
+    console.log(name.length);
+    let res2 = [];
+
+    console.log(
+      data.filter((item) => {
+        console.log(item.name.toLowerCase());
+        if (item.name.toLowerCase().includes(name.toLowerCase())) {
+          res2.push(item);
+        }
+        //return res2;
+      })
+    );
+    console.log(res2);
+    if (res2) {
+      setData(res2);
+    }
+    if (!name) {
+      getDocumentsFromList();
+    }
+  };
+
   return (
     <div className="appss">
       <div className="appss__body">
@@ -222,6 +307,24 @@ function GetDocumentsFromList() {
             <Button type="printAll" onClick={printAll}>
               Надрукувати все
             </Button>
+            <div className="d-flex">
+              <form onSubmit={filtration}>
+                <input
+                  id="vehicle"
+                  value={vehicle}
+                  onChange={(e) => setVehicle(e.target.value)}
+                  className="mt-2"
+                />
+              </form>
+              <form onSubmit={filtration2}>
+                <input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className=" mt-2 mx-2 "
+                />
+              </form>
+            </div>
           </div>
           <div>
             <Row>

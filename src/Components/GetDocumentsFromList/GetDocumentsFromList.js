@@ -119,7 +119,7 @@ function GetDocumentsFromList() {
     //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
     // );
     // console.log(checkedValue);
-
+    item.vehicle = item.vehicle.replace("#", "*");
     setData(value);
 
     try {
@@ -187,7 +187,7 @@ function GetDocumentsFromList() {
     for (const item of data) {
       //   const contents = await fs.readFile(file, 'utf8');
       //     console.log(contents);
-
+      item.vehicle = item.vehicle.replace("#", "*");
       try {
         console.log(
           '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'

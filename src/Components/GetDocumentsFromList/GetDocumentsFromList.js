@@ -7,6 +7,8 @@ import { Store } from '../../Store';
 import PrintedService from '../../services/PrintedService';
 import $api from '../http';
 import RemoveCheckService from '../../services/RemoveCheckService';
+import DataTable from '../dataTable/DataTable';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
@@ -27,6 +29,116 @@ function GetDocumentsFromList() {
   let { printerUrl } = userInfo;
 
   const [styled, setStyled] = useState(false);
+
+  const actionColumn = {
+    field: 'action',
+    headerName: 'Action',
+    width: 200,
+    renderCell: (params) => {
+      return (
+        <div
+          className={`action btn btn-danger${
+            params.row.printed ? 'styled' : 'btn btn-danger'
+          }`}
+        >
+          <button
+            name={params.row.id}
+            checked={params.row.printed || false}
+            onChange={handleChecked}
+            onClick={(e) => {
+              barcodeNew(e, params.row);
+              newPrintFunc2(e, params.row);
+              togle(e, params.row);
+            }}
+            className={`btn btn-danger${
+              params.row.printed ? 'styled' : 'btn btn-danger'
+            }`}
+          >
+            Barcode
+          </button>
+        </div>
+      );
+    },
+  };
+
+  const columns = [
+    {
+      field: 'vehicle',
+      headerName: 'Vehicle',
+      width: 150,
+      editable: true,
+    },
+
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 160,
+      editable: true,
+    },
+    {
+      field: 'rhinoID',
+      headerName: 'RhinoID',
+      width: 120,
+      editable: true,
+    },
+
+    {
+      field: 'stockPrice',
+      headerName: 'Stock Price',
+      width: 120,
+      editable: true,
+    },
+    {
+      field: 'incomePrice',
+      headerName: 'Income Price',
+      width: 120,
+      editable: true,
+    },
+
+    {
+      field: 'priceWithDepreciation',
+      headerName: 'Price With Depreciation',
+      width: 120,
+      editable: true,
+    },
+
+    {
+      field: 'barCodePrintQnt',
+      headerName: 'Кількість',
+      width: 90,
+      editable: true,
+    },
+    { field: 'id', headerName: 'ID', width: 110 },
+
+    {
+      field: 'defect',
+      headerName: 'Дефекти',
+      // type: 'number',
+      width: 80,
+      editable: true,
+    },
+    // {
+    //   field: 'fullName',
+    //   headerName: 'Full name',
+    //   description: 'This column has a value getter and is not sortable.',
+    //   sortable: false,
+    //   width: 160,
+    //   valueGetter: (params) =>
+    //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    // },
+  ];
+
+  const rows = [
+    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  ];
 
   const togle = (e, item) => {
     e.preventDefault();
@@ -175,6 +287,7 @@ function GetDocumentsFromList() {
     //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
     // );
     // console.log(checkedValue);
+    console.log(value);
 
     setData(value);
     //return value;
@@ -295,6 +408,7 @@ function GetDocumentsFromList() {
       getDocumentsFromList();
     }
   };
+  console.log(data);
 
   return (
     <div className="appss">
@@ -327,222 +441,32 @@ function GetDocumentsFromList() {
             </div>
           </div>
           <div>
-            <Row>
-              <Col>
-                <Table bordered className="border">
-                  <thead className="text-black table-header">
-                    <tr>
-                      <th>printed</th>
-                      <th>машина</th>
-                      <th>назва </th>
-                      <th>rhinoID</th>
-                      <th>stock price</th>
-                      <th>income price</th>
-                      <th>price with depreciation</th>
-                      <th>кількість</th>
-                      <th>id</th>
-                      <th>дефекти</th>
-                      <th>баркод</th>
-
-                      {/* <th>оригінальний id</th> */}
-                      {/* <th>доставка</th> */}
-                    </tr>
-                  </thead>
-                  <tbody className="text-primarily table-body">
-                    {data.map((item, index) => (
-                      // <div className={`post card ${styled ? 'styled' : ''}`}>
-
-                      <tr
-                        className={`${item.togle ? 'styled' : ''}`}
-                        key={index}
-                      >
-                        <th
-                          className="checkbox-style"
-                          style={{
-                            // display: 'flex',
-                            // //flexDirection: 'column',
-                            // justifyContent: 'center',
-                            // alignItems: 'center',
-                            backgroundColor: item.printed
-                              ? 'gray checkbox-style'
-                              : 'text-secondary checkbox-style ',
-                          }}
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary d-flex justify-content-center text-center my-auto',
-                          // }}
-                        >
-                          <input
-                            type="checkbox"
-                            name={item.id}
-                            checked={item.printed || false}
-                            onChange={handleChecked}
-                          />
-                          {/* <Checkbox
-                              label=""
-                              //checked={true}
-                              name={item.id}
-                              checked={item.printed || false}
-                              onChange={handleChecked}
-                            /> */}
-                        </th>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-                          style={{
-                            backgroundColor:
-                              item.printed && item.togle
-                                ? 'gray'
-                                : 'text-secondary',
-                          }}
-                        >
-                          {item.vehicle}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.name}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.rhinoID}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.stockPrice}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.incomePrice}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.priceWithDepreciation}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.barCodePrintQnt}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.id}
-                        </td>
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item.defect}
-                        </td>
-                        {/* <div> */}
-                        <td
-                          className={`${item.printed ? 'styled' : ''}`}
-                          // style={{
-                          //   backgroundColor: item.printed
-                          //     ? 'gray'
-                          //     : 'text-secondary',
-                          // }}
-                        >
-                          {item ? (
-                            // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
-                            // target="_blank"
-
-                            <button
-                              name={item.id}
-                              checked={item.printed || false}
-                              onChange={handleChecked}
-                              onClick={(e) => {
-                                barcodeNew(e, item);
-                                newPrintFunc2(e, item);
-                                togle(e, item);
-                                //handleClick();
-                              }}
-                              // className="btn btn-danger"
-                              // style={{
-                              //   backgroundColor:
-                              //     item.printed && styled
-                              //       ? 'styled'
-                              //       : 'btn btn-danger',
-                              // }}
-                              className={`btn btn-danger${
-                                item.printed ? 'styled' : 'btn btn-danger'
-                              }`}
-                            >
-                              Barcode
-                            </button>
-                          ) : (
-                            // <Link to="/barcode">
-                            <button
-                              onClick={(e) => barcodeNew(e, item)}
-                              className="btn btn-danger"
-                            >
-                              Barcode
-                            </button>
-                            // </Link>
-                          )}
-                        </td>
-                        {/* </div> */}
-                        {/* <td>
-                          <button onClick={OnToggleMeHandler2}>delete</button>
-                        </td> */}
-                        {/* <td>{item.stock}</td> */}
-                        {/* <td>{item.originaID}</td> */}
-                        {/* <td>{item.deliveryInfo}</td> */}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
+            <DataGrid
+              className="dataGrid"
+              rows={data}
+              columns={[...columns, actionColumn]}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
+                },
+              }}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              pageSizeOptions={[5]}
+              // checkboxSelection
+              disableRowSelectionOnClick
+              disableColumnFilter
+              disableDensitySelector
+              disableColumnSelector
+            />
+            {/* <DataTable rows={data} /> */}
           </div>
         </div>
       </div>

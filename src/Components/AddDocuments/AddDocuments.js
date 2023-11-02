@@ -51,30 +51,32 @@ function AddDocuments() {
     <div className="app">
       <div className="app__body">
         <Sidebar />
-        <Container className="small-container">
-          <h1 className="my-3">Загрузити дані по документу</h1>
-          <Form onSubmit={getData}>
-            <FormGroup className="mb-3" controlId="documentID">
-              <Form.Label>urlID</Form.Label>
-              <Form.Control
-                // type="phone"
-                required
-                onChange={(e) => setDocumentID(e.target.value)}
-              />
-            </FormGroup>
+        <div className="form">
+          <Container className="small-container mx-4">
+            <h1 className="my-3">Загрузити дані по документу</h1>
+            <Form onSubmit={getData} className="mx-5">
+              <FormGroup className="mb-3" controlId="documentID">
+                <Form.Label>urlID</Form.Label>
+                <Form.Control
+                  // type="phone"
+                  required
+                  onChange={(e) => setDocumentID(e.target.value)}
+                />
+              </FormGroup>
 
-            <FormGroup className="mb-3" controlId="sheetID">
-              <Form.Label>sheetID</Form.Label>
-              <Form.Control
-                // type="password"
-                onChange={(e) => setSheetID(e.target.value)}
-              />
-            </FormGroup>
-            <div className="mb-3">
-              <Button type="submit">Відправити</Button>
-            </div>
-          </Form>
-        </Container>
+              <FormGroup className="mb-3" controlId="sheetID">
+                <Form.Label>sheetID</Form.Label>
+                <Form.Control
+                  // type="password"
+                  onChange={(e) => setSheetID(e.target.value)}
+                />
+              </FormGroup>
+              <div className="mb-3">
+                <Button type="submit">Відправити</Button>
+              </div>
+            </Form>
+          </Container>
+        </div>
       </div>
     </div>
   );

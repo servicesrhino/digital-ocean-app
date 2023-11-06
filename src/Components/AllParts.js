@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Table } from 'react-bootstrap';
+import { Button, Col, Row, Table } from 'react-bootstrap';
 import $api from './http';
+import Sidebar from './Sidebar/Sidebar';
+// import { Button } from '@mui/material';
 
 function AllParts() {
   const [allData, setAllData] = useState([]);
@@ -38,17 +40,20 @@ function AllParts() {
   }, []);
 
   return (
-    <div>
-      <div className="my-3">
-        <button onClick={getParts}>Get parts</button>
-      </div>
+    <div className="app">
+      <div className="app__body">
+        <Sidebar />
+        <div className="app__other">
+          <div className="my-3 mx-2">
+            <Button onClick={getParts}>Get parts</Button>
+          </div>
 
-      <Row>
-        <Col md={12}>
-          <Table bordered className="border">
-            <thead className="text-primary table-header">
-              <tr>
-                {/* <th>
+          <Row>
+            <Col md={12}>
+              <Table bordered className="border">
+                <thead className="text-primary table-header">
+                  <tr>
+                    {/* <th>
                   <input
                     type="checkbox"
                     name="allselect"
@@ -58,38 +63,40 @@ function AllParts() {
                   />
                 </th> */}
 
-                <th>Авто</th>
-                <th>Наименование</th>
-                <th>Количество</th>
-                <th>НомерRhino</th>
-                <th>оригинальный номер</th>
-                <th>цена со склада</th>
-                <th>цена входящая</th>
-                <th>цена с амортизацией</th>
-                <th>дата завоза</th>
+                    <th>Авто</th>
+                    <th>Наименование</th>
+                    <th>Количество</th>
+                    <th>НомерRhino</th>
+                    <th>оригинальный номер</th>
+                    <th>цена со склада</th>
+                    <th>цена входящая</th>
+                    <th>цена с амортизацией</th>
+                    <th>дата завоза</th>
 
-                {/* {sheet.map(h => <td>{h}</td>)} */}
-              </tr>
-            </thead>
-            <tbody className="text-secondary table-body">
-              {allData.map((getdata, index) => (
-                <tr key={index}>
-                  {/* <th>{getdata.id}</th> */}
-                  <th>{getdata.vehicleItem.name}</th>
-                  <th>{getdata.name}</th>
-                  <th>{getdata.quantity}</th>
-                  <th>{getdata.rhinoID}</th>
-                  <th>{getdata.originalID}</th>
-                  <th>{getdata.incomePrice}</th>
-                  <th>{getdata.stockPrice}</th>
-                  <th>{getdata.priceWithDepreciation}</th>
-                  <th>{getdata.deliveryInfo}</th>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
+                    {/* {sheet.map(h => <td>{h}</td>)} */}
+                  </tr>
+                </thead>
+                <tbody className="text-secondary table-body">
+                  {allData.map((getdata, index) => (
+                    <tr key={index}>
+                      {/* <th>{getdata.id}</th> */}
+                      <th>{getdata.vehicleItem.name}</th>
+                      <th>{getdata.name}</th>
+                      <th>{getdata.quantity}</th>
+                      <th>{getdata.rhinoID}</th>
+                      <th>{getdata.originalID}</th>
+                      <th>{getdata.incomePrice}</th>
+                      <th>{getdata.stockPrice}</th>
+                      <th>{getdata.priceWithDepreciation}</th>
+                      <th>{getdata.deliveryInfo}</th>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </div>
+      </div>
     </div>
   );
 }

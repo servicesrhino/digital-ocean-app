@@ -1,8 +1,90 @@
 .form {
-  margin: 10px;
-  /* flex-direction: column; */
-  margin: auto;
-  align-items: center;
   /* display: flex;
-  flex: 1; */
+  align-items: center;
+  flex-direction: column;
+  text-align: center; */
+  /* margin: auto; */
+  /* flex-direction: column !important; */
+  /* text-align: center;
+  justify-content: center;
+  position: absolute;
+  top: 30%;
+  z-index: 1; */
+  /* justify-content: center; */
+  /* display: flex; */
+  /* max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto; */
+  /* align-items: flex-start; */
+  /* justify-content: flex-start; */
+}
+
+.form2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.form3 {
+  display: flex;
+  align-items: center;
+}
+
+.form4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app4 {
+  /* display: flex; */
+  margin: auto;
+  /* position: relative; */
+  /* text-align: center; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* flex: 1;
+  background-color: #f3f2ef;
+  height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; */
+}
+
+.app__body4 {
+  display: flex;
+  justify-content: flex-start;
+  /* margin-top: 25px;
+  margin-left: 10px; */
+  /* display: flex !important; */
+  /* flex-direction: column; */
+  /* align-items: center;
+  margin: auto; */
+  /* width: 100%; */
+}
+
+.app__other {
+  /* display: 0.6; */
+  /* width: 700px; */
+  /* align-self: auto; */
+  width: 100%;
+}
+
+.test2 {
+  width: 110%;
+  margin-left: 150px;
+  /* margin: auto; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  /* align-items: stretch; */
+  /* align-items: stretch; */
 }

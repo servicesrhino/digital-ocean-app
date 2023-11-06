@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
 import $api from '../http';
 import Sidebar from '../Sidebar/Sidebar';
+import './AddDocuments.css';
 
 function AddDocuments() {
   const [documentID, setDocumentID] = useState('');
@@ -48,13 +49,13 @@ function AddDocuments() {
   };
 
   return (
-    <div className="app">
-      <div className="app__body">
+    <div className="app4">
+      <div className="app__body4">
         <Sidebar />
         <div className="form">
           <Container className="small-container mx-4">
-            <h1 className="my-3">Загрузити дані по документу</h1>
-            <Form onSubmit={getData} className="mx-5">
+            <h1 className=" my-4 test2">Загрузити дані по документу</h1>
+            <Form onSubmit={getData} className="test2">
               <FormGroup className="mb-3" controlId="documentID">
                 <Form.Label>urlID</Form.Label>
                 <Form.Control

@@ -387,7 +387,7 @@ function GetRouteSheet() {
         <div className="app__other">
           <div className="form">
             <Container className="small-container">
-              <h4 className="my-1">Отримати дані по маршрутному листу</h4>
+              <h2 className="my-1">Отримати дані по маршрутному листу</h2>
               <Form onSubmit={getData}>
                 <FormGroup className="mb-1" controlId="documentID">
                   <Form.Label>urlID</Form.Label>

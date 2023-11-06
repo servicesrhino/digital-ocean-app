@@ -24,6 +24,8 @@ function GetDocuments() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
 
+  const [styled, setStyled] = useState(false);
+
   const [urlID, setUrlID] = useState([]);
   //const [sheetID, setSheetID] = useState([])
   const tes2 =
@@ -66,18 +68,18 @@ function GetDocuments() {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener('click', commit);
+  // useEffect(() => {
+  //   document.addEventListener('click', commit);
 
-    // return () => {
-    //   document.removeEventListener('click', commit);
-    // };
-  }, [data]);
+  //   // return () => {
+  //   //   document.removeEventListener('click', commit);
+  //   // };
+  // }, [data]);
 
   const commit = (event) => {
     const { name, checked } = event.target;
- //   console.log(name);
- //   console.log(checked);
+    //   console.log(name);
+    //   console.log(checked);
 
     const value = RemoveCheckService.remove(name, checked, data);
 
@@ -217,6 +219,20 @@ function GetDocuments() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const togle = (e, item) => {
+    e.preventDefault();
+    console.log(item);
+    console.log(data);
+    console.log(data.filter((el) => el.id === item.id));
+    const newVal = data.map((el) =>
+      el.id === item.id ? { ...el, togle: true } : { ...el }
+    );
+    console.log(newVal);
+    setStyled(!styled);
+    console.log(styled);
+    return newVal;
   };
 
   const barcodeNew2 = async (e, item) => {
@@ -421,97 +437,116 @@ function GetDocuments() {
                             /> */}
                           </th>
                           <td
-                            style={{
-                              backgroundColor:
-                                item.printed === true
-                                  ? 'gray'
-                                  : 'text-secondary no-wrap',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+                            // style={{
+                            //   backgroundColor:
+                            //     item.printed === true
+                            //       ? 'gray'
+                            //       : 'text-secondary no-wrap',
+                            // }}
                           >
                             {item.vehicle}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.name}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.rhinoID}
                           </td>
                           {/* <th>{item.originalIDs.join(', ')}</th> */}
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.stockPrice}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.incomePrice}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.priceWithDepreciation}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.deliveryInfo}
                           </td>
                           {/* <th>{item.id}</th> */}
                           {/* <Link to={`/get-documents/${'id'} =${item.id}`}> */}
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.barCodePrintQnt}
                           </td>
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item.id}
                           </td>
                           {/* </Link> */}
                           <td
-                            style={{
-                              backgroundColor: item.printed
-                                ? 'gray'
-                                : 'text-secondary',
-                            }}
+                            className={`${item.printed ? 'styled' : ''}`}
+
+                            // style={{
+                            //   backgroundColor: item.printed
+                            //     ? 'gray'
+                            //     : 'text-secondary',
+                            // }}
                           >
                             {item ? (
                               // Чтобы страница открывалась в новой вкладке в <Link> нужно установить опцию target="_blank"
@@ -524,14 +559,15 @@ function GetDocuments() {
                                 onClick={(e) => {
                                   barcodeNew(e, item);
                                   newPrintFunc2(e, item);
+                                  togle(e, item);
                                   //handleClick();
                                 }}
                                 className="btn btn-danger"
-                                style={{
-                                  backgroundColor: item.printed
-                                    ? 'gray'
-                                    : 'btn btn-danger',
-                                }}
+                                // style={{
+                                //   backgroundColor: item.printed
+                                //     ? 'gray'
+                                //     : 'btn btn-danger',
+                                // }}
                               >
                                 Barcode
                               </button>

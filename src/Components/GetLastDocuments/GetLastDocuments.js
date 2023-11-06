@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './GetLastDocuments.css';
 import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar';
-import { Col, Row, Table } from 'react-bootstrap';
+import { Button, Col, Row, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { Store } from '../../Store';
@@ -60,7 +60,7 @@ function GetLastDocuments() {
         <div className="app__other mx-4">
           <h1>Отримати останні дані по документу</h1>
           <div>
-            <button onClick={getData}>Отримати останні дані</button>
+            <Button onClick={getData}>Отримати останні дані</Button>
           </div>
           <div className="mt-3 ml-3">
             <Row>

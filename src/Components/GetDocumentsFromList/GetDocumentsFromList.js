@@ -9,6 +9,7 @@ import $api from '../http';
 import RemoveCheckService from '../../services/RemoveCheckService';
 import DataTable from '../dataTable/DataTable';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import TableBootstrap from '../tableBootstrap/TableBootstrap';
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
@@ -32,14 +33,14 @@ function GetDocumentsFromList() {
 
   const actionColumn = {
     field: 'action',
-    headerName: 'Action',
-    width: 200,
+    headerName: 'Barcode',
+    width: 90,
     renderCell: (params) => {
       return (
         <div
-          className={`action btn btn-danger${
-            params.row.printed ? 'styled' : 'btn btn-danger'
-          }`}
+        // className={`action btn btn-danger${
+        //   params.row.printed ? 'styled' : 'btn btn-danger'
+        // }`}
         >
           <button
             name={params.row.id}
@@ -50,7 +51,7 @@ function GetDocumentsFromList() {
               newPrintFunc2(e, params.row);
               togle(e, params.row);
             }}
-            className={`btn btn-danger${
+            className={`size btn btn-danger${
               params.row.printed ? 'styled' : 'btn btn-danger'
             }`}
           >
@@ -61,61 +62,152 @@ function GetDocumentsFromList() {
     },
   };
 
+  const actionColumn2 = {
+    field: 'action2',
+    headerName: 'Відмінити',
+    width: 70,
+    renderCell: (params) => {
+      return (
+        <div>
+          <button
+            className=" check size btn btn-primary"
+            // type="checkbox"
+            name={params.row.id}
+            checked={params.row.printed || false}
+            onClick={handleChecked}
+          >
+            unclick
+          </button>
+
+          {/* <input
+            type="checkbox"
+            name={params.row.id}
+            checked={params.row.printed || false}
+            onClick={handleChecked}
+          /> */}
+        </div>
+      );
+    },
+  };
+
   const columns = [
     {
       field: 'vehicle',
-      headerName: 'Vehicle',
-      width: 150,
+      headerName: 'Машина',
+      width: 160,
       editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={` size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.vehicle}
+          </div>
+        );
+      },
     },
 
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: 'Назва',
       width: 160,
       editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.name}
+          </div>
+        );
+      },
     },
     {
       field: 'rhinoID',
-      headerName: 'RhinoID',
-      width: 120,
-      editable: true,
+      headerName: 'Рино ID',
+      width: 100,
+      // editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.rhinoID}
+          </div>
+        );
+      },
     },
 
     {
       field: 'stockPrice',
-      headerName: 'Stock Price',
-      width: 120,
-      editable: true,
+      headerName: 'Цена со склада',
+      width: 100,
+      // editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.stockPrice}
+          </div>
+        );
+      },
     },
     {
       field: 'incomePrice',
-      headerName: 'Income Price',
-      width: 120,
-      editable: true,
+      headerName: 'Цена входящая',
+      width: 100,
+      // editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.incomePrice}
+          </div>
+        );
+      },
     },
 
     {
       field: 'priceWithDepreciation',
-      headerName: 'Price With Depreciation',
-      width: 120,
+      headerName: 'Цена с амортизацией',
+      width: 110,
       editable: true,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.priceWithDepreciation}
+          </div>
+        );
+      },
     },
 
     {
       field: 'barCodePrintQnt',
       headerName: 'Кількість',
       width: 90,
-      editable: true,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.barCodePrintQnt}
+          </div>
+        );
+      },
     },
-    { field: 'id', headerName: 'ID', width: 110 },
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.id}
+          </div>
+        );
+      },
+    },
 
     {
       field: 'defect',
       headerName: 'Дефекти',
       // type: 'number',
       width: 80,
-      editable: true,
+      // editable: true,
+      renderCell: (params) => {
+        return <div>{params.row.defect}</div>;
+      },
     },
     // {
     //   field: 'fullName',
@@ -231,7 +323,7 @@ function GetDocumentsFromList() {
     //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
     // );
     // console.log(checkedValue);
-    item.vehicle = item.vehicle.replace("#", "*");
+
     setData(value);
 
     try {
@@ -300,7 +392,7 @@ function GetDocumentsFromList() {
     for (const item of data) {
       //   const contents = await fs.readFile(file, 'utf8');
       //     console.log(contents);
-      item.vehicle = item.vehicle.replace("#", "*");
+
       try {
         console.log(
           '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
@@ -422,29 +514,30 @@ function GetDocumentsFromList() {
               Надрукувати все
             </Button>
             <div className="d-flex">
-              <form onSubmit={filtration}>
+              {/* <form onSubmit={filtration}>
                 <input
                   id="vehicle"
                   value={vehicle}
                   onChange={(e) => setVehicle(e.target.value)}
                   className="mt-2"
                 />
-              </form>
-              <form onSubmit={filtration2}>
+              </form> */}
+
+              {/* <form onSubmit={filtration2}>
                 <input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className=" mt-2 mx-2 "
                 />
-              </form>
+              </form> */}
             </div>
           </div>
           <div>
             <DataGrid
               className="dataGrid"
               rows={data}
-              columns={[...columns, actionColumn]}
+              columns={[...columns, actionColumn, actionColumn2]}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -462,7 +555,7 @@ function GetDocumentsFromList() {
               pageSizeOptions={[5]}
               // checkboxSelection
               disableRowSelectionOnClick
-              disableColumnFilter
+              // disableColumnFilter
               disableDensitySelector
               disableColumnSelector
             />

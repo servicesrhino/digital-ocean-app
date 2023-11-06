@@ -74,8 +74,8 @@ function AddRouteSheet() {
       <div className="app__body">
         <Sidebar />
         <Container className="small-container">
-          <h1 className="my-3">Загрузити дані по маршрутному листу</h1>
-          <Form onSubmit={getData}>
+          <h1 className="my-3 test2">Загрузити дані по маршрутному листу</h1>
+          <Form onSubmit={getData} className="test2">
             <FormGroup className="mb-3" controlId="documentID">
               <Form.Label>urlID</Form.Label>
               <Form.Control

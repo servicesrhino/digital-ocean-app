@@ -10,6 +10,7 @@ import RemoveCheckService from '../../services/RemoveCheckService';
 import DataTable from '../dataTable/DataTable';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import TableBootstrap from '../tableBootstrap/TableBootstrap';
+import { Box } from '@mui/material';
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
@@ -65,6 +66,7 @@ function GetDocumentsFromList() {
   const actionColumn2 = {
     field: 'action2',
     headerName: 'Відмінити',
+    align: 'center',
     width: 70,
     renderCell: (params) => {
       return (
@@ -94,7 +96,7 @@ function GetDocumentsFromList() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 160,
+      width: 150,
       editable: true,
       renderCell: (params) => {
         return (
@@ -108,19 +110,32 @@ function GetDocumentsFromList() {
     {
       field: 'name',
       headerName: 'Назва',
-      width: 160,
+      width: 150,
       editable: true,
       renderCell: (params) => {
         return (
-          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.name}
-          </div>
+          <Box
+            sx={{
+              // boxShadow: 2,
+              // border: 2,
+              // width: '100%',
+              // height: 50,
+              borderColor: 'primary.light',
+              '& .MuiDataGrid-row': {
+                color: 'primary.main',
+              },
+            }}
+          >
+            <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+              {params.row.name}
+            </div>
+          </Box>
         );
       },
     },
     {
       field: 'rhinoID',
-      headerName: 'Рино ID',
+      headerName: 'Ріно ID',
       width: 100,
       // editable: true,
       renderCell: (params) => {
@@ -162,7 +177,7 @@ function GetDocumentsFromList() {
     {
       field: 'priceWithDepreciation',
       headerName: 'Цена с амортизацией',
-      width: 110,
+      width: 100,
       editable: true,
       renderCell: (params) => {
         return (
@@ -176,7 +191,7 @@ function GetDocumentsFromList() {
     {
       field: 'barCodePrintQnt',
       headerName: 'Кількість',
-      width: 90,
+      width: 80,
       editable: false,
       renderCell: (params) => {
         return (
@@ -189,7 +204,7 @@ function GetDocumentsFromList() {
     {
       field: 'id',
       headerName: 'ID',
-      width: 100,
+      width: 90,
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
@@ -541,7 +556,7 @@ function GetDocumentsFromList() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 10,
+                    pageSize: 50,
                   },
                 },
               }}

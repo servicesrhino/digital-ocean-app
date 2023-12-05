@@ -56,6 +56,10 @@
   .MuiDataGrid-toolbarContainer {
     flex-direction: row-reverse;
   }
+  .MuiDataGrid-row {
+    /* background-color: gray;
+    flex: 1; */
+  }
 
   .MuiDataGrid-cell--withRenderer {
     align-items: center;

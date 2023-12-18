@@ -22,6 +22,8 @@ import Header from './Components/Header/Header';
 import GetLastRouteSheet from './Components/RouteSheet/GetLastRouteSheet/GetLastRouteSheet';
 import GetLastDocuments from './Components/GetLastDocuments/GetLastDocuments';
 import GetDocumentsFromList from './Components/GetDocumentsFromList/GetDocumentsFromList';
+import Reports from './Components/Reports/Reports';
+import GetReports from './Components/GetReports/GetReports';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -132,6 +134,8 @@ function App() {
               path="/get-last-documents-fromList"
               element={<GetDocumentsFromList />}
             />
+            <Route path="reports" element={<Reports />} />
+            <Route path="get-reports" element={<GetReports />} />
           </Routes>
         </Container>
       </main>

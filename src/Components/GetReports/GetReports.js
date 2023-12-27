@@ -7,10 +7,12 @@ import Sidebar from '../Sidebar/Sidebar';
 // import { Button } from 'bootstrap';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import ReactLoading from 'react-loading';
 
 function GetReports() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
+  const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
   console.log(lastDocumentsFromList);
@@ -30,6 +32,7 @@ function GetReports() {
           console.log(res.data.reportItemsModel);
           setData(res.data.reportItemsModel);
           setData2(res.data);
+          setDone(true);
         });
     } catch (error) {
       console.log(error);
@@ -187,47 +190,59 @@ function GetReports() {
   ];
 
   return (
-    <div className="appss">
-      <div className="appss__body">
-        <Sidebar />
-        <div className="app__other">
-          <h1>Отримати дані по звітам</h1>
-          {/* <button onClick={getDocumentsFromList}>Get reports</button> */}
-          <div className="mb-3">
-            <Button type="printAll">Надрукувати все</Button>
-            <div className="d-flex"></div>
-          </div>
-          <div>
-            <DataGrid
-              className="dataGrid"
-              rows={data}
-              columns={[...columns]}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 50,
-                  },
-                },
-              }}
-              slots={{ toolbar: GridToolbar }}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              pageSizeOptions={[5]}
-              // checkboxSelection
-              disableRowSelectionOnClick
-              // disableColumnFilter
-              disableDensitySelector
-              disableColumnSelector
-            />
-            {/* <DataTable rows={data} /> */}
+    <>
+      {!done ? (
+        <ReactLoading
+          className="flex justify-content-center align-items-center"
+          type={'bars'}
+          color={'green'}
+          height={200}
+          width={200}
+        />
+      ) : (
+        <div className="appss">
+          <div className="appss__body">
+            <Sidebar />
+            <div className="app__other">
+              <h1>Отримати дані по звітам</h1>
+              {/* <button onClick={getDocumentsFromList}>Get reports</button> */}
+              <div className="mb-3">
+                <Button type="printAll">Надрукувати все</Button>
+                <div className="d-flex"></div>
+              </div>
+              <div>
+                <DataGrid
+                  className="dataGrid"
+                  rows={data}
+                  columns={[...columns]}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 50,
+                      },
+                    },
+                  }}
+                  slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                      quickFilterProps: { debounceMs: 500 },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  // checkboxSelection
+                  disableRowSelectionOnClick
+                  // disableColumnFilter
+                  disableDensitySelector
+                  disableColumnSelector
+                />
+                {/* <DataTable rows={data} /> */}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

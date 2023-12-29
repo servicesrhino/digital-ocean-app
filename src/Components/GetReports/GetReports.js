@@ -47,7 +47,7 @@ function GetReports() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 200,
+      width: 190,
       headerAlign: 'left',
       editable: true,
       renderCell: (params) => {
@@ -62,7 +62,7 @@ function GetReports() {
     {
       field: 'name',
       headerName: 'Назва',
-      width: 200,
+      width: 190,
       editable: true,
       renderCell: (params) => {
         return (
@@ -88,7 +88,7 @@ function GetReports() {
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
-      width: 130,
+      width: 110,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -102,7 +102,7 @@ function GetReports() {
     {
       field: 'stockPrice',
       headerName: 'Цена со склада',
-      width: 120,
+      width: 110,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -115,7 +115,7 @@ function GetReports() {
     {
       field: 'incomePrice',
       headerName: 'Цена входящая',
-      width: 130,
+      width: 110,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -129,7 +129,7 @@ function GetReports() {
     {
       field: 'priceWithDepreciation',
       headerName: 'Цена с амортизацией',
-      width: 130,
+      width: 110,
       editable: true,
       renderCell: (params) => {
         return (
@@ -153,15 +153,57 @@ function GetReports() {
     //     );
     //   },
     // },
+
+    // {
+    //   field: 'id',
+    //   headerName: 'ID',
+    //   //   headerAlign: 'center',
+    //   width: 120,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.id}
+    //       </div>
+    //     );
+    //   },
+    // },
+
     {
-      field: 'id',
-      headerName: 'ID',
+      field: 'scanCode',
+      headerName: 'ScanCode',
       //   headerAlign: 'center',
-      width: 120,
+      width: 100,
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.id}
+            {params.row.scanCode}
+          </div>
+        );
+      },
+    },
+
+    {
+      field: 'other',
+      headerName: 'Назва транспорту',
+      //   headerAlign: 'center',
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.routeItem?.vehicleName}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'otehr2',
+      headerName: 'Менеджер',
+      //   headerAlign: 'center',
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {params.row.routeListManagerName}
           </div>
         );
       },

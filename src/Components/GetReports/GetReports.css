@@ -1,0 +1,17 @@
+.styled2 {
+}
+
+.some {
+  /* align-items: text-wrap; */
+  /* background-color: yellow; */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  font-size: 10px;
+}
+
+.dataGrid {
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  word-wrap: break-wordt;
+}

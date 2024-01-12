@@ -2,12 +2,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '../../Store';
 import axios from 'axios';
-import { Box } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import Sidebar from '../Sidebar/Sidebar';
 // import { Button } from 'bootstrap';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
+import './GetReports.css';
 
 function GetReports() {
   const [data, setData] = useState([]);
@@ -47,12 +48,12 @@ function GetReports() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 190,
+      width: 160,
       headerAlign: 'left',
       editable: true,
       renderCell: (params) => {
         return (
-          <div className={` size ${params.row.printed ? 'styled' : ''}`}>
+          <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
             {params.row.vehicle}
           </div>
         );
@@ -62,26 +63,65 @@ function GetReports() {
     {
       field: 'name',
       headerName: 'Назва',
-      width: 190,
+      width: 200,
       editable: true,
       renderCell: (params) => {
         return (
-          <Box
-            sx={{
-              // boxShadow: 2,
-              // border: 2,
-              // width: '100%',
-              // height: 50,
-              borderColor: 'primary.light',
-              '& .MuiDataGrid-row': {
-                color: 'primary.main',
-              },
-            }}
-          >
-            <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-              {params.row.name}
-            </div>
-          </Box>
+          // <Box
+          //   sx={{
+          //     // boxShadow: 2,
+          //     // border: 2,
+          //     // width: '100%',
+          //     // height: 50,
+          //     borderColor: 'primary.light',
+          //     overflowWrap: 'break-word',
+          //     '& .MuiDataGrid-row': {
+          //       color: 'primary.main',
+          //       overflowWrap: 'break-word !important',
+          //       worldWrap: 'break-word !important',
+          //     },
+          //     '&.MuiDataGrid-root .MuiDataGrid-cell--withRenderer': {
+          //       color: 'tomato',
+          //       overflowWrap: 'break-word !important',
+          //       whiteSpace: 'normal',
+          //       worldWrap: 'break-word !important',
+          //       // word-wrap: 'break-word !important',
+          //       // white-space: 'normal',
+          //       // word-wrap: 'break-word',
+          //     },
+          //     '& .MuiDataGrid-cell--withRenderer MuiDataGrid-cell MuiDataGrid-cell--textLeft MuiDataGrid-cell--editable MuiDataGrid-withBorderColor':
+          //       {
+          //         overflowWrap: 'break-word',
+          //         // color2: 'primary',
+          //       },
+          //   }}
+          // >
+          <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+            <TextField
+              // sx={{
+              //   fontSize: 10,
+              //   fontWeight: 'bold',
+              // }}
+              InputProps={{
+                sx: {
+                  // color: '#518eb9',
+                  fontSize: '11px',
+                  // fontWeight: 1000,
+                },
+                disableUnderline: true,
+              }}
+              variant="standard"
+              className={`some size ${params.row.printed ? 'styled' : ''}`}
+              //
+              size="small"
+              style={{ fontSize: 10 }}
+              value={params.row.name}
+              // InputProps={{ disableUnderline: true }}
+              multiline
+            />
+            {/* <div className="some">{params.row.name}</div> */}
+          </div>
+          // </Box>
         );
       },
     },
@@ -185,12 +225,35 @@ function GetReports() {
     {
       field: 'other',
       headerName: 'Назва транспорту',
+      // cellClassName: 'super-app-theme--cell',
       //   headerAlign: 'center',
-      width: 100,
+      width: 110,
       renderCell: (params) => {
         return (
-          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.routeItem?.vehicleName}
+          <div
+            style={{ lineHeight: 'normal' }}
+            // className={`some size ${params.row.printed ? 'styled' : ''}`}
+          >
+            <TextField
+              // sx={{
+              //   fontSize: 10,
+              //   fontWeight: 'medium',
+              // }}
+
+              InputProps={{
+                sx: {
+                  // color: '#518eb9',
+                  fontSize: '11px',
+                  // fontWeight: 1000,
+                  '&.MuiOutlinedInput-notchedOutline': { fontSize: '10px' },
+                  // outline: 'not',
+                },
+                disableUnderline: true,
+              }}
+              value={params.row.routeItem?.vehicleName}
+              variant="standard"
+              multiline
+            />
           </div>
         );
       },
@@ -199,15 +262,49 @@ function GetReports() {
       field: 'otehr2',
       headerName: 'Менеджер',
       //   headerAlign: 'center',
-      width: 100,
+      width: 110,
       renderCell: (params) => {
         return (
-          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.routeListManagerName}
+          <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+            <TextField
+              // sx={{
+              //   fontSize: 10,
+              //   fontWeight: 'bold',
+              // }}
+              InputProps={{
+                sx: {
+                  // color: '#518eb9',
+                  fontSize: '11px',
+                  // fontWeight: 1000,
+                },
+                disableUnderline: true,
+              }}
+              variant="standard"
+              className={`some size ${params.row.printed ? 'styled' : ''}`}
+              //
+              size="small"
+              style={{ fontSize: 10 }}
+              value={params.row.routeListManagerName}
+              // InputProps={{ disableUnderline: true }}
+              multiline
+            />
           </div>
         );
       },
     },
+    // {
+    //   field: 'otehr3',
+    //   headerName: 'Менед3жер',
+    //   //   headerAlign: 'center',
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.routeListManagerName}
+    //       </div>
+    //     );
+    //   },
+    // },
 
     // {
     //   field: 'defect',
@@ -253,31 +350,50 @@ function GetReports() {
                 <div className="d-flex"></div>
               </div>
               <div>
-                <DataGrid
-                  className="dataGrid"
-                  rows={data}
-                  columns={[...columns]}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 50,
+                <Box
+                // sx={{
+                //   '& .super-app-theme--cell': {
+                //     backgroundColor: 'rgba(224, 183, 60, 0.55)',
+                //     color: '#1a3e72',
+                //     fontWeight: '600',
+                //     overflowWrap: 'break-word !important',
+                //     worldWrap: 'break-word !important',
+                //     overflow: 'hidden',
+                //   },
+                //   '& .MuiDataGrid-cellContent': {
+                //     overflowWrap: 'break-word !important',
+                //     textOverflow: 'ellipsis',
+                //     wordWrap: 'break-word !important',
+                //   },
+                // }}
+                >
+                  <DataGrid
+                    className="dataGrid"
+                    rows={data}
+                    columns={[...columns]}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 50,
+                        },
                       },
-                    },
-                  }}
-                  slots={{ toolbar: GridToolbar }}
-                  slotProps={{
-                    toolbar: {
-                      showQuickFilter: true,
-                      quickFilterProps: { debounceMs: 500 },
-                    },
-                  }}
-                  pageSizeOptions={[5]}
-                  // checkboxSelection
-                  disableRowSelectionOnClick
-                  // disableColumnFilter
-                  disableDensitySelector
-                  disableColumnSelector
-                />
+                    }}
+                    slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true,
+                        quickFilterProps: { debounceMs: 500 },
+                      },
+                    }}
+                    pageSizeOptions={[5]}
+                    // checkboxSelection
+                    disableRowSelectionOnClick
+                    // disableColumnFilter
+                    disableDensitySelector
+                    disableColumnSelector
+                  />
+                </Box>
+
                 {/* <DataTable rows={data} /> */}
               </div>
             </div>

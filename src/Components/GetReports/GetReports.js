@@ -12,7 +12,9 @@ import './GetReports.css';
 
 function GetReports() {
   const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
+  // const [data2, setData2] = useState([]);
+  // const [data3, setData3] = useState([]);
+
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
@@ -31,26 +33,57 @@ function GetReports() {
         )
         .then((res) => {
           console.log(res.data.reportItemsModel);
-          setData(res.data.reportItemsModel);
-          setData2(res.data);
+          console.log(res.data);
+          // setData(res.data.reportItemsModel);
+          const checkedValue = res.data.reportItemsModel.map(
+            (row) =>
+              row.routeItem?.vehicleName
+                ? { ...row, routeItemVeh: row.routeItem?.vehicleName }
+                : { ...row, routeItemVeh: '' } //  row.id === name ? { ...row, defect: true } : row
+          );
+          console.log(checkedValue);
+          setData(checkedValue);
+          // setData2(res.data);
           setDone(true);
         });
     } catch (error) {
       console.log(error);
     }
   };
+  // if (data)
+
+  const checkedValue = data.map(
+    (row) =>
+      row.routeItem?.vehicleName
+        ? { ...row, routeItemVeh: row.routeItem?.vehicleName }
+        : { ...row, routeItemVeh: false } //  row.id === name ? { ...row, defect: true } : row
+  );
+  console.log(checkedValue);
+  // setData3(checkedValue);
+
+  const newData = data.map((row) => {
+    return {
+      ...row,
+      routeItemVehicle: row.routeItem?.vehicleName,
+    };
+  });
+  console.log(newData);
+  // setData3(newData);
 
   useEffect(() => {
     getDocumentsFromList();
   }, []);
 
+  function handleOnInput(e) {}
+
   const columns = [
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 160,
+      width: 170,
       headerAlign: 'left',
       editable: true,
+      // flex: 1,
       renderCell: (params) => {
         return (
           <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
@@ -59,72 +92,93 @@ function GetReports() {
         );
       },
     },
-
     {
       field: 'name',
       headerName: 'Назва',
-      width: 200,
-      editable: true,
+      // style: fontSize: '16px',
+      width: 190,
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
       renderCell: (params) => {
         return (
-          // <Box
-          //   sx={{
-          //     // boxShadow: 2,
-          //     // border: 2,
-          //     // width: '100%',
-          //     // height: 50,
-          //     borderColor: 'primary.light',
-          //     overflowWrap: 'break-word',
-          //     '& .MuiDataGrid-row': {
-          //       color: 'primary.main',
-          //       overflowWrap: 'break-word !important',
-          //       worldWrap: 'break-word !important',
-          //     },
-          //     '&.MuiDataGrid-root .MuiDataGrid-cell--withRenderer': {
-          //       color: 'tomato',
-          //       overflowWrap: 'break-word !important',
-          //       whiteSpace: 'normal',
-          //       worldWrap: 'break-word !important',
-          //       // word-wrap: 'break-word !important',
-          //       // white-space: 'normal',
-          //       // word-wrap: 'break-word',
-          //     },
-          //     '& .MuiDataGrid-cell--withRenderer MuiDataGrid-cell MuiDataGrid-cell--textLeft MuiDataGrid-cell--editable MuiDataGrid-withBorderColor':
-          //       {
-          //         overflowWrap: 'break-word',
-          //         // color2: 'primary',
-          //       },
-          //   }}
-          // >
           <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
-            <TextField
-              // sx={{
-              //   fontSize: 10,
-              //   fontWeight: 'bold',
-              // }}
-              InputProps={{
-                sx: {
-                  // color: '#518eb9',
-                  fontSize: '11px',
-                  // fontWeight: 1000,
-                },
-                disableUnderline: true,
-              }}
-              variant="standard"
-              className={`some size ${params.row.printed ? 'styled' : ''}`}
-              //
-              size="small"
-              style={{ fontSize: 10 }}
-              value={params.row.name}
-              // InputProps={{ disableUnderline: true }}
-              multiline
-            />
-            {/* <div className="some">{params.row.name}</div> */}
+            {params.row.name}
           </div>
-          // </Box>
         );
       },
     },
+
+    // {
+    //   field: 'name',
+    //   headerName: 'Назва',
+    //   width: 200,
+    //   editable: true,
+    //   renderCell: (params) => {
+    //     return (
+    //       // <Box
+    //       //   sx={{
+    //       //     // boxShadow: 2,
+    //       //     // border: 2,
+    //       //     // width: '100%',
+    //       //     // height: 50,
+    //       //     borderColor: 'primary.light',
+    //       //     overflowWrap: 'break-word',
+    //       //     '& .MuiDataGrid-row': {
+    //       //       color: 'primary.main',
+    //       //       overflowWrap: 'break-word !important',
+    //       //       worldWrap: 'break-word !important',
+    //       //     },
+    //       //     '&.MuiDataGrid-root .MuiDataGrid-cell--withRenderer': {
+    //       //       color: 'tomato',
+    //       //       overflowWrap: 'break-word !important',
+    //       //       whiteSpace: 'normal',
+    //       //       worldWrap: 'break-word !important',
+    //       //       // word-wrap: 'break-word !important',
+    //       //       // white-space: 'normal',
+    //       //       // word-wrap: 'break-word',
+    //       //     },
+    //       //     '& .MuiDataGrid-cell--withRenderer MuiDataGrid-cell MuiDataGrid-cell--textLeft MuiDataGrid-cell--editable MuiDataGrid-withBorderColor':
+    //       //       {
+    //       //         overflowWrap: 'break-word',
+    //       //         // color2: 'primary',
+    //       //       },
+    //       //   }}
+    //       // >
+    //       <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'bold',
+    //           // }}
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           variant="standard"
+    //           className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //           //
+    //           size="small"
+    //           style={{ fontSize: 10 }}
+    //           value={params.row.name || ''}
+    //           // InputProps={{ disableUnderline: true }}
+    //           maxRows={2}
+    //           minRows={1}
+    //           rows={2}
+    //           // onChange={() => handleChange()}
+    //           onInput={(e) => handleOnInput(e)}
+    //           // multiline
+    //         />
+    //         {/* <div className="some">{params.row.name}</div> */}
+    //       </div>
+    //       // </Box>
+    //     );
+    //   },
+    // },
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
@@ -221,80 +275,220 @@ function GetReports() {
         );
       },
     },
+    // {
+    //   field: 'routeItemVeh',
+    //   headerName: 'Назва транспорту',
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'bold',
+    //           // }}
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           variant="standard"
+    //           className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //           //
+    //           size="small"
+    //           style={{ fontSize: 10 }}
+    //           value={params.row.routeItemVeh || ''}
+    //           maxRows={2}
+    //           rows={2}
+    //           fullWidth
+    //           width={'100px'}
+    //           // onChange={() => handleChange()}
+    //           // InputProps={{ disableUnderline: true }}
+    //           // multiline
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
 
+    // {
+    //   field: 'routeItemVehicle',
+    //   headerName: 'Назва транспорту',
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'bold',
+    //           // }}
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           variant="standard"
+    //           className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //           //
+    //           size="small"
+    //           style={{ fontSize: 10 }}
+    //           value={params.row.routeItemVeh || []}
+    //           // InputProps={{ disableUnderline: true }}
+    //           multiline
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
     {
-      field: 'other',
+      field: 'routeItemVeh',
       headerName: 'Назва транспорту',
-      // cellClassName: 'super-app-theme--cell',
-      //   headerAlign: 'center',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
       width: 110,
-      renderCell: (params) => {
-        return (
-          <div
-            style={{ lineHeight: 'normal' }}
-            // className={`some size ${params.row.printed ? 'styled' : ''}`}
-          >
-            <TextField
-              // sx={{
-              //   fontSize: 10,
-              //   fontWeight: 'medium',
-              // }}
-
-              InputProps={{
-                sx: {
-                  // color: '#518eb9',
-                  fontSize: '11px',
-                  // fontWeight: 1000,
-                  '&.MuiOutlinedInput-notchedOutline': { fontSize: '10px' },
-                  // outline: 'not',
-                },
-                disableUnderline: true,
-              }}
-              value={params.row.routeItem?.vehicleName}
-              variant="standard"
-              multiline
-            />
-          </div>
-        );
-      },
     },
     {
-      field: 'otehr2',
+      field: 'routeListManagerName',
       headerName: 'Менеджер',
-      //   headerAlign: 'center',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
       width: 110,
-      renderCell: (params) => {
-        return (
-          <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
-            <TextField
-              // sx={{
-              //   fontSize: 10,
-              //   fontWeight: 'bold',
-              // }}
-              InputProps={{
-                sx: {
-                  // color: '#518eb9',
-                  fontSize: '11px',
-                  // fontWeight: 1000,
-                },
-                disableUnderline: true,
-              }}
-              variant="standard"
-              className={`some size ${params.row.printed ? 'styled' : ''}`}
-              //
-              size="small"
-              style={{ fontSize: 10 }}
-              value={params.row.routeListManagerName}
-              // InputProps={{ disableUnderline: true }}
-              multiline
-            />
-          </div>
-        );
-      },
     },
+    // {
+    //   field: 'routeListManagerName',
+    //   headerName: 'Менеджер',
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'bold',
+    //           // }}
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           variant="standard"
+    //           className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //           //
+    //           size="small"
+    //           style={{ fontSize: 10 }}
+    //           value={params.row.routeListManagerName || ''}
+    //           // InputProps={{ disableUnderline: true }}
+    //           maxRows={2}
+    //           rows={2}
+    //           // rowHeight={2}
+    //           // multiline
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   field: 'scanCode2',
+    //   headerName: 'ScanCode2',
+    //   //   headerAlign: 'center',
+    //   filterable: 'true',
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.scanCode}
+    //       </div>
+    //     );
+    //   },
+    // },
+
+    // {
+    //   field: 'other',
+    //   headerName: 'Назва транспорту',
+    //   // cellClassName: 'super-app-theme--cell',
+    //   //   headerAlign: 'center',
+    //   width: 110,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div
+    //         style={{ lineHeight: 'normal' }}
+    //         // className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //       >
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'medium',
+    //           // }}
+
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //               '&.MuiOutlinedInput-notchedOutline': { fontSize: '10px' },
+    //               // outline: 'not',
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           value={params.row.routeItem?.vehicleName}
+    //           variant="standard"
+    //           multiline
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
+
+    // {
+    //   field: 'otehr2',
+    //   headerName: 'Менеджер',
+    //   //   headerAlign: 'center',
+    //   width: 110,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`some size ${params.row.printed ? 'styled' : ''}`}>
+    //         <TextField
+    //           // sx={{
+    //           //   fontSize: 10,
+    //           //   fontWeight: 'bold',
+    //           // }}
+    //           InputProps={{
+    //             sx: {
+    //               // color: '#518eb9',
+    //               fontSize: '11px',
+    //               // fontWeight: 1000,
+    //             },
+    //             disableUnderline: true,
+    //           }}
+    //           variant="standard"
+    //           className={`some size ${params.row.printed ? 'styled' : ''}`}
+    //           //
+    //           size="small"
+    //           style={{ fontSize: 10 }}
+    //           value={params.row.routeListManagerName}
+    //           // InputProps={{ disableUnderline: true }}
+    //           multiline
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
+
     // {
     //   field: 'otehr3',
     //   headerName: 'Менед3жер',
+    //   editable: true,
     //   //   headerAlign: 'center',
     //   width: 100,
     //   renderCell: (params) => {
@@ -318,14 +512,17 @@ function GetReports() {
     // },
 
     // {
-    //   field: 'fullName',
+    //   field: 'routeItemVeh',
     //   headerName: 'Full name',
     //   description: 'This column has a value getter and is not sortable.',
     //   sortable: false,
     //   width: 160,
+    //   // multiline: true,
     //   valueGetter: (params) =>
-    //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    //     `${params.row.routeItemVeh || ''} ${params.row.lastName || ''}`,
     // },
+
+    // (params) => params.row.details[0].name,
   ];
 
   return (
@@ -351,26 +548,43 @@ function GetReports() {
               </div>
               <div>
                 <Box
-                // sx={{
-                //   '& .super-app-theme--cell': {
-                //     backgroundColor: 'rgba(224, 183, 60, 0.55)',
-                //     color: '#1a3e72',
-                //     fontWeight: '600',
-                //     overflowWrap: 'break-word !important',
-                //     worldWrap: 'break-word !important',
-                //     overflow: 'hidden',
-                //   },
-                //   '& .MuiDataGrid-cellContent': {
-                //     overflowWrap: 'break-word !important',
-                //     textOverflow: 'ellipsis',
-                //     wordWrap: 'break-word !important',
-                //   },
-                // }}
+                  sx={{
+                    '& .super-app-theme--cell': {
+                      // backgroundColor: 'rgba(224, 183, 60, 0.55)',
+                      // color: '#1a3e72',
+                      // fontWeight: '600',
+                      overflowWrap: 'break-word !important',
+                      worldWrap: 'break-word !important',
+                      overflow: 'hidden',
+                      fontSize: '11px',
+                      // width: '100%',
+                    },
+                    '& .MuiDataGrid-cellContent': {
+                      overflowWrap: 'break-word !important',
+                      textOverflow: 'ellipsis',
+                      wordWrap: 'break-word !important',
+                    },
+                  }}
                 >
                   <DataGrid
+                    getRowHeight={() => 'auto'}
+                    getEstimatedRowHeight={() => 200}
+                    sx={{
+                      '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
+                        py: '8px',
+                      },
+                      '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
+                        py: '15px',
+                      },
+                      '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell':
+                        { py: '22px' },
+                    }}
                     className="dataGrid"
                     rows={data}
-                    columns={[...columns]}
+                    columns={[
+                      ...columns,
+                      // { field: 'scanCode2', filterable: true },
+                    ]}
                     initialState={{
                       pagination: {
                         paginationModel: {
@@ -385,7 +599,7 @@ function GetReports() {
                         quickFilterProps: { debounceMs: 500 },
                       },
                     }}
-                    pageSizeOptions={[5]}
+                    pageSizeOptions={[10]}
                     // checkboxSelection
                     disableRowSelectionOnClick
                     // disableColumnFilter

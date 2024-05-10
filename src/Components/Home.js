@@ -61,7 +61,7 @@ const Home = () => {
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('time', data.serverTime);
 
-      navigate('/get-documents');
+      navigate('/reports');
       console.log(data);
 
       if (data) {

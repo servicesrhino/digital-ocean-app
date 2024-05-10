@@ -18,7 +18,7 @@ function Sidebar() {
           <Link to="/reports">Звіти</Link>
         </div>
         <div className="link">
-          <Link to="/get-documents">Отримати дані по документу</Link>
+          {/* <Link to="/get-documents">Отримати дані по документу</Link> */}
         </div>
         <div className="link">
           <Link to="/add-documents">Загрузити дані з документу</Link>
@@ -46,7 +46,7 @@ function Sidebar() {
           <Link to="/">Login</Link>
         </div>
         <div className="link">
-          <Link to="/parse-excel">Parse excel</Link>
+          {/* <Link to="/parse-excel">Parse excel</Link> */}
         </div>
 
         {/* <p>Link 3</p> */}

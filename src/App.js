@@ -113,10 +113,10 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/parse-excel" element={<ParseExcel />} />
+            {/* <Route path="/parse-excel" element={<ParseExcel />} /> */}
             <Route path="/barcode" element={<BarcodeGen />} />
             <Route path="/allparts" element={<AllParts />} />
-            <Route path="/get-documents" element={<GetDocuments />} />
+            {/* <Route path="/get-documents" element={<GetDocuments />} /> */}
             <Route path="/add-documents" element={<AddDocuments />} />
             <Route path="get-documents/:id" element={<GetDocumentsPrint />} />
             <Route path="/get-route-sheet" element={<GetRouteSheet />} />

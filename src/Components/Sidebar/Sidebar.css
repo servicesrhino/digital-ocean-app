@@ -15,7 +15,7 @@
   max-width: 260px;
   /* justify-content: flex-start; */
   flex-wrap: wrap;
-  align-content: space-around;
+  /* align-content: space-around; */
   justify-content: left;
   white-space: nowrap;
   padding: 7px;

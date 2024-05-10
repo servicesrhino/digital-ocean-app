@@ -18,6 +18,7 @@ function Header() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('time');
 
     // setTimeout(function () {
     //   localStorage.removeItem('userInfo');

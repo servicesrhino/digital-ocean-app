@@ -13,6 +13,8 @@ const initialState = {
   id: '',
   rhinoID: '',
   isAuth: false,
+  jwtToken: '',
+  refreshToken: '',
 
   // cart: {
   //     cartItems: [],
@@ -40,6 +42,10 @@ function reducer(state, action) {
       return { ...state, id: action.payload };
     case 'BARCODE_RHINOID':
       return { ...state, rhinoID: action.payload };
+    case 'JWT':
+      return { ...state, jwtToken: action.payload };
+    case 'REFRESH_TOKEN':
+      return { ...state, refreshToken: action.payload };
 
     default:
       return state;

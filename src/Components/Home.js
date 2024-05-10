@@ -54,15 +54,19 @@ const Home = () => {
       console.log(token);
       ctxDispatch({ type: 'IS_AUTH' });
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      ctxDispatch({ type: 'JWT', payload: data.jwtToken });
+      ctxDispatch({ type: 'REFRESH_TOKEN', payload: data.refreshToken });
       localStorage.setItem('userInfo', JSON.stringify(data));
       localStorage.setItem('token', data.jwtToken);
       localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('time', data.serverTime);
 
       navigate('/get-documents');
       console.log(data);
 
       if (data) {
         getCatalog();
+        // checkAuth();
       }
     } catch (err) {
       //alert('Invalid email or password')
@@ -116,7 +120,7 @@ const Home = () => {
         token: newToken,
         //password,
         refreshToken: newToken2,
-        udid: 'test67',
+        udid: 'test',
         //parentId: '',
       })
       .then((res) => {
@@ -168,6 +172,9 @@ const Home = () => {
               <div className="mb-3">
                 <Button type="submit">Логин</Button>
               </div>
+              {/* <div>
+                <button onClick={checkAuth} />
+              </div> */}
             </Form>
           </Container>
         </div>

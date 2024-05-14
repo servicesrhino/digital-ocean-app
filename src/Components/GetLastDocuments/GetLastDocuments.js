@@ -9,6 +9,8 @@ import { Store } from '../../Store';
 
 function GetLastDocuments() {
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
+
   // const [documentId, setDocumentID] = useState('');
   // const [sheetId, setSheetID] = useState('');
   const documentId = '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0';
@@ -23,13 +25,37 @@ function GetLastDocuments() {
         )
         .then((res) => {
           console.log(res.data);
-          setData(res.data);
+          const newData = res.data.map((row) => {
+            return {
+              ...row,
+              // created: data.map((item) => item.created),
+              created: row.created.slice(0, row.created.indexOf('T')),
+            };
+          });
+          setData(newData);
         });
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(data);
+  console.log(data.map((item) => new Date(item.created).getMonth()));
+  console.log(data.map((item) => new Date(item.created).getUTCFullYear()));
+  console.log(data.map((item) => new Date(item.created).getDay()));
+
+  let text = '2024-02-14T14:01:44.613Z';
+  let result = text.indexOf('T');
+  console.log(text.slice(0, result));
+
+  const newData = data.map((row) => {
+    return {
+      ...row,
+      // created: data.map((item) => item.created),
+      created: row.created.slice(0, row.created.indexOf('T')),
+    };
+  });
+
+  console.log(newData);
+  // setData(newData);
 
   const getDocumentsFromList = async (e, info) => {
     try {
@@ -69,25 +95,37 @@ function GetLastDocuments() {
                   <thead className="text-right ">
                     <tr>
                       <th>created</th>
-                      <th>documentId</th>
-                      <th>sheetId</th>
+                      {/* <th>documentId</th> */}
+                      {/* <th>sheetId</th> */}
+                      <th>Назва документу</th>
                     </tr>
                   </thead>
                   <tbody className="text-primarily table-body ">
                     {data.map((item, index) => (
                       <tr key={index}>
                         <td
+                        // onClick={(e) =>
+                        //   getDocumentsFromList(e, item.documentId)
+                        // }
+                        >
+                          {item.created}
+                          {/* <Link to="/get-last-documents-fromList">
+                            
+                          </Link> */}
+                        </td>
+
+                        {/* <td>{item.documentId}</td> */}
+                        {/* <td>{item.sheetId}</td> */}
+                        <td
                           onClick={(e) =>
                             getDocumentsFromList(e, item.documentId)
                           }
                         >
                           <Link to="/get-last-documents-fromList">
-                            {item.created}
+                            {item.documentName}
                           </Link>
+                          {/* {item.documentName} */}
                         </td>
-
-                        <td>{item.documentId}</td>
-                        <td>{item.sheetId}</td>
                       </tr>
                     ))}
                   </tbody>

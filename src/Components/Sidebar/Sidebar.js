@@ -21,7 +21,7 @@ function Sidebar() {
           {/* <Link to="/get-documents">Отримати дані по документу</Link> */}
         </div>
         <div className="link">
-          <Link to="/add-documents">Загрузити дані з документу</Link>
+          <Link to="/add-documents">Оформити прихід на склад</Link>
         </div>
         <div className="link">
           <Link to="/get-last-documents">
@@ -29,10 +29,10 @@ function Sidebar() {
           </Link>
         </div>
         <div className="link">
-          <Link to="/get-route-sheet">Отримати дані по маршрутному листу</Link>
+          {/* <Link to="/get-route-sheet">Отримати дані по маршрутному листу</Link> */}
         </div>
         <div className="link">
-          <Link to="/add-route-sheet">Загрузити дані по маршрутному листу</Link>
+          {/* <Link to="/add-route-sheet">Загрузити дані по маршрутному листу</Link> */}
         </div>
         <div className="link">
           <Link to="/get-last-route-sheet">Отримати останні дані по листу</Link>

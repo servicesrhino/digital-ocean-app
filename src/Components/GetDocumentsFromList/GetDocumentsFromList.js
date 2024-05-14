@@ -49,7 +49,7 @@ function GetDocumentsFromList() {
             onChange={handleChecked}
             onClick={(e) => {
               barcodeNew(e, params.row);
-              newPrintFunc2(e, params.row);
+              // newPrintFunc2(e, params.row);
               togle(e, params.row);
             }}
             className={`size btn btn-danger${
@@ -96,7 +96,7 @@ function GetDocumentsFromList() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 150,
+      width: 160,
       editable: true,
       renderCell: (params) => {
         return (
@@ -110,7 +110,7 @@ function GetDocumentsFromList() {
     {
       field: 'name',
       headerName: 'Назва',
-      width: 150,
+      width: 210,
       editable: true,
       renderCell: (params) => {
         return (
@@ -150,7 +150,7 @@ function GetDocumentsFromList() {
     {
       field: 'stockPrice',
       headerName: 'Цена со склада',
-      width: 100,
+      width: 90,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -163,7 +163,7 @@ function GetDocumentsFromList() {
     {
       field: 'incomePrice',
       headerName: 'Цена входящая',
-      width: 100,
+      width: 90,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -177,7 +177,7 @@ function GetDocumentsFromList() {
     {
       field: 'priceWithDepreciation',
       headerName: 'Цена с амортизацией',
-      width: 100,
+      width: 90,
       editable: true,
       renderCell: (params) => {
         return (
@@ -191,7 +191,7 @@ function GetDocumentsFromList() {
     {
       field: 'barCodePrintQnt',
       headerName: 'Кількість',
-      width: 80,
+      width: 60,
       editable: false,
       renderCell: (params) => {
         return (
@@ -218,7 +218,7 @@ function GetDocumentsFromList() {
       field: 'defect',
       headerName: 'Дефекти',
       // type: 'number',
-      width: 80,
+      width: 60,
       // editable: true,
       renderCell: (params) => {
         return <div>{params.row.defect}</div>;
@@ -235,17 +235,17 @@ function GetDocumentsFromList() {
     // },
   ];
 
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
+  // const rows = [
+  //   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  //   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  //   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  //   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  //   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  //   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  //   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  //   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  //   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  // ];
 
   const togle = (e, item) => {
     e.preventDefault();

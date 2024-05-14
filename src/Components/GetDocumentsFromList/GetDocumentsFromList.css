@@ -85,4 +85,7 @@
     align-items: center;
     justify-content: center;
   }
+  .size {
+    font-size: 13px;
+  }
 }

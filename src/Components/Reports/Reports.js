@@ -19,7 +19,13 @@ function Reports() {
         )
         .then((res) => {
           console.log(res.data);
-          setData(res.data);
+          const newData = res.data.map((row) => {
+            return {
+              ...row,
+              created: row.created.slice(0, row.created.indexOf('T')),
+            };
+          });
+          setData(newData);
         });
     } catch (error) {
       console.log(error);
@@ -47,7 +53,7 @@ function Reports() {
       <div className="app__body">
         <Sidebar />
         <div className="app__other mx-4">
-          <h1>Отримати дані по приходам</h1>
+          <h1>Отримати звіти</h1>
           <div>
             <Button onClick={getData}>Отримати останні дані</Button>
           </div>
@@ -58,23 +64,44 @@ function Reports() {
                   <thead className="text-right ">
                     <tr>
                       <th>created</th>
-                      <th>documentId</th>
-                      <th>sheetId</th>
+                      {/* <th>documentId</th> */}
+                      {/* <th>sheetId</th> */}
+                      <th>Назва документу</th>
                     </tr>
                   </thead>
                   <tbody className="text-primarily table-body ">
                     {data.map((item, index) => (
                       <tr key={index}>
-                        <td
+                        {/* <td
                           onClick={(e) =>
                             getDocumentsFromList(e, item.documentId)
                           }
                         >
                           <Link to="/get-reports">{item.created}</Link>
+                        </td> */}
+
+                        <td
+                        // onClick={(e) =>
+                        //   getDocumentsFromList(e, item.documentId)
+                        // }
+                        >
+                          {item.created}
+                          {/* <Link to="/get-last-documents-fromList">
+                            
+                          </Link> */}
                         </td>
 
-                        <td>{item.documentId}</td>
-                        <td>{item.sheetId}</td>
+                        {/* <td>{item.created}</td> */}
+
+                        {/* <td>{item.documentId}</td> */}
+                        {/* <td>{item.sheetId}</td> */}
+                        <td
+                          onClick={(e) =>
+                            getDocumentsFromList(e, item.documentId)
+                          }
+                        >
+                          <Link to="/get-reports">{item.documentName}</Link>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

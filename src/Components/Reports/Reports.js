@@ -15,7 +15,7 @@ function Reports() {
     try {
       const res = axios
         .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-last-documents-list'
+          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-documents-list'
         )
         .then((res) => {
           console.log(res.data);

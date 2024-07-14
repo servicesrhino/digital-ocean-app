@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'https://rhino-api-alquo.ondigitalocean.app';
+export const API_URL = 'https://rhino-api-dyq7j.ondigitalocean.app';
 
 const $api = axios.create({
   withCredentials: true,

@@ -12,6 +12,8 @@ import './GetReports.css';
 
 function GetReports() {
   const [data, setData] = useState([]);
+  const [sold, setSold] = useState();
+  const [remained, setRemained] = useState();
   // const [data2, setData2] = useState([]);
   // const [data3, setData3] = useState([]);
 
@@ -24,7 +26,7 @@ function GetReports() {
     try {
       const res = axios
         .post(
-          'https://rhino-api-alquo.ondigitalocean.app/Reports/get-report-fromlist',
+          'https://rhino-api-dyq7j.ondigitalocean.app/Reports/get-report-fromlist',
           {
             documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
             sheetId: '2020',
@@ -43,6 +45,23 @@ function GetReports() {
           );
           console.log(checkedValue);
           setData(checkedValue);
+
+          const someVal = res.data.reportItemsModel
+            .map((row) => {
+              // if (
+              //   row.routeListManagerName !== null &&
+              //   row.routeListManagerName !== undefined
+              // ) {
+              //   return;
+              // }
+              return row.routeListManagerName;
+            })
+            .filter((row) => row !== null);
+          console.log(someVal);
+          setSold(someVal);
+          let const2 = 100 - sold;
+          console.log(const2);
+          setRemained(const2);
           // setData2(res.data);
           setDone(true);
         });
@@ -50,7 +69,56 @@ function GetReports() {
       console.log(error);
     }
   };
+  console.log(data);
+
+  let const2 = 100 - sold;
+  console.log(const2);
+  // setRemained(const2);
+  const solded = () => {
+    const someVal = data
+      .map((row) => {
+        // if (
+        //   row.routeListManagerName !== null &&
+        //   row.routeListManagerName !== undefined
+        // ) {
+        //   return;
+        // }
+        return row.routeListManagerName;
+      })
+      .filter((row) => row !== null);
+    console.log(someVal);
+
+    const total = data.map((row, i) => (i += i));
+    console.log(data.length);
+
+    const res = (someVal.length / data.length) * 100;
+    console.log(`${res}%`);
+    // if (data)
+    setSold(+res.toFixed(1));
+    console.log(sold);
+  };
+
+  const someVal = data
+    .map((row) => {
+      // if (
+      //   row.routeListManagerName !== null &&
+      //   row.routeListManagerName !== undefined
+      // ) {
+      //   return;
+      // }
+      return row.routeListManagerName;
+    })
+    .filter((row) => row !== null);
+  console.log(someVal);
+
+  const total = data.map((row, i) => (i += i));
+  console.log(data.length);
+
+  const res = (someVal.length / data.length) * 100;
+  console.log(`${res}%`);
   // if (data)
+  // setSold(res);
+  // console.log(sold);
 
   const checkedValue = data.map(
     (row) =>
@@ -72,7 +140,12 @@ function GetReports() {
 
   useEffect(() => {
     getDocumentsFromList();
+    // solded();
   }, []);
+
+  useEffect(() => {
+    solded(sold);
+  }, [sold]);
 
   function handleOnInput(e) {}
 
@@ -544,6 +617,16 @@ function GetReports() {
               {/* <button onClick={getDocumentsFromList}>Get reports</button> */}
               <div className="mb-3">
                 <Button type="printAll">Надрукувати все</Button>
+                <div className="mt-3">
+                  <div>
+                    <h6>Продано: {sold}%</h6>
+                  </div>
+                  <div>
+                    <h6> Залишилось на складі: {100 - sold}% </h6>
+                  </div>
+                </div>
+
+                {/* <div>{}</div> */}
                 <div className="d-flex"></div>
               </div>
               <div>

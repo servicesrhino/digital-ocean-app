@@ -11,12 +11,124 @@ import DataTable from '../dataTable/DataTable';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import TableBootstrap from '../tableBootstrap/TableBootstrap';
 import { Box } from '@mui/material';
+import GetDocumentsFromListActions from './GetDocumentsFromListActions';
+import { type } from '@testing-library/user-event/dist/type';
+import {
+  GridRowModes,
+  // DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import {
+  randomCreatedDate,
+  randomTraderName,
+  randomId,
+  randomArrayItem,
+} from '@mui/x-data-grid-generator';
+
+const roles = ['Market', 'Finance', 'Development'];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+
+const initialRows = [
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 25,
+    joinDate: randomCreatedDate(),
+    role: randomRole(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 36,
+    joinDate: randomCreatedDate(),
+    role: randomRole(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 19,
+    joinDate: randomCreatedDate(),
+    role: randomRole(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 28,
+    joinDate: randomCreatedDate(),
+    role: randomRole(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 23,
+    joinDate: randomCreatedDate(),
+    role: randomRole(),
+  },
+];
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [name, setName] = useState([]);
+
+  const [rows, setRows] = React.useState(initialRows);
+  const [rowModesModel, setRowModesModel] = React.useState({});
+
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    // setData(rowModesModel);
+    console.log(rowModesModel);
+  };
+
+  const handleDeleteClick = (id) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+    console.log(updatedRow);
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    console.log(rows);
+    // setData(updatedRow);
+
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
 
   const tes2 =
     'https://docs.google.com/spreadsheets/d/1_j-WNAwx21E6XFeE2gs62eH5P2YdYASQmouMaR7dvmM';
@@ -31,6 +143,7 @@ function GetDocumentsFromList() {
   let { printerUrl } = userInfo;
 
   const [styled, setStyled] = useState(false);
+  const [rowId, setRowId] = useState(null);
 
   const actionColumn = {
     field: 'action',
@@ -92,6 +205,35 @@ function GetDocumentsFromList() {
     },
   };
 
+  const action3 = {
+    field: 'action3',
+    headerName: 'Action3',
+    type: 'action',
+    renderCell: (params) => {
+      return <GetDocumentsFromListActions {...{ params, rowId, setRowId }} />;
+    },
+  };
+
+  const setFullName = (value, row) => {
+    const [name, vehicle] = value.toString().split(' ');
+    return { ...row, name, vehicle };
+  };
+
+  const getFullName = (value, row) => {
+    return `${row.vehicle || ''} ${row.name || ''}`;
+  };
+
+  function generateRandom() {
+    var length = 8,
+      charset =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+      retVal = '';
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }
+
   const columns = [
     {
       field: 'vehicle',
@@ -146,12 +288,58 @@ function GetDocumentsFromList() {
         );
       },
     },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
 
     {
       field: 'stockPrice',
       headerName: 'Цена со склада',
       width: 90,
-      // editable: true,
+      editable: true,
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
@@ -159,6 +347,23 @@ function GetDocumentsFromList() {
           </div>
         );
       },
+    },
+
+    {
+      field: 'fullName',
+      headerName: 'Full name',
+      width: 160,
+      editable: true,
+      // valueGetter: getFullName,
+      // valueSetter: setFullName,
+      // valueParser: parseFullName,
+      // valueGetter: (value, row) =>
+      //   `${row.fullName ? row.fullName : ''} ${row.vehicle || ''}`,
+      // valueGetter: (params) =>
+      //   `${params.row.name || ''} ${params.row.vehicle || ''}`,
+      // valueSetter: setFullName,
+
+      sortComparator: (v1, v2) => v1.toString().localeCompare(v2.toString()),
     },
     {
       field: 'incomePrice',
@@ -224,6 +429,14 @@ function GetDocumentsFromList() {
         return <div>{params.row.defect}</div>;
       },
     },
+    {
+      field: 'role',
+      headerName: 'test',
+      width: 100,
+      type: 'singleSelect',
+      valueOptions: ['basic', 'editor', 'admin'],
+      editable: true,
+    },
     // {
     //   field: 'fullName',
     //   headerName: 'Full name',
@@ -280,17 +493,45 @@ function GetDocumentsFromList() {
         )
         .then((res) => {
           console.log(res.data);
-          setData(res.data);
-          setData2(res.data);
+          let some = res.data.map((row) => {
+            return {
+              ...row,
+              role: 'admin',
+              // id: randomId(),
+            };
+          });
+          // setData(res.data);
+          setData(some);
+
+          // setData2(res.data);
         });
     } catch (error) {
       console.log(error);
     }
   };
   console.log(data);
+  // let some = [ ...data, role: 'admin' ];
+  // let some = data.map({
+  //   ...data,
+  //   role: 'admin',
+  // });
+
+  // let some2 = data.map((row) => {
+  //   return {
+  //     ...row,
+  //     role: 'admin',
+  //   };
+  // });
+  // // setData(some2);
+  // console.log(some2);
+
   useEffect(() => {
     getDocumentsFromList();
   }, []);
+
+  // useEffect(() => {
+  //   getDocumentsFromList();
+  // }, [data]);
 
   // useEffect(() => {
   //   document.addEventListener('click', commit);
@@ -552,7 +793,13 @@ function GetDocumentsFromList() {
             <DataGrid
               className="dataGrid"
               rows={data}
-              columns={[...columns, actionColumn, actionColumn2]}
+              // getRowId={(row) => generateRandom()}
+              columns={[...columns, actionColumn, actionColumn2, action3]}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -565,6 +812,7 @@ function GetDocumentsFromList() {
                 toolbar: {
                   showQuickFilter: true,
                   quickFilterProps: { debounceMs: 500 },
+                  toolbar: { setRows, setRowModesModel },
                 },
               }}
               pageSizeOptions={[5]}
@@ -573,6 +821,8 @@ function GetDocumentsFromList() {
               // disableColumnFilter
               disableDensitySelector
               disableColumnSelector
+              // processRowUpdate={(params) => setRowId(params.id)}
+              // onCellEditStop={(params) => setRowId(params.id)}
             />
             {/* <DataTable rows={data} /> */}
           </div>

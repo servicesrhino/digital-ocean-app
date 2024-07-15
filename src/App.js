@@ -61,11 +61,11 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      checkAuth();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem('token')) {
+  //     checkAuth();
+  //   }
+  // }, []);
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });

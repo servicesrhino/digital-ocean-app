@@ -1,26 +1,23 @@
+// webpack.config.js
+
 module.exports = {
   // Your other Webpack configuration settings...
 
   devServer: {
     // Other devServer options...
 
-    // Replace deprecated options
-    /*
-      onBeforeSetupMiddleware: function(devServer) {
-        // Your existing middleware setup logic
-      },
-      onAfterSetupMiddleware: function(devServer) {
-        // Your existing middleware setup logic
-      },
-      */
-
-    // Use the new setupMiddlewares option
     setupMiddlewares: (middlewares, devServer) => {
-      // Your existing middleware setup logic from onBeforeSetupMiddleware
-      // ...
+      // Logic previously in onBeforeSetupMiddleware
+      middlewares.unshift((req, res, next) => {
+        console.log('Before middleware logic');
+        next();
+      });
 
-      // Your existing middleware setup logic from onAfterSetupMiddleware
-      // ...
+      // Logic previously in onAfterSetupMiddleware
+      middlewares.push((req, res, next) => {
+        console.log('After middleware logic');
+        next();
+      });
 
       return middlewares;
     },

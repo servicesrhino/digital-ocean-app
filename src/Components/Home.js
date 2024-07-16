@@ -112,6 +112,7 @@ const Home = () => {
   const checkAuth = async () => {
     const token = localStorage.getItem('token');
     const newToken = token.replace(/['"«»]/g, '');
+    console.log(token);
 
     const token2 = localStorage.getItem('refreshToken');
     const newToken2 = token2.replace(/['"«»]/g, '');

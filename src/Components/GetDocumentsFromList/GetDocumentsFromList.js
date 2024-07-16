@@ -272,7 +272,7 @@ function GetDocumentsFromList() {
     try {
       const res = axios
         .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
+          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
           {
             documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
             sheetId: '2020',

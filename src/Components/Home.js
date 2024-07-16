@@ -43,7 +43,7 @@ const Home = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        'https://rhino-api-alquo.ondigitalocean.app/Users/authenticate',
+        'https://rhino-api-dyq7j.ondigitalocean.app/Users/authenticate',
         {
           phone,
           password,

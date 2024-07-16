@@ -19,6 +19,7 @@ function GetReports() {
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
   console.log(lastDocumentsFromList);
+  console.log('1')
 
   const getDocumentsFromList = () => {
     try {

@@ -14,12 +14,13 @@ function GetReports() {
   const [data, setData] = useState([]);
   // const [data2, setData2] = useState([]);
   // const [data3, setData3] = useState([]);
+  const [sold, setSold] = useState();
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
   console.log(lastDocumentsFromList);
-  console.log('1')
+  console.log('1');
 
   const getDocumentsFromList = () => {
     try {
@@ -35,6 +36,7 @@ function GetReports() {
         .then((res) => {
           console.log(res.data.reportItemsModel);
           console.log(res.data);
+          const length = res.data.reportItemsModel.length;
           // setData(res.data.reportItemsModel);
           const checkedValue = res.data.reportItemsModel.map(
             (row) =>
@@ -44,6 +46,23 @@ function GetReports() {
           );
           console.log(checkedValue);
           setData(checkedValue);
+
+          const someVal = res.data.reportItemsModel
+            .map((row) => {
+              return row.routeListManagerName;
+            })
+            .filter((row) => row !== null);
+          console.log(someVal);
+          setSold(((someVal.length / length) * 100).toFixed(1));
+
+          // const total = data.map((row, i) => (i += i));
+          // console.log(data.length);
+
+          // const res = (someVal.length / data.length) * 100;
+          // console.log(`${res}%`);
+          // // if (data)
+          // setSold(+res.toFixed(1));
+          // console.log(sold);
           // setData2(res.data);
           setDone(true);
         });
@@ -52,6 +71,72 @@ function GetReports() {
     }
   };
   // if (data)
+
+  // const solded = () => {
+  //   const someVal = data
+  //     .map((row) => {
+  //       // if (
+  //       //   row.routeListManagerName !== null &&
+  //       //   row.routeListManagerName !== undefined
+  //       // ) {
+  //       //   return;
+  //       // }
+  //       return row.routeListManagerName;
+  //     })
+  //     .filter((row) => row !== null);
+  //   console.log(someVal);
+
+  //   const total = data.map((row, i) => (i += i));
+  //   console.log(data.length);
+
+  //   const res = (someVal.length / data.length) * 100;
+  //   console.log(`${res}%`);
+  //   // if (data)
+  //   setSold(+res.toFixed(1));
+  //   console.log(sold);
+  // };
+  const solded = () => {
+    const someVal = data
+      .map((row) => {
+        // if (
+        //   row.routeListManagerName !== null &&
+        //   row.routeListManagerName !== undefined
+        // ) {
+        //   return;
+        // }
+        return row.routeListManagerName;
+      })
+      .filter((row) => row !== null);
+    console.log(someVal);
+
+    const total = data.map((row, i) => (i += i));
+    console.log(data.length);
+
+    const res = (someVal.length / data.length) * 100;
+    console.log(`${res}%`);
+    // if (data)
+    // setSold(+res.toFixed(1));
+    console.log(sold);
+  };
+
+  const someVal = data
+    .map((row) => {
+      // if (
+      //   row.routeListManagerName !== null &&
+      //   row.routeListManagerName !== undefined
+      // ) {
+      //   return;
+      // }
+      return row.routeListManagerName;
+    })
+    .filter((row) => row !== null);
+  console.log(someVal);
+
+  const total = data.map((row, i) => (i += i));
+  console.log(data.length);
+
+  const res = (someVal.length / data.length) * 100;
+  console.log(`${res}%`);
 
   const checkedValue = data.map(
     (row) =>
@@ -74,6 +159,10 @@ function GetReports() {
   useEffect(() => {
     getDocumentsFromList();
   }, []);
+
+  useEffect(() => {
+    solded(sold);
+  }, [sold]);
 
   function handleOnInput(e) {}
 
@@ -545,6 +634,12 @@ function GetReports() {
               {/* <button onClick={getDocumentsFromList}>Get reports</button> */}
               <div className="mb-3">
                 <Button type="printAll">Надрукувати все</Button>
+                <div className="mt-3">
+                  <h6>Продано: {sold}%</h6>
+                </div>
+                <div className="mt-3">
+                  <h6>Залишилось на складі: {100 - sold}%</h6>
+                </div>
                 <div className="d-flex"></div>
               </div>
               <div>

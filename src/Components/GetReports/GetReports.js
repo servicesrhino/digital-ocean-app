@@ -15,6 +15,7 @@ function GetReports() {
   // const [data2, setData2] = useState([]);
   // const [data3, setData3] = useState([]);
   const [sold, setSold] = useState();
+  const [value, setValue] = useState();
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
@@ -55,6 +56,21 @@ function GetReports() {
           console.log(someVal);
           setSold(((someVal.length / length) * 100).toFixed(1));
 
+          // let some = [];
+          const some = res.data.reportItemsModel
+            .map((row) => {
+              return (
+                row.stockPrice + row.priceWithDepreciation + row.incomePrice
+              );
+            })
+            .reduce((total, val) => (total += val), 0);
+          // const someFin = some.map((row) =>
+          //   row.reduce((total, val) => (total += val), 0)
+          // );
+          console.log(some);
+          // console.log(someFin);
+          setValue(some.toFixed(1));
+
           // const total = data.map((row, i) => (i += i));
           // console.log(data.length);
 
@@ -70,6 +86,7 @@ function GetReports() {
       console.log(error);
     }
   };
+  console.log(data);
   // if (data)
 
   // const solded = () => {
@@ -85,6 +102,17 @@ function GetReports() {
   //     })
   //     .filter((row) => row !== null);
   //   console.log(someVal);
+  let some = [];
+  some = data
+    .map((row) => {
+      return row.stockPrice;
+    })
+    .reduce((total, val) => (total += val), 0);
+  console.log(some);
+  // let val = some.reduce((total, val) => (total += val), 0);
+  // console.log(some.reduce((total, val) => (total += val), 0));
+  // setValue(val);
+  // console.log(val);
 
   //   const total = data.map((row, i) => (i += i));
   //   console.log(data.length);
@@ -118,6 +146,7 @@ function GetReports() {
     // setSold(+res.toFixed(1));
     console.log(sold);
   };
+  console.log(data);
 
   const someVal = data
     .map((row) => {
@@ -365,6 +394,20 @@ function GetReports() {
         );
       },
     },
+
+    // {
+    //   field: 'routeListDate',
+    //   headerName: 'Date',
+    //   //   headerAlign: 'center',
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.routeListDate}
+    //       </div>
+    //     );
+    //   },
+    // },
     // {
     //   field: 'routeItemVeh',
     //   headerName: 'Назва транспорту',
@@ -636,8 +679,9 @@ function GetReports() {
                 <Button type="printAll">Надрукувати все</Button>
                 <div className="mt-3">
                   <h6>Продано: {sold}%</h6>
+                  {/* <h6>{value}</h6> */}
                 </div>
-                <div className="mt-3">
+                <div className="mt-2">
                   <h6>Залишилось на складі: {100 - sold}%</h6>
                 </div>
                 <div className="d-flex"></div>
@@ -684,7 +728,7 @@ function GetReports() {
                     initialState={{
                       pagination: {
                         paginationModel: {
-                          pageSize: 50,
+                          pageSize: 100,
                         },
                       },
                     }}
@@ -703,6 +747,9 @@ function GetReports() {
                     disableColumnSelector
                   />
                 </Box>
+                <div className="mt-2 mb-2">
+                  <h6>Загальна вартість завезеного товару: {value}</h6>
+                </div>
 
                 {/* <DataTable rows={data} /> */}
               </div>

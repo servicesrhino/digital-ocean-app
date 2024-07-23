@@ -16,6 +16,8 @@ function GetReports() {
   // const [data3, setData3] = useState([]);
   const [sold, setSold] = useState();
   const [value, setValue] = useState();
+  const [efective, setEfective] = useState();
+  const [efectiveNum, setEfectiveNum] = useState();
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
@@ -79,6 +81,59 @@ function GetReports() {
           // // if (data)
           // setSold(+res.toFixed(1));
           // console.log(sold);
+
+          const efectiveManager = res.data.reportItemsModel
+            .map((row) => {
+              if (
+                row.routeListManagerName !== null ||
+                row.routeListManagerName !== undefined
+              ) {
+                return row.routeListManagerName;
+              }
+              return;
+            })
+            .filter((row) => row !== null);
+          // .filter(
+          //   (value, index, current_value) => current_value.indexOf(value) === index
+          // );
+
+          const test = efectiveManager
+            // .map((row) => {
+            //   return row.routeListManagerName;
+            // })
+            .reduce(function (value, value2) {
+              return (
+                value[value2] ? ++value[value2] : (value[value2] = 1), value
+              );
+            }, {});
+          console.log(test);
+
+          for (const property in test) {
+            console.log(`${property}: ${test[property]}`);
+            let max = 0;
+            // if
+          }
+
+          let max = 0;
+          let arr = Object.entries(test);
+          console.log(arr);
+
+          let values = Object.values(test);
+          console.log(values);
+
+          values.map((item) => {
+            return (max = Math.max(max, item));
+          });
+          console.log(max);
+          // setData3(newData);
+          let fina = arr.filter((row) => row[1] === max);
+          console.log(fina);
+          let percent = fina[0];
+          console.log(percent);
+          let manager1 = percent[0];
+          console.log(manager1);
+          setEfective(manager1);
+          setEfectiveNum((percent[1] / length) * 100);
           // setData2(res.data);
           setDone(true);
         });
@@ -183,7 +238,59 @@ function GetReports() {
     };
   });
   console.log(newData);
+  console.log(data);
+
+  const efectiveManager = data
+    .map((row) => {
+      if (
+        row.routeListManagerName !== null ||
+        row.routeListManagerName !== undefined
+      ) {
+        return row.routeListManagerName;
+      }
+      return;
+    })
+    .filter((row) => row !== null);
+  // .filter(
+  //   (value, index, current_value) => current_value.indexOf(value) === index
+  // );
+  console.log(efectiveManager);
+  let withoutRepeat = efectiveManager;
+
+  const test = efectiveManager
+    // .map((row) => {
+    //   return row.routeListManagerName;
+    // })
+    .reduce(function (value, value2) {
+      return value[value2] ? ++value[value2] : (value[value2] = 1), value;
+    }, {});
+  console.log(test);
+
+  for (const property in test) {
+    console.log(`${property}: ${test[property]}`);
+    let max = 0;
+    // if
+  }
+
+  let max = 0;
+  let arr = Object.entries(test);
+  console.log(arr);
+
+  let values = Object.values(test);
+  console.log(values);
+
+  values.map((item) => {
+    return (max = Math.max(max, item));
+  });
+  console.log(max);
   // setData3(newData);
+  let fina = arr.filter((row) => row[1] === max);
+  console.log(fina);
+  let percent = fina[0];
+  console.log(percent);
+  // let manager1 = percent[0];
+  // console.log(manager1);
+  // setEfective(percent)
 
   useEffect(() => {
     getDocumentsFromList();
@@ -684,6 +791,10 @@ function GetReports() {
                 <div className="mt-2">
                   <h6>Залишилось на складі: {100 - sold}%</h6>
                 </div>
+                <div>
+                  <br />
+                  <h6>Найбільш ефективний менеджер: {efective}</h6>
+                </div>
                 <div className="d-flex"></div>
               </div>
               <div>
@@ -749,6 +860,10 @@ function GetReports() {
                 </Box>
                 <div className="mt-2 mb-2">
                   <h6>Загальна вартість завезеного товару: {value}</h6>
+                  {/* <h5>
+                    {efective} : {efectiveNum}%
+                  </h5> */}
+                  {/* <h5>{efectiveNum}</h5> */}
                 </div>
 
                 {/* <DataTable rows={data} /> */}

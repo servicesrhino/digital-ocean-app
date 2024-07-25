@@ -18,6 +18,8 @@ function GetReports() {
   const [value, setValue] = useState();
   const [efective, setEfective] = useState();
   const [efectiveNum, setEfectiveNum] = useState();
+  const [efectiveData, setEfectiveData] = useState([]);
+  const [efectiveData2, setEfectiveData2] = useState([]);
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
@@ -86,7 +88,8 @@ function GetReports() {
             .map((row) => {
               if (
                 row.routeListManagerName !== null ||
-                row.routeListManagerName !== undefined
+                row.routeListManagerName !== undefined ||
+                row.routeListManagerName !== ''
               ) {
                 return row.routeListManagerName;
               }
@@ -108,15 +111,44 @@ function GetReports() {
             }, {});
           console.log(test);
 
-          for (const property in test) {
-            console.log(`${property}: ${test[property]}`);
-            let max = 0;
-            // if
-          }
+          // for (const property in test) {
+          //   console.log(`${property}: ${test[property]}`);
+          //   let max = 0;
+          //   // if
+          // }
 
           let max = 0;
           let arr = Object.entries(test);
           console.log(arr);
+
+          let one = arr
+            .map((row, i) => {
+              if (row[0] === '') return false;
+              return {
+                id: i,
+                name: row[0],
+                sold: row[1],
+              };
+            })
+            .filter((row) => row !== false);
+          console.log(one);
+
+          setEfectiveData(one);
+
+          const newSold = one
+            .map((row) => row.sold)
+            .reduce((total, row) => (total += row), 0);
+          console.log(newSold);
+
+          const one2 = one.map((row) => {
+            return {
+              ...row,
+              soldPercent: ((row.sold / newSold) * 100).toFixed(1),
+              warehousePercent: ((row.sold / length) * 100).toFixed(1),
+            };
+          });
+          console.log(one2);
+          setEfectiveData2(one2);
 
           let values = Object.values(test);
           console.log(values);
@@ -133,7 +165,7 @@ function GetReports() {
           let manager1 = percent[0];
           console.log(manager1);
           setEfective(manager1);
-          setEfectiveNum((percent[1] / length) * 100);
+          setEfectiveNum((percent[1] / newSold) * 100);
           // setData2(res.data);
           setDone(true);
         });
@@ -301,6 +333,46 @@ function GetReports() {
   }, [sold]);
 
   function handleOnInput(e) {}
+
+  const columns2 = [
+    {
+      field: 'name',
+      headerName: 'Менеджер',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 150,
+      flex: 1,
+    },
+    {
+      field: 'sold',
+      headerName: 'Продав',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 110,
+    },
+    {
+      field: 'soldPercent',
+      headerName: 'Відсоток від усіх продажів',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 150,
+    },
+    {
+      field: 'warehousePercent',
+      headerName: 'Продано усього від контейнеру',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 160,
+    },
+  ];
 
   const columns = [
     {
@@ -795,6 +867,27 @@ function GetReports() {
                   <br />
                   <h6>Найбільш ефективний менеджер: {efective}</h6>
                 </div>
+                <div>
+                  <Box>
+                    <DataGrid
+                      width="500px"
+                      className="dataGrid"
+                      columns={[...columns2]}
+                      rows={efectiveData2}
+                      disableExtendRowFullWidth={true}
+                      initialState={{
+                        pagination: {
+                          paginationModel: {
+                            pageSize: 5,
+                          },
+                        },
+                      }}
+                      // pageSizeOptions={[5]}
+                      // checkboxSelection
+                      disableRowSelectionOnClick
+                    />
+                  </Box>
+                </div>
                 <div className="d-flex"></div>
               </div>
               <div>
@@ -863,6 +956,7 @@ function GetReports() {
                   {/* <h5>
                     {efective} : {efectiveNum}%
                   </h5> */}
+
                   {/* <h5>{efectiveNum}</h5> */}
                 </div>
 

@@ -15,3 +15,9 @@
   text-overflow: ellipsis;
   word-wrap: break-wordt;
 }
+
+.dataGrid2 {
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  word-wrap: break-wordt;
+}

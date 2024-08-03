@@ -9,9 +9,15 @@ import { Button, Col, Row, Table } from 'react-bootstrap';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
 import './GetReports.css';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRangePicker } from 'react-date-range';
+import { addDays } from 'date-fns';
+import { useDemoData } from '@mui/x-data-grid-generator';
 
 function GetReports() {
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
   // const [data2, setData2] = useState([]);
   // const [data3, setData3] = useState([]);
   const [sold, setSold] = useState();
@@ -20,12 +26,68 @@ function GetReports() {
   const [efectiveNum, setEfectiveNum] = useState();
   const [efectiveData, setEfectiveData] = useState([]);
   const [efectiveData2, setEfectiveData2] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [dates2, setDates2] = useState([]);
+
+  const VISIBLE_FIELDS = [
+    'name',
+    'rating',
+    'country',
+    'dateCreated',
+    'isAdmin',
+  ];
+
+  // const { dataNew } = useDemoData({ dataSet: 'Employee', rowLength: 100 });
+  const { dataNew } = useDemoData({
+    dataSet: 'Employee',
+    visibleFields: VISIBLE_FIELDS,
+    rowLength: 100,
+  });
+  console.log(dataNew);
+
+  const [state2, setState2] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: 'selection',
+    },
+  ]);
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
   console.log(lastDocumentsFromList);
   console.log('1');
+  const dates = ['15.01.2024', '25.01.2024'];
+  console.log(dates);
+
+  // const handleSelect = (ranges) => {
+  //   let arr = [];
+  //   let dateBegin = ranges.selection.startDate;
+  //   let dateFinish = ranges.selection.endDate;
+  //   arr.push(dateBegin.toLocaleDateString());
+  //   arr.push(dateFinish.toLocaleDateString());
+  //   console.log(arr);
+  //   setDates2([
+  //     dateBegin.toLocaleDateString(),
+  //     dateFinish.toLocaleDateString(),
+  //   ]);
+  //   // setDates2(dateFinish);
+  //   console.log(dateFinish.toLocaleDateString());
+  //   console.log(ranges.selection.startDate);
+  //   console.log(Date.parse(ranges.selection.startDate));
+  //   console.log(ranges);
+  //   setStartDate(ranges.selection.startDate);
+  //   setEndDate(ranges.selection.endDate);
+  // };
+
+  console.log(dates2);
+  const selectionRanges = {
+    startDate: startDate,
+    endDate: endDate,
+    key: 'selection',
+  };
 
   const getDocumentsFromList = () => {
     try {
@@ -46,7 +108,12 @@ function GetReports() {
           const checkedValue = res.data.reportItemsModel.map(
             (row) =>
               row.routeItem?.vehicleName
-                ? { ...row, routeItemVeh: row.routeItem?.vehicleName }
+                ? {
+                    ...row,
+                    routeItemVeh: row.routeItem?.vehicleName,
+                    date: new Date(row.routeListDate).toLocaleDateString(),
+                    date3: new Date(row.routeListDate),
+                  }
                 : { ...row, routeItemVeh: '' } //  row.id === name ? { ...row, defect: true } : row
           );
           console.log(checkedValue);
@@ -378,7 +445,7 @@ function GetReports() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 170,
+      width: 150,
       headerAlign: 'left',
       editable: true,
       // flex: 1,
@@ -480,7 +547,7 @@ function GetReports() {
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
-      width: 110,
+      width: 100,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -494,7 +561,7 @@ function GetReports() {
     {
       field: 'stockPrice',
       headerName: 'Цена со склада',
-      width: 110,
+      width: 100,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -507,7 +574,7 @@ function GetReports() {
     {
       field: 'incomePrice',
       headerName: 'Цена входящая',
-      width: 110,
+      width: 100,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -521,7 +588,7 @@ function GetReports() {
     {
       field: 'priceWithDepreciation',
       headerName: 'Цена с амортизацией',
-      width: 110,
+      width: 100,
       editable: true,
       renderCell: (params) => {
         return (
@@ -575,18 +642,39 @@ function GetReports() {
     },
 
     // {
-    //   field: 'routeListDate',
+    //   field: 'date3',
     //   headerName: 'Date',
     //   //   headerAlign: 'center',
     //   width: 100,
     //   renderCell: (params) => {
+    //     // console.log(sold);
+    //     if (params.row.date > dates[0] && params.row.date < dates[1]) {
+    //       console.log('yeah');
+    //       const updated = data.map((row) => {
+    //         return {
+    //           ...row,
+    //           date2: params.row.date,
+    //         };
+    //       });
+    //       console.log(updated);
+    //       return (
+    //         <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //           {/* {sold} */}
+    //           {/* {dates} */}
+    //           {params.row.date}
+    //         </div>
+    //       );
+    //     }
     //     return (
     //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-    //         {params.row.routeListDate}
+    //         {/* {sold} */}
+    //         {/* {dates} */}
+    //         {/* {dates2[0] < params.row.date} */}
     //       </div>
     //     );
     //   },
     // },
+
     // {
     //   field: 'routeItemVeh',
     //   headerName: 'Назва транспорту',
@@ -657,6 +745,17 @@ function GetReports() {
     //     );
     //   },
     // },
+
+    {
+      field: 'date3',
+      headerName: 'Дата продажу',
+      type: 'date',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 90,
+    },
     {
       field: 'routeItemVeh',
       headerName: 'Назва транспорту',
@@ -664,8 +763,9 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 110,
+      width: 100,
     },
+
     {
       field: 'routeListManagerName',
       headerName: 'Менеджер',
@@ -673,7 +773,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 110,
+      width: 100,
     },
     // {
     //   field: 'routeListManagerName',
@@ -864,6 +964,23 @@ function GetReports() {
                   <h6>Залишилось на складі: {100 - sold}%</h6>
                 </div>
                 <div>
+                  {/* <DateRangePicker
+                  // onChange={(item) => setState2([item.selection])}
+                  // showSelectionPreview={true}
+                  // moveRangeOnFirstSelection={false}
+                  // months={2}
+                  // ranges={state}
+                  // direction="horizontal"
+                  // preventSnapRefocus={true}
+                  // calendarFocus="backwards"
+                  // ranges={[selectionRanges]}
+                  // minDate={new Date()}
+                  // onChange={handleSelect}
+                  // months={2}
+                  // calendarFocus="backwards"
+                  /> */}
+                </div>
+                <div>
                   <br />
                   <h6>Найбільш ефективний менеджер: {efective}</h6>
                 </div>
@@ -930,6 +1047,15 @@ function GetReports() {
                       // { field: 'scanCode2', filterable: true },
                     ]}
                     initialState={{
+                      ...data.initialState,
+                      filter: {
+                        ...data.initialState?.filter,
+                        filterModel: {
+                          items: [
+                            { field: 'unitPrice', value: '25', operator: '>' },
+                          ],
+                        },
+                      },
                       pagination: {
                         paginationModel: {
                           pageSize: 100,

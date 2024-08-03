@@ -9,11 +9,11 @@ import { Button, Col, Row, Table } from 'react-bootstrap';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
 import './GetReports.css';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRangePicker } from 'react-date-range';
-import { addDays } from 'date-fns';
-import { useDemoData } from '@mui/x-data-grid-generator';
+// import 'react-date-range/dist/styles.css'; // main style file
+// import 'react-date-range/dist/theme/default.css'; // theme css file
+// import { DateRangePicker } from 'react-date-range';
+// import { addDays } from 'date-fns';
+// import { useDemoData } from '@mui/x-data-grid-generator';
 
 function GetReports() {
   const [data, setData] = useState([]);
@@ -39,20 +39,21 @@ function GetReports() {
   ];
 
   // const { dataNew } = useDemoData({ dataSet: 'Employee', rowLength: 100 });
-  const { dataNew } = useDemoData({
-    dataSet: 'Employee',
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });
-  console.log(dataNew);
 
-  const [state2, setState2] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: 'selection',
-    },
-  ]);
+  // const { dataNew } = useDemoData({
+  //   dataSet: 'Employee',
+  //   visibleFields: VISIBLE_FIELDS,
+  //   rowLength: 100,
+  // });
+  // console.log(dataNew);
+
+  // const [state2, setState2] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: addDays(new Date(), 7),
+  //     key: 'selection',
+  //   },
+  // ]);
 
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);

@@ -2,18 +2,147 @@
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '../../Store';
 import axios from 'axios';
-import { Box, TextField } from '@mui/material';
+import { Box, MenuItem, TextField } from '@mui/material';
 import Sidebar from '../Sidebar/Sidebar';
 // import { Button } from 'bootstrap';
 import { Button, Col, Row, Table } from 'react-bootstrap';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  gridFilteredSortedRowIdsSelector,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExportContainer,
+  GridToolbarQuickFilter,
+  gridVisibleColumnFieldsSelector,
+  useGridApiContext,
+} from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
 import './GetReports.css';
+import * as XLSX from 'xlsx';
 // import 'react-date-range/dist/styles.css'; // main style file
 // import 'react-date-range/dist/theme/default.css'; // theme css file
 // import { DateRangePicker } from 'react-date-range';
 // import { addDays } from 'date-fns';
 // import { useDemoData } from '@mui/x-data-grid-generator';
+
+const config = {
+  columnNames: [
+    'Менеджер',
+    'Продав',
+    'Відсоток від усіх продажів',
+    'Продано усього від контейнеру',
+  ],
+  keys: ['name', 'sold', 'soldPercent', 'warehousePercent'],
+  fileName: 'data.xlsx',
+  sheetName: 'Personal Info',
+};
+
+const config2 = {
+  columnNames: [
+    'Машина',
+    'Назва',
+    'Ріно ID',
+    'Цена со склада',
+    'Цена входящая',
+    'Цена с амортизацией',
+    'ScanCode',
+    'Дата продажу',
+    'Назва транспорту',
+    'Менеджер',
+  ],
+  keys: [
+    'vehicle',
+    'name',
+    'rhinoID',
+    'stockPrice',
+    'incomePrice',
+    'priceWithDepreciation',
+    'scanCode',
+    'date3',
+    'vehicle',
+    'routeListManagerName',
+  ],
+  fileName: 'reports.xlsx',
+  sheetName: 'Reports Info',
+};
+
+function CustomToolbar(props) {
+  return (
+    <GridToolbarContainer
+      className="flex flex-row-reverse space-around"
+      {...props}
+    >
+      {/* <GridToolbarQuickFilter /> */}
+
+      <ExportButton className="mt-3 mx-6 flex-grow-0  " />
+      <GridToolbarQuickFilter className="mx-6 flex-grow-1 " />
+    </GridToolbarContainer>
+  );
+}
+
+export function ExportButton(props) {
+  return (
+    <GridToolbarExportContainer {...props}>
+      <ExportMenuItem />
+      {/* <GridToolbarQuickFilter /> */}
+    </GridToolbarExportContainer>
+  );
+}
+
+export function ExportMenuItem(props) {
+  const apiRef = useGridApiContext();
+  const { hideMenu } = props;
+
+  return (
+    <MenuItem
+      onClick={() => {
+        handleExport(apiRef);
+        // Hide the export menu after the export
+        hideMenu?.();
+      }}
+    >
+      Download Excel
+    </MenuItem>
+  );
+}
+
+function handleExport(apiRef) {
+  const data = getExcelData(apiRef);
+
+  const rows = data.map((row) => {
+    const mRow = {};
+    for (const key of config2.keys) {
+      mRow[key] = row[key];
+    }
+    return mRow;
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  XLSX.utils.sheet_add_aoa(worksheet, [[...config.columnNames]], {
+    origin: 'A1',
+  });
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, config.sheetName);
+  XLSX.writeFile(workbook, config.fileName, { compression: true });
+}
+
+function getExcelData(apiRef) {
+  // Select rows and columns
+  const filteredSortedRowIds = gridFilteredSortedRowIdsSelector(apiRef);
+  const visibleColumnsField = gridVisibleColumnFieldsSelector(apiRef);
+
+  // Format the data. Here we only keep the value
+  const data = filteredSortedRowIds.map((id) => {
+    const row = {};
+    visibleColumnsField.forEach((field) => {
+      row[field] = apiRef.current.getCellParams(id, field).value;
+    });
+    return row;
+  });
+
+  return data;
+}
 
 function GetReports() {
   const [data, setData] = useState([]);
@@ -993,6 +1122,9 @@ function GetReports() {
                       columns={[...columns2]}
                       rows={efectiveData2}
                       disableExtendRowFullWidth={true}
+                      // components={{
+                      //   Toolbar: CustomToolbar,
+                      // }}
                       initialState={{
                         pagination: {
                           paginationModel: {
@@ -1048,28 +1180,36 @@ function GetReports() {
                       // { field: 'scanCode2', filterable: true },
                     ]}
                     initialState={{
-                      ...data.initialState,
-                      filter: {
-                        ...data.initialState?.filter,
-                        filterModel: {
-                          items: [
-                            { field: 'unitPrice', value: '25', operator: '>' },
-                          ],
-                        },
-                      },
+                      // ...data.initialState,
+                      // filter: {
+                      //   ...data.initialState?.filter,
+                      //   filterModel: {
+                      //     items: [
+                      //       { field: 'unitPrice', value: '25', operator: '>' },
+                      //     ],
+                      //   },
+                      // },
                       pagination: {
                         paginationModel: {
                           pageSize: 100,
                         },
                       },
                     }}
-                    slots={{ toolbar: GridToolbar }}
-                    slotProps={{
-                      toolbar: {
-                        showQuickFilter: true,
-                        quickFilterProps: { debounceMs: 500 },
-                      },
+                    components={{
+                      Toolbar: CustomToolbar,
+                      // toolbar: GridToolbar,
                     }}
+                    // slots={{ toolbar: GridToolbar }}
+
+                    // slotProps={{
+                    //   toolbar: {
+                    //     showQuickFilter: true,
+                    //     // Toolbar: CustomToolbar,
+                    //     quickFilterProps: { debounceMs: 500 },
+                    //     csvOptions: { disableToolbarButton: true },
+                    //     printOptions: { disableToolbarButton: true },
+                    //   },
+                    // }}
                     pageSizeOptions={[10]}
                     // checkboxSelection
                     disableRowSelectionOnClick

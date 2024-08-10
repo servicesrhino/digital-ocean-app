@@ -539,8 +539,8 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 150,
-      flex: 1,
+      width: 360,
+      // flex: 1,
     },
     {
       field: 'sold',
@@ -549,7 +549,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 110,
+      width: 220,
     },
     {
       field: 'soldPercent',
@@ -558,7 +558,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 150,
+      width: 220,
     },
     {
       field: 'warehousePercent',
@@ -567,7 +567,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 160,
+      width: 220,
     },
   ];
 

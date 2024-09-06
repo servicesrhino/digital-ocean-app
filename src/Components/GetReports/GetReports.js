@@ -158,6 +158,18 @@ function GetReports() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [dates2, setDates2] = useState([]);
+  const [soldMoney, setSoldMoney] = useState([]);
+  const [unsoldMoney, setUnsoldMoney] = useState([]);
+
+  let USDollar = new Intl.NumberFormat('uah-UA', {
+    style: 'currency',
+    currency: 'UAH',
+  });
+
+  const price = 14340;
+
+  console.log(`The formated version of ${price} is ${USDollar.format(price)}`);
+  // The formated version of 14340 is $14,340.00
 
   const VISIBLE_FIELDS = [
     'name',
@@ -257,12 +269,34 @@ function GetReports() {
           console.log(someVal);
           setSold(((someVal.length / length) * 100).toFixed(1));
 
+          // sold in maoney
+          const someVal2 = res.data.reportItemsModel
+            .map((row) => {
+              if (row.routeListManagerName) {
+                return row.stockPrice;
+              }
+            })
+            .filter((row) => row !== undefined)
+            .reduce((total, el) => (total += el), 0);
+          console.log(someVal2);
+          setSoldMoney(someVal2);
+
+          // unsold in money
+          const unsoldMoney = res.data.reportItemsModel
+            .map((row) => {
+              if (!row.routeListManagerName) {
+                return row.stockPrice;
+              }
+            })
+            .filter((row) => row !== undefined)
+            .reduce((total, el) => (total += el), 0);
+          console.log(unsoldMoney);
+          setUnsoldMoney(unsoldMoney);
+
           // let some = [];
           const some = res.data.reportItemsModel
             .map((row) => {
-              return (
-                row.stockPrice + row.priceWithDepreciation + row.incomePrice
-              );
+              return row.stockPrice;
             })
             .reduce((total, val) => (total += val), 0);
           // const someFin = some.map((row) =>
@@ -288,14 +322,74 @@ function GetReports() {
                 row.routeListManagerName !== undefined ||
                 row.routeListManagerName !== ''
               ) {
-                return row.routeListManagerName;
+                return {
+                  name: row.routeListManagerName,
+                  price: row.stockPrice,
+                };
               }
               return;
             })
-            .filter((row) => row !== null);
+            .filter((row) => row[0] !== null);
           // .filter(
           //   (value, index, current_value) => current_value.indexOf(value) === index
           // );
+          console.log(efectiveManager);
+
+          // const raw = efectiveManager.map((row) => {
+          //   if (row.routeListManagerName === '') {
+          //     return row.routeListManager.replace(/"/g, '');
+          //   }
+          // });
+          // console.log(raw);
+
+          // let temp = efectiveManager.reduce((acc, curr) => {
+          //   const str = JSON.stringify(curr);
+          //   acc[str] = (acc[str] || 0) + 1;
+          //   return acc;
+          // }, {});
+          // console.log(temp);
+
+          // const users2 = [
+          //   { name: 'John', gender: 'Male', orders: 20 },
+          //   { name: 'Doe', gender: 'Male', orders: 8 },
+          //   { name: 'Ada', gender: 'Female', orders: 10 },
+          //   { name: 'David', gender: 'Male', orders: 30 },
+          // ];
+
+          const users = [
+              { name: 'John', gender: 'Male', orders: 20 },
+              { name: 'Doe', gender: 'Male', orders: 8 },
+              { name: 'Ada', gender: 'Female', orders: 10 },
+              { name: 'David', gender: 'Male', orders: 30 },
+            ],
+            result = Object.values(
+              efectiveManager.reduce((r, { name, price }) => {
+                r[name] ??= { name, sold: 0, soldInMoney: 0 };
+                r[name].sold++;
+                r[name].soldInMoney += price;
+                return r;
+              }, {})
+            )
+              .filter((row) => row.name !== null)
+              .filter((row) => row.name !== '');
+
+          console.log(result);
+
+          const newSold2 = result
+            .map((row) => row.sold)
+            .reduce((total, row) => (total += row), 0);
+          console.log(newSold2);
+
+          const one3 = result.map((row) => {
+            return {
+              ...row,
+              // soldInMoney: USDollar.format(soldMoney),
+              soldPercent: ((row.sold / newSold2) * 100).toFixed(1),
+              warehousePercent: ((row.sold / length) * 100).toFixed(1),
+            };
+          });
+          console.log(one3);
+          setEfectiveData2(one3);
 
           const test = efectiveManager
             // .map((row) => {
@@ -345,7 +439,7 @@ function GetReports() {
             };
           });
           console.log(one2);
-          setEfectiveData2(one2);
+          // setEfectiveData2(one2);
 
           let values = Object.values(test);
           console.log(values);
@@ -539,7 +633,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 360,
+      width: 280,
       // flex: 1,
     },
     {
@@ -549,7 +643,23 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 220,
+      width: 210,
+    },
+    {
+      field: 'soldInMoney',
+      headerName: 'Продав у грошах',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+            {USDollar.format(params.row.soldInMoney)}
+          </div>
+        );
+      },
     },
     {
       field: 'soldPercent',
@@ -1087,11 +1197,16 @@ function GetReports() {
               <div className="mb-3">
                 <Button type="printAll">Надрукувати все</Button>
                 <div className="mt-3">
-                  <h6>Продано: {sold}%</h6>
+                  <h6>
+                    Продано: {sold}% ({USDollar.format(soldMoney)})
+                  </h6>
                   {/* <h6>{value}</h6> */}
                 </div>
                 <div className="mt-2">
-                  <h6>Залишилось на складі: {100 - sold}%</h6>
+                  <h6>
+                    Залишилось на складі: {100 - sold}% (
+                    {USDollar.format(unsoldMoney)})
+                  </h6>
                 </div>
                 <div>
                   {/* <DateRangePicker
@@ -1112,7 +1227,11 @@ function GetReports() {
                 </div>
                 <div>
                   <br />
-                  <h6>Найбільш ефективний менеджер: {efective}</h6>
+                  {/* <h6>Найбільш ефективний менеджер: {efective}</h6> */}
+                  <h6>
+                    Загальна вартість завезеного товару:{' '}
+                    {USDollar.format(value)}
+                  </h6>
                 </div>
                 <div>
                   <Box>
@@ -1122,6 +1241,7 @@ function GetReports() {
                       columns={[...columns2]}
                       rows={efectiveData2}
                       disableExtendRowFullWidth={true}
+                      getRowId={() => Math.floor(Math.random() * 100000000)}
                       // components={{
                       //   Toolbar: CustomToolbar,
                       // }}
@@ -1219,7 +1339,11 @@ function GetReports() {
                   />
                 </Box>
                 <div className="mt-2 mb-2">
-                  <h6>Загальна вартість завезеного товару: {value}</h6>
+                  {/* <h6>
+                    Загальна вартість завезеного товару:{' '}
+                    {USDollar.format(value)}
+                  </h6> */}
+
                   {/* <h5>
                     {efective} : {efectiveNum}%
                   </h5> */}

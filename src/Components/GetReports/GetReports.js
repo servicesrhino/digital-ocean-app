@@ -25,17 +25,17 @@ import * as XLSX from 'xlsx';
 // import { addDays } from 'date-fns';
 // import { useDemoData } from '@mui/x-data-grid-generator';
 
-const config = {
-  columnNames: [
-    'Менеджер',
-    'Продав',
-    'Відсоток від усіх продажів',
-    'Продано усього від контейнеру',
-  ],
-  keys: ['name', 'sold', 'soldPercent', 'warehousePercent'],
-  fileName: 'data.xlsx',
-  sheetName: 'Personal Info',
-};
+// const config = {
+//   columnNames: [
+//     'Менеджер',
+//     'Продав',
+//     'Відсоток від усіх продажів',
+//     'Продано усього від контейнеру',
+//   ],
+//   keys: ['name', 'sold', 'soldPercent', 'warehousePercent'],
+//   fileName: 'data.xlsx',
+//   sheetName: 'Personal Info',
+// };
 
 const config2 = {
   columnNames: [
@@ -47,10 +47,11 @@ const config2 = {
     'Цена с амортизацией',
     'ScanCode',
     'Дата продажу',
+    // 'ldljfkdj',
     'Назва транспорту',
     'Менеджер',
   ],
-  keys: [
+  keys2: [
     'vehicle',
     'name',
     'rhinoID',
@@ -60,6 +61,8 @@ const config2 = {
     'scanCode',
     'date3',
     'vehicle',
+    // 'vehicle',
+    'routeItemVeh',
     'routeListManagerName',
   ],
   fileName: 'reports.xlsx',
@@ -111,20 +114,20 @@ function handleExport(apiRef) {
 
   const rows = data.map((row) => {
     const mRow = {};
-    for (const key of config2.keys) {
+    for (const key of config2.keys2) {
       mRow[key] = row[key];
     }
     return mRow;
   });
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
-  XLSX.utils.sheet_add_aoa(worksheet, [[...config.columnNames]], {
+  XLSX.utils.sheet_add_aoa(worksheet, [[...config2.columnNames]], {
     origin: 'A1',
   });
 
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, config.sheetName);
-  XLSX.writeFile(workbook, config.fileName, { compression: true });
+  XLSX.utils.book_append_sheet(workbook, worksheet, config2.sheetName);
+  XLSX.writeFile(workbook, config2.fileName, { compression: true });
 }
 
 function getExcelData(apiRef) {

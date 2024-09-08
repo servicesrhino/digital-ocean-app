@@ -164,9 +164,9 @@ function GetReports() {
   const [soldMoney, setSoldMoney] = useState([]);
   const [unsoldMoney, setUnsoldMoney] = useState([]);
 
-  let USDollar = new Intl.NumberFormat('uah-UA', {
+  let USDollar = new Intl.NumberFormat('usd-US', {
     style: 'currency',
-    currency: 'UAH',
+    currency: 'USD',
   });
 
   const price = 14340;

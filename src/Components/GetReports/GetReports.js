@@ -682,6 +682,15 @@ function GetReports() {
       // flex: 1,
       width: 220,
     },
+    // {
+    //   field: 'warehousePercent',
+    //   headerName: 'Інвентаризація',
+    //   // style: fontSize: '16px',
+    //   size: 'small',
+    //   cellClassName: 'super-app-theme--cell',
+    //   // flex: 1,
+    //   width: 220,
+    // },
   ];
 
   const columns = [
@@ -1017,6 +1026,15 @@ function GetReports() {
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
       width: 100,
+    },
+    {
+      field: 'lastInventory',
+      headerName: 'Інвентаризація',
+      // style: fontSize: '16px',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
+      // flex: 1,
+      width: 220,
     },
     // {
     //   field: 'routeListManagerName',

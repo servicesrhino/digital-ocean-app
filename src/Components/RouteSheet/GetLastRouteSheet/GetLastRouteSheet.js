@@ -30,7 +30,9 @@ function GetLastRouteSheet() {
     try {
       const res = axios
         .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-last-route-lists',
+          // 'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-last-route-lists',
+          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-route-lists',
+
           {
             // documentId: 'BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
             // sheetId: 'Sheet1',
@@ -85,7 +87,7 @@ function GetLastRouteSheet() {
               item.routeListItems
                 .map((item) => ({
                   manager: item.managerName,
-                  length: item.routeItems.length,
+                  // length: item.routeListItems.length,
                   other: [item.managerName, ...item.routeItems],
                 }))
                 .flat()
@@ -127,7 +129,7 @@ function GetLastRouteSheet() {
           setFinal4(
             res.data.map((item) =>
               item.routeListItems.map((item) => ({
-                length: item.routeItems.length,
+                // length: item.routeListItems.length,
                 manager: item.managerName,
                 partName: item.routeItems.map((item) => item.partName),
                 vehicleName: item.routeItems.map((item) => item.vehicleName),

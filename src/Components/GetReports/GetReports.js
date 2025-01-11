@@ -697,7 +697,7 @@ function GetReports() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 150,
+      width: 140,
       headerAlign: 'left',
       editable: true,
       // flex: 1,
@@ -713,7 +713,7 @@ function GetReports() {
       field: 'name',
       headerName: 'Назва',
       // style: fontSize: '16px',
-      width: 190,
+      width: 180,
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
@@ -799,7 +799,7 @@ function GetReports() {
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
-      width: 100,
+      width: 90,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -813,7 +813,7 @@ function GetReports() {
     {
       field: 'stockPrice',
       headerName: 'Цена со склада',
-      width: 100,
+      width: 80,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -826,7 +826,7 @@ function GetReports() {
     {
       field: 'incomePrice',
       headerName: 'Цена входящая',
-      width: 100,
+      width: 80,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -840,7 +840,7 @@ function GetReports() {
     {
       field: 'priceWithDepreciation',
       headerName: 'Цена с амортизацией',
-      width: 100,
+      width: 80,
       editable: true,
       renderCell: (params) => {
         return (
@@ -883,7 +883,7 @@ function GetReports() {
       field: 'scanCode',
       headerName: 'ScanCode',
       //   headerAlign: 'center',
-      width: 100,
+      width: 92,
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
@@ -1015,7 +1015,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 100,
+      width: 90,
     },
 
     {
@@ -1025,7 +1025,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 100,
+      width: 90,
     },
     {
       field: 'lastInventory',
@@ -1034,7 +1034,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 220,
+      width: 115,
     },
     // {
     //   field: 'routeListManagerName',
@@ -1257,7 +1257,7 @@ function GetReports() {
                 <div>
                   <Box>
                     <DataGrid
-                      width="500px"
+                      width="510px"
                       className="dataGrid"
                       columns={[...columns2]}
                       rows={efectiveData2}

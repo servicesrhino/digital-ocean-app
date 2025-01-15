@@ -67,9 +67,7 @@ function GetLastRouteSheet() {
           console.log(res.data.map((item) => item.documentName)); // маршрутные листы здесь
 
           console.log(
-            res.data.map((item) =>
-              item.routeListItems.map((item) => item.routeItems)
-            )
+            res.data.map((item) => item.routeListItems.map((item) => item))
           );
           //console.log(res.data.routeListItems.routeItems);
           console.log(
@@ -81,14 +79,14 @@ function GetLastRouteSheet() {
           //       (item) => item.managerName
           //     )
           //   );
-          setDocumentName(res.data.map((item) => item.documentName));
+          setDocumentName(res.data.map((item) => item.routeListItems));
           setFinal1(
             res.data.map((item) =>
               item.routeListItems
                 .map((item) => ({
                   manager: item.managerName,
                   // length: item.routeListItems.length,
-                  other: [item.managerName, ...item.routeItems],
+                  // other: [item.managerName, ...item.map((item) => item)],
                 }))
                 .flat()
             )
@@ -100,7 +98,7 @@ function GetLastRouteSheet() {
                 other: { ...item.routeItems, adf: [item.managerName] },
                 other2: {
                   manager: item.managerName,
-                  partName: item.routeItems.map((item) => item.partName),
+                  partName: item.routeListItems.map((item) => item.partName),
                   endPoint: item.endPoint,
                 },
               }))
@@ -114,11 +112,7 @@ function GetLastRouteSheet() {
           //     //.flat()
           //   );
 
-          setFinal2(
-            res.data
-              .map((item) => item.routeListItems.map((item) => item.routeItems))
-              .flat(2)
-          );
+          setFinal2(res.data.map((item) => item.routeListItems).flat(2));
 
           //   setFinal4(
           //     Object.values(res.data.routeListItems).map((item) => ({
@@ -144,7 +138,11 @@ function GetLastRouteSheet() {
               }))
             )
           );
-          setFinal6(res.data.map((item) => item.routeListItems));
+          // Object.values(res.data).map((item) => item.routeListItems)
+          setFinal6(
+            // res.data.map((item) => item.routeListItems.map((item) => item))
+            res.data.map((item) => item.routeListItems)
+          );
         });
       // dataShow(final2);
     } catch (error) {
@@ -160,16 +158,39 @@ function GetLastRouteSheet() {
   console.log(final4);
   console.log(final6);
 
-  useEffect(() => {
-    mainTranform(final6);
-  }, [final6]);
+  // useEffect(() => {
+  //   mainTranform(data);
+  // }, [data]);
 
   let man;
-  const newTest = final6.map((item) =>
-    item.map((item2) => {
-      man = item2.managerName;
-      console.log(man);
-      return item2.routeItems.map((item3) => ({
+  // console.log(data);
+  // const newTest = data.map((item) =>
+  //   item.map((item2) => {
+  //     man = item2.managerName;
+  //     console.log(man);
+  //     return item2.map((item3) => ({
+  //       endPoint: item3.endPoint,
+  //       partName: item3.partName,
+  //       startPoint: item3.startPoint,
+  //       vehicleName: item3.vehicleName,
+  //       qnt: item3.qnt,
+  //       originalPrice: item3.originalPrice,
+  //       originalId: item3.originalId,
+  //       comments: item3.comments,
+  //       managerName: man,
+  //     }));
+  //   })
+  // );
+  // console.log(newTest);
+
+  let man2;
+  let sheet;
+  let newTest3 = data.map((item) => {
+    sheet = item.documentName;
+    return item.map((item2) => {
+      man2 = item2.managerName;
+      console.log(man2);
+      return item2.routeListItems.map((item3) => ({
         endPoint: item3.endPoint,
         partName: item3.partName,
         startPoint: item3.startPoint,
@@ -178,11 +199,12 @@ function GetLastRouteSheet() {
         originalPrice: item3.originalPrice,
         originalId: item3.originalId,
         comments: item3.comments,
-        managerName: man,
+        managerName: man2,
+        documentName: sheet,
       }));
-    })
-  );
-  console.log(newTest);
+    });
+  });
+  console.log(newTest3);
 
   const newTest2 = final6.map((list) => {
     list.map((item) => {
@@ -294,10 +316,10 @@ function GetLastRouteSheet() {
     // if (lastItems2) {
     //   setFinal8(lastItems2);
     // }
-    mainTranform2(data);
+    mainTransform2(data);
   }, [data]);
 
-  function mainTranform(final6) {
+  function mainTranform(data) {
     let man;
     let newTest = final6.map((item) =>
       item.map((item2) => {
@@ -325,12 +347,13 @@ function GetLastRouteSheet() {
 
   console.log(final9);
 
-  function mainTranform2(data) {
+  function mainTransform2(data) {
+    console.log(data);
     let man2;
     let sheet;
     let newTest3 = data.map((item) => {
       sheet = item.documentName;
-      return item.routeListItems.map((item2) => {
+      return item.map((item2) => {
         man2 = item2.managerName;
         console.log(man2);
         return item2.routeItems.map((item3) => ({
@@ -620,7 +643,7 @@ function GetLastRouteSheet() {
                         return item;
                       }
                     })
-                    //.flat(2)
+                    .flat(2)
                     .map((getdata, index) => (
                       <tr key={index}>
                         {/* <th>{getdata.id}</th> */}

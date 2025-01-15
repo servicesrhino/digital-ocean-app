@@ -15,6 +15,9 @@ function Sidebar() {
           </LinkContainer>
         </Container> */}
         <div className="link">
+          <Link to="/inventorization">Переучеты</Link>
+        </div>
+        <div className="link">
           <Link to="/reports">Звіти</Link>
         </div>
         <div className="link">

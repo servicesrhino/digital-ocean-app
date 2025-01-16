@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import axios from 'axios';
 import { Col, Row, Table } from 'react-bootstrap';
+import './Inventorization.css';
 
 const Inventorization = () => {
   const [data, setData] = useState([]);
@@ -19,7 +20,9 @@ const Inventorization = () => {
       <div className="appss__body">
         <Sidebar />
         <div className="app__other">
-          <button onClick={getData}>Получить перечеты</button>
+          <button className="btn btn-primary" onClick={getData}>
+            Переобліки
+          </button>
 
           {data.status === 'open' ? <button className="m-2">open</button> : ''}
           {/* <button>Создать переучет</button> */}
@@ -30,8 +33,8 @@ const Inventorization = () => {
                 <thead className="text-right table-header text-header">
                   <tr>
                     <th>Дата</th>
-                    <th>ID</th>
-                    <th>Number</th>
+                    {/* <tfewxxh>ID</tfewh> */}
+                    <th>Nомер</th>
                     <th>Статус</th>
                     <th></th>
                   </tr>
@@ -40,15 +43,17 @@ const Inventorization = () => {
                 <tbody className="text-secondary table-body">
                   {data.map((getData, index) => (
                     <tr key={index}>
-                      <th>{getData.date}</th>
-                      <th>{getData.id}</th>
+                      <th>{getData.date.slice(0, 10)}</th>
+                      {/* <th>{getData.id}</th> */}
                       <th>{getData.number}</th>
                       <th>{getData.status}</th>
                       <th>
                         {data.status === 'open' ? (
                           <button disabled>закрыть переучет</button>
                         ) : (
-                          <button>закрыть переучет</button>
+                          <button className="btn btn-danger">
+                            закрыть переучет
+                          </button>
                         )}
                         {/* if (data.status === 'open')
                         {<button>Закрыть переучет</button>} */}

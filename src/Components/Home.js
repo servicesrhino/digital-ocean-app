@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Container, Form, FormGroup, Navbar } from 'react-bootstrap';
+import { Button, Container, Form, Navbar } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Store } from '../Store';
@@ -150,33 +150,38 @@ const Home = () => {
       <div className="app__body">
         {/* <Sidebar /> */}
         <div className="app__other">
-          <Container className="small-container ">
-            <h1 className="my-3 test">Логин</h1>
-            <Form onSubmit={submitHandler2} className="test ">
-              <FormGroup className="mb-3" controlId="phone">
+          <div className="small-container">
+            <h1 className=" my-3 test1">Логин</h1>
+
+            <Form onSubmit={submitHandler2} className="test1">
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Номер телефона</Form.Label>
                 <Form.Control
                   type="phone"
-                  required
+                  placeholder="Enter email"
                   onChange={(e) => setPhone(e.target.value)}
                 />
-              </FormGroup>
+                {/* <Form.Text className="text-muted">
+                  We'll never share your email with anyone else.
+                </Form.Text> */}
+              </Form.Group>
 
-              <FormGroup className="mb-3" controlId="password">
+              <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Пароль</Form.Label>
                 <Form.Control
                   type="password"
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-              </FormGroup>
-              <div className="mb-3">
-                <Button type="submit">Логин</Button>
-              </div>
-              {/* <div>
-                <button onClick={checkAuth} />
-              </div> */}
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                <Form.Check type="checkbox" label="Check me out" />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Логин
+              </Button>
             </Form>
-          </Container>
+          </div>
         </div>
       </div>
     </div>

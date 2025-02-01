@@ -35,10 +35,10 @@ const Inventorization = () => {
       });
   };
 
-  useEffect(() => {
-    if (!data) return;
-    data2();
-  }, [data]);
+  // useEffect(() => {
+  //   if (!data) return;
+  //   data2();
+  // }, [data]);
 
   console.log('container:', container);
   return (
@@ -56,7 +56,7 @@ const Inventorization = () => {
             ) : (
               ''
             )}
-            <button>some</button>
+            {/* <button>some</button> */}
             {/* <button>Создать переучет</button> */}
 
             <Row>
@@ -89,6 +89,9 @@ const Inventorization = () => {
                           )}
                           {/* if (data.status === 'open')
                         {<button>Закрыть переучет</button>} */}
+                        </th>
+                        <th>
+                          <button onClick={data2}>Отримати контейнери</button>
                         </th>
                       </tr>
                     ))}

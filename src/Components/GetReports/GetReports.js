@@ -9,6 +9,7 @@ import { Button, Col, Row, Table } from 'react-bootstrap';
 import {
   DataGrid,
   gridFilteredSortedRowIdsSelector,
+  GridLogicOperator,
   GridToolbar,
   GridToolbarContainer,
   GridToolbarExportContainer,
@@ -1326,6 +1327,32 @@ function GetReports() {
                       //   ...data.initialState?.filter,
                       //   filterModel: {
                       //     items: [
+                      //       {
+                      //         id: 1,
+                      //         field: 'name',
+                      //         operator: 'contains',
+                      //         value: 'D',
+                      //       },
+                      //       {
+                      //         id: 2,
+                      //         field: 'vehicle',
+                      //         operator: 'contains',
+                      //         value: 'Tesla',
+                      //       },
+                      //       {
+                      //         id: 3,
+                      //         field: 'stockPrice',
+                      //         operator: '>',
+                      //         value: '0',
+                      //       },
+                      //     ],
+                      //   },
+                      // },
+                      // ...data.initialState,
+                      // filter: {
+                      //   ...data.initialState?.filter,
+                      //   filterModel: {
+                      //     items: [
                       //       { field: 'unitPrice', value: '25', operator: '>' },
                       //     ],
                       //   },
@@ -1341,7 +1368,6 @@ function GetReports() {
                       // toolbar: GridToolbar,
                     }}
                     // slots={{ toolbar: GridToolbar }}
-
                     // slotProps={{
                     //   toolbar: {
                     //     showQuickFilter: true,
@@ -1350,6 +1376,64 @@ function GetReports() {
                     //     csvOptions: { disableToolbarButton: true },
                     //     printOptions: { disableToolbarButton: true },
                     //   },
+                    // }}
+                    slotProps={{
+                      filterPanel: {
+                        // Force usage of "And" operator
+                        logicOperators: [GridLogicOperator.And],
+                        // Display columns by ascending alphabetical order
+                        columnsSort: 'asc',
+                        filterFormProps: {
+                          // Customize inputs by passing props
+                          logicOperatorInputProps: {
+                            variant: 'outlined',
+                            size: 'small',
+                          },
+                          columnInputProps: {
+                            variant: 'outlined',
+                            size: 'small',
+                            sx: { mt: 'auto' },
+                          },
+                          operatorInputProps: {
+                            variant: 'outlined',
+                            size: 'small',
+                            sx: { mt: 'auto' },
+                          },
+                          valueInputProps: {
+                            InputComponentProps: {
+                              variant: 'outlined',
+                              size: 'small',
+                            },
+                          },
+                          deleteIconProps: {
+                            sx: {
+                              '& .MuiSvgIcon-root': { color: '#d32f2f' },
+                            },
+                          },
+                        },
+                        sx: {
+                          // Customize inputs using css selectors
+                          '& .MuiDataGrid-filterForm': { p: 2 },
+                          '& .MuiDataGrid-filterForm:nth-child(even)': {
+                            backgroundColor: (theme) =>
+                              theme.palette.mode === 'dark'
+                                ? '#444'
+                                : '#f5f5f5',
+                          },
+                          '& .MuiDataGrid-filterFormLogicOperatorInput': {
+                            mr: 2,
+                          },
+                          '& .MuiDataGrid-filterFormColumnInput': {
+                            mr: 2,
+                            width: 150,
+                          },
+                          '& .MuiDataGrid-filterFormOperatorInput': { mr: 2 },
+                          '& .MuiDataGrid-filterFormValueInput': { width: 200 },
+                        },
+                      },
+                    }}
+                    // initialState={{
+
                     // }}
                     pageSizeOptions={[10]}
                     // checkboxSelection

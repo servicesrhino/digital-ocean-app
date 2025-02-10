@@ -29,6 +29,7 @@ function GetDocumentsFromList() {
   // const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
   let { printerUrl } = userInfo;
+  console.log('printerURL:', printerUrl);
 
   const [styled, setStyled] = useState(false);
 
@@ -343,13 +344,19 @@ function GetDocumentsFromList() {
 
     try {
       console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+          item.name + item.rhinoID
+        }`
       );
 
       await fetch(
         `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
           item.name + ' ' + item.rhinoID
-        }`
+        }`,
+        {
+          // ...
+          referrerPolicy: 'unsafe-url',
+        }
       ).then((res) => {
         console.log(res.data);
       });
@@ -403,32 +410,132 @@ function GetDocumentsFromList() {
   const printAll = async (e) => {
     e.preventDefault();
 
-    // data.forEach(item => {
+    try {
+      const printRequests = data.map((item) => {
+        let printUrl = `http://${userInfo.printerUrl.replace(
+          /^https?:\/\//,
+          ''
+        )}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
+
+        return fetch(printUrl, {
+          referrerPolicy: 'unsafe-url',
+          mode: 'no-cors',
+          credentials: 'include',
+        }).then((res) => res.json().catch(() => null)); // Handle potential JSON parse errors
+      });
+
+      const responses = await Promise.all(printRequests);
+      console.log('Print responses:', responses);
+    } catch (error) {
+      console.error('Error printing documents:', error);
+    }
+  };
+
+  // const printAll = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const printRequests = data.map((item) => {
+  //       let printUrl = `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
+
+  //       // Force HTTP by replacing 'https' with 'http'
+  //       if (printUrl.startsWith('https://')) {
+  //         printUrl = printUrl.replace('https://', 'http://');
+  //       }
+
+  //       return fetch(printUrl, {
+  //         referrerPolicy: 'unsafe-url',
+  //         mode: 'no-cors',
+  //         credentials: 'include',
+  //       }).then((res) => res.json());
+  //     });
+
+  //     const responses = await Promise.all(printRequests);
+  //     console.log('Print responses:', responses);
+  //   } catch (error) {
+  //     console.error('Error printing documents:', error);
+  //   }
+  // };
+
+  // const printAll = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const printRequests = data.map((item) => {
+  //       const printUrl = `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
+
+  //       return fetch(printUrl, {
+  //         referrerPolicy: 'unsafe-url',
+  //       }).then((res) => res.json()); // Assuming the response is JSON
+  //     });
+
+  //     const responses = await Promise.all(printRequests);
+  //     console.log('Print responses:', responses);
+  //   } catch (error) {
+  //     console.error('Error printing documents:', error);
+  //   }
+  // };
+
+  // const printAll = async (e) => {
+  //   e.preventDefault();
+
+  //   // data.forEach(item => {
+  //   for (const item of data) {
+  //     //   const contents = await fs.readFile(file, 'utf8');
+  //     //     console.log(contents);
+
+  //     try {
+  //       console.log(
+  //         '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+  //       );
+  //       if (window.location.protocol == 'http:') {
+  //         console.log('You are not connected with a secure connection.');
+  //         console.log('Reloading the page to a Secure Connection...');
+  //         window.location = document.URL.replace('http://', 'https://');
+  //       }
+  //       await fetch(
+  //         `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
+  //           item.name + ' ' + item.rhinoID
+  //         }`,
+  //         {
+  //           // ...
+  //           referrerPolicy: 'unsafe-url',
+  //         }
+  //       ).then((res) => {
+  //         console.log(res.data);
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+
+  //     await timer(1000);
+  //   }
+  //   // });
+
+  //   //newPrintFunc2();
+  // };
+
+  const testing = async () => {
     for (const item of data) {
-      //   const contents = await fs.readFile(file, 'utf8');
-      //     console.log(contents);
-
       try {
-        console.log(
-          '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
-        );
-
-        await fetch(
-          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-            item.name + ' ' + item.rhinoID
-          }`
-        ).then((res) => {
-          console.log(res.data);
-        });
+        const res = axios
+          .get(
+            '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}',
+            {
+              // documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
+              // sheetId: '2020',
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+            // setData(res.data);
+            // setData2(res.data);
+          });
       } catch (error) {
         console.log(error);
       }
-
-      await timer(1000);
     }
-    // });
-
-    //newPrintFunc2();
+    await timer(1000);
   };
 
   function timer(ms) {

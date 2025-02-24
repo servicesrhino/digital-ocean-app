@@ -25,6 +25,7 @@ import GetDocumentsFromList from './Components/GetDocumentsFromList/GetDocuments
 import Reports from './Components/Reports/Reports';
 import GetReports from './Components/GetReports/GetReports';
 import Inventorization from './Inventorization/Inventorization';
+import InventorizationDetails from './Inventorization/InventorizationDetails';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -138,6 +139,10 @@ function App() {
             <Route path="reports" element={<Reports />} />
             <Route path="get-reports" element={<GetReports />} />
             <Route path="inventorization" element={<Inventorization />} />
+            <Route
+              path="inventorization-details"
+              element={<InventorizationDetails />}
+            />
           </Routes>
         </Container>
       </main>

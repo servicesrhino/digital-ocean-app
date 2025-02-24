@@ -8,9 +8,15 @@ import PrintedService from '../../services/PrintedService';
 import $api from '../http';
 import RemoveCheckService from '../../services/RemoveCheckService';
 import DataTable from '../dataTable/DataTable';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+// import { GridToolbar } from '@mui/x-data-grid';
 import TableBootstrap from '../tableBootstrap/TableBootstrap';
 import { Box } from '@mui/material';
+import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
+import { LicenseInfo } from '@mui/x-license';
+
+LicenseInfo.setLicenseKey(
+  '907c77a4e512fb294259232fff989342Tz0xMDgyMTIsRT0xNzcxNjMxOTk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI='
+);
 
 function GetDocumentsFromList() {
   const [data, setData] = useState([]);
@@ -269,6 +275,66 @@ function GetDocumentsFromList() {
     console.log('handler3');
   };
 
+  const proxy = {
+    host: 'your-proxy-server.com',
+    port: 8080,
+  };
+
+  const testHttp = () => {
+    // Make HTTP request using proxy
+    axios
+      .get(`${printerUrl}`, { proxy })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // const testHttp = () => {
+  //   const instance = axios.create({
+  //     protocol: 'http',
+  //   });
+
+  //   instance
+  //     .get('http://jsonplaceholder.typicode.com/todos/1')
+  //     .then((response) => {
+  //       const data = response.data;
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  // const httpProtocol = 'http://';
+
+  // const testHttp = () => {
+  //   axios
+  //     .get(`${httpProtocol}jsonplaceholder.typicode.com/todos/1`)
+  //     .then((response) => {
+  //       const data = response.data;
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  // const testHttp = () => {
+  //   axios
+  //     .get('http://jsonplaceholder.typicode.com/todos/1')
+  //     .then((response) => {
+  //       const data = response.data;
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+
+  // };
+
   const getDocumentsFromList = () => {
     try {
       const res = axios
@@ -412,16 +478,19 @@ function GetDocumentsFromList() {
 
     try {
       const printRequests = data.map((item) => {
-        let printUrl = `http://${userInfo.printerUrl.replace(
-          /^https?:\/\//,
-          ''
-        )}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
+        // Ensure printerUrl doesn't have any protocol and force it to HTTP
+        const cleanPrinterUrl = userInfo.printerUrl.replace(/^https?:\/\//, '');
+        const printUrl = `http://${cleanPrinterUrl}?id=${encodeURIComponent(
+          item.id
+        )}&veh=${encodeURIComponent(item.vehicle)}&name=${encodeURIComponent(
+          item.name
+        )}%20${encodeURIComponent(item.rhinoID)}`;
 
         return fetch(printUrl, {
           referrerPolicy: 'unsafe-url',
           mode: 'no-cors',
           credentials: 'include',
-        }).then((res) => res.json().catch(() => null)); // Handle potential JSON parse errors
+        }).then((res) => res.json().catch(() => null)); // Handle non-JSON responses safely
       });
 
       const responses = await Promise.all(printRequests);
@@ -430,6 +499,30 @@ function GetDocumentsFromList() {
       console.error('Error printing documents:', error);
     }
   };
+
+  // const printAll = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const printRequests = data.map((item) => {
+  //       let printUrl = `http://${userInfo.printerUrl.replace(
+  //         /^https?:\/\//,
+  //         ''
+  //       )}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
+
+  //       return fetch(printUrl, {
+  //         referrerPolicy: 'unsafe-url',
+  //         mode: 'no-cors',
+  //         credentials: 'include',
+  //       }).then((res) => res.json().catch(() => null)); // Handle potential JSON parse errors
+  //     });
+
+  //     const responses = await Promise.all(printRequests);
+  //     console.log('Print responses:', responses);
+  //   } catch (error) {
+  //     console.error('Error printing documents:', error);
+  //   }
+  // };
 
   // const printAll = async (e) => {
   //   e.preventDefault();
@@ -631,6 +724,7 @@ function GetDocumentsFromList() {
         <div className="app__other">
           <h1>Отримати дані з листа</h1>
           {/* <button onClick={getDocumentsFromList}>helo</button> */}
+          <div>{/* <button onClick={testHttp}>test me</button> */}</div>
           <div className="mb-3">
             <Button type="printAll" onClick={printAll}>
               Надрукувати все
@@ -656,7 +750,7 @@ function GetDocumentsFromList() {
             </div>
           </div>
           <div>
-            <DataGrid
+            <DataGridPro
               className="dataGrid"
               rows={data}
               columns={[...columns, actionColumn, actionColumn2]}

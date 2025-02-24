@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import axios from 'axios';
 import { Col, Row, Table } from 'react-bootstrap';
 import './Inventorization.css';
+import { Link } from 'react-router-dom';
+import { Store } from '../Store';
 
 const Inventorization = () => {
   const [data, setData] = useState([]);
   const [container, setContainer] = useState([]);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
 
   const getData = () => {
     const result = axios
@@ -18,7 +21,7 @@ const Inventorization = () => {
   };
   console.log('some:', data);
 
-  const data2 = () => {
+  const data2 = (e, id) => {
     const result2 = axios
       .post(
         'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-documents-list'
@@ -29,10 +32,20 @@ const Inventorization = () => {
           return {
             ...doc,
             created: doc.created.slice(0, doc.created.indexOf('T')),
+            test: id,
           };
         });
         setContainer(newData);
       });
+  };
+
+  const some = (e, info) => {
+    try {
+      console.log(info);
+      ctxDispatch({ type: 'GET_INVENTORY_DETAILS', payload: info });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // useEffect(() => {
@@ -91,7 +104,9 @@ const Inventorization = () => {
                         {<button>Закрыть переучет</button>} */}
                         </th>
                         <th>
-                          <button onClick={data2}>Отримати контейнери</button>
+                          <button onClick={(e) => data2(e, getData.id)}>
+                            Отримати контейнери
+                          </button>
                         </th>
                       </tr>
                     ))}
@@ -117,7 +132,12 @@ const Inventorization = () => {
                       container.map((getData, index) => (
                         <tr key={index}>
                           <td>{getData.created}</td>
-                          <td>{getData.documentName}</td>
+                          <td onClick={(e) => some(e, getData.test)}>
+                            <Link to="/inventorization-details">
+                              {' '}
+                              {getData.documentName}{' '}
+                            </Link>
+                          </td>
                         </tr>
                       ))}
                   </tbody>

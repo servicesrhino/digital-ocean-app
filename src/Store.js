@@ -9,6 +9,7 @@ const initialState = {
 
   category: [],
   lastDocumentsFromList: [],
+  inventoryId: [],
 
   id: '',
   rhinoID: '',
@@ -34,6 +35,8 @@ function reducer(state, action) {
       return { ...state, category: action.payload };
     case 'GET_LAST_DOCUMENTS_FROM_LIST':
       return { ...state, lastDocumentsFromList: action.payload };
+    case 'GET_INVENTORY_DETAILS':
+      return { ...state, inventoryId: action.payload };
     case 'IS_AUTH':
       return { ...state, isAuth: true };
     case 'IS_NO_AUTH':

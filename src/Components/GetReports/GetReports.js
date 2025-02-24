@@ -1,5 +1,5 @@
 // import { Store } from '@mui/x-data-grid/utils/Store';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { Store } from '../../Store';
 import axios from 'axios';
 import { Box, MenuItem, TextField } from '@mui/material';
@@ -183,6 +183,10 @@ function GetReports() {
     'isAdmin',
   ];
 
+  useEffect(() => {
+    getDocumentsFromList();
+  }, []);
+
   // const { dataNew } = useDemoData({ dataSet: 'Employee', rowLength: 100 });
 
   // const { dataNew } = useDemoData({
@@ -235,7 +239,11 @@ function GetReports() {
     key: 'selection',
   };
 
-  const getDocumentsFromList = () => {
+  const getReportsData = useCallback(() => {
+    // get reports data logic here
+  }, []);
+
+  const getDocumentsFromList = useCallback(() => {
     try {
       const res = axios
         .post(
@@ -467,7 +475,7 @@ function GetReports() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [lastDocumentsFromList]);
   console.log(data);
   // if (data)
 
@@ -618,10 +626,6 @@ function GetReports() {
   // let manager1 = percent[0];
   // console.log(manager1);
   // setEfective(percent)
-
-  useEffect(() => {
-    getDocumentsFromList();
-  }, []);
 
   useEffect(() => {
     solded(sold);

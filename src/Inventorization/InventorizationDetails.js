@@ -15,10 +15,54 @@ const InventorizationDetails = () => {
     {
       field: 'name',
       headerName: 'Менеджер',
+      // cellClassName: 'super-app-theme--cell',
+      size: 'small',
+      width: 200,
     },
     {
       field: 'vehicle',
       headerName: 'Машина',
+      size: 'small',
+      width: 140,
+    },
+    {
+      field: 'location',
+      headerName: 'Location',
+      size: 'small',
+      width: 90,
+    },
+    {
+      field: 'rhinoID',
+      headerName: 'rhinoID',
+      size: 'small',
+    },
+    {
+      field: 'scanCode',
+      headerName: 'scanCode',
+      size: 'small',
+      width: 110,
+    },
+    {
+      field: 'routeListId',
+      headerName: 'routeListId',
+      size: 'small',
+    },
+    {
+      field: 'routeListManagerName',
+      headerName: 'routeListManagerName',
+      size: 'small',
+    },
+    {
+      field: 'routeListDocument',
+      headerName: 'routeListDocument',
+      size: 'small',
+      width: 140,
+    },
+    {
+      field: 'lastInventory',
+      headerName: 'lastInventory',
+      size: 'small',
+      width: 140,
     },
   ];
 
@@ -46,11 +90,15 @@ const InventorizationDetails = () => {
       <div className="app__body">
         <Sidebar />
         <div className="app__other">
+          <div className="mb-2">
+            <button onClick={getData}>Отримати дані</button>
+          </div>
           {/* <h3>Inventorization Details</h3> */}
-          <button onClick={getData}>cllick me</button>
           <div>
             <Box>
               <DataGrid
+                width="510px"
+                className="dataGrid"
                 getRowId={() => Math.floor(Math.random() * 100000000)}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 200}

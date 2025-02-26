@@ -17,23 +17,23 @@ const InventorizationDetails = () => {
       headerName: 'Менеджер',
       // cellClassName: 'super-app-theme--cell',
       size: 'small',
-      width: 200,
+      width: 150,
     },
     {
       field: 'vehicle',
       headerName: 'Машина',
       size: 'small',
-      width: 140,
+      width: 120,
     },
     {
       field: 'location',
-      headerName: 'Location',
+      headerName: 'Локация',
       size: 'small',
-      width: 90,
+      width: 80,
     },
     {
       field: 'rhinoID',
-      headerName: 'rhinoID',
+      headerName: 'Ріно ID',
       size: 'small',
     },
     {
@@ -48,21 +48,34 @@ const InventorizationDetails = () => {
       size: 'small',
     },
     {
-      field: 'routeListManagerName',
-      headerName: 'routeListManagerName',
+      field: 'routeListDate',
+      headerName: 'Дата',
       size: 'small',
+      width: 120,
+    },
+    {
+      field: 'routeListManagerName',
+      headerName: 'Менеджер',
+      size: 'small',
+      width: 120,
     },
     {
       field: 'routeListDocument',
-      headerName: 'routeListDocument',
+      headerName: 'Маршрутний лист',
       size: 'small',
-      width: 140,
+      width: 120,
     },
+    // {
+    //   field: 'routeItem',
+    //   headerName: 'route Item',
+    //   size: 'small',
+    //   width: 80,
+    // },
     {
       field: 'lastInventory',
       headerName: 'lastInventory',
       size: 'small',
-      width: 140,
+      width: 100,
     },
   ];
 

@@ -3,8 +3,14 @@ import Sidebar from '../Components/Sidebar/Sidebar';
 import { Store } from '../Store';
 import axios from 'axios';
 import { Box } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+// import { DataGrid } from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
+import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
+import { LicenseInfo } from '@mui/x-license';
+
+LicenseInfo.setLicenseKey(
+  '907c77a4e512fb294259232fff989342Tz0xMDgyMTIsRT0xNzcxNjMxOTk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI='
+);
 
 const InventorizationDetails = () => {
   const [data, setData] = useState([]);
@@ -135,7 +141,7 @@ const InventorizationDetails = () => {
               {/* <h3>Inventorization Details</h3> */}
               <div>
                 <Box>
-                  <DataGrid
+                  <DataGridPro
                     width="510px"
                     className="dataGrid"
                     getRowId={() => Math.floor(Math.random() * 100000000)}

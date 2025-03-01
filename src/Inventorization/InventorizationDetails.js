@@ -144,6 +144,16 @@ const InventorizationDetails = () => {
                   <DataGridPro
                     width="510px"
                     className="dataGrid"
+                    sx={{
+                      '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
+                        py: '8px',
+                      },
+                      '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
+                        py: '15px',
+                      },
+                      '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell':
+                        { py: '22px' },
+                    }}
                     getRowId={() => Math.floor(Math.random() * 100000000)}
                     getRowHeight={() => 'auto'}
                     getEstimatedRowHeight={() => 200}

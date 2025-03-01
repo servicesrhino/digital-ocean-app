@@ -7,10 +7,10 @@ import Sidebar from '../Sidebar/Sidebar';
 // import { Button } from 'bootstrap';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import {
-  DataGrid,
+  // DataGrid,
   gridFilteredSortedRowIdsSelector,
   GridLogicOperator,
-  GridToolbar,
+  // GridToolbar,
   GridToolbarContainer,
   GridToolbarExportContainer,
   GridToolbarQuickFilter,
@@ -20,6 +20,12 @@ import {
 import ReactLoading from 'react-loading';
 import './GetReports.css';
 import * as XLSX from 'xlsx';
+import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
+import { LicenseInfo } from '@mui/x-license';
+
+LicenseInfo.setLicenseKey(
+  '907c77a4e512fb294259232fff989342Tz0xMDgyMTIsRT0xNzcxNjMxOTk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI='
+);
 // import 'react-date-range/dist/styles.css'; // main style file
 // import 'react-date-range/dist/theme/default.css'; // theme css file
 // import { DateRangePicker } from 'react-date-range';
@@ -1261,7 +1267,7 @@ function GetReports() {
                 </div>
                 <div>
                   <Box>
-                    <DataGrid
+                    <DataGridPro
                       width="510px"
                       className="dataGrid"
                       columns={[...columns2]}
@@ -1306,7 +1312,7 @@ function GetReports() {
                     },
                   }}
                 >
-                  <DataGrid
+                  <DataGridPro
                     getRowHeight={() => 'auto'}
                     getEstimatedRowHeight={() => 200}
                     sx={{

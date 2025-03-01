@@ -1,54 +1,51 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import { Store } from '../Store';
 import axios from 'axios';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import ReactLoading from 'react-loading';
 
 const InventorizationDetails = () => {
   const [data, setData] = useState([]);
+  const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
   const { inventoryId } = state;
   console.log('inventoryId:', inventoryId);
 
   const collums = [
     {
-      field: 'name',
-      headerName: 'Менеджер',
-      // cellClassName: 'super-app-theme--cell',
+      field: 'vehicle',
+      headerName: 'Машина',
       size: 'small',
       width: 150,
     },
     {
-      field: 'vehicle',
-      headerName: 'Машина',
+      field: 'name',
+      headerName: 'Назва',
+      // cellClassName: 'super-app-theme--cell',
       size: 'small',
-      width: 120,
-    },
-    {
-      field: 'location',
-      headerName: 'Локация',
-      size: 'small',
-      width: 80,
+      width: 220,
     },
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
       size: 'small',
     },
+
     {
       field: 'scanCode',
       headerName: 'scanCode',
       size: 'small',
       width: 110,
     },
+    // {
+    //   field: 'routeListId',
+    //   headerName: 'routeListId',
+    //   size: 'small',
+    // },
     {
-      field: 'routeListId',
-      headerName: 'routeListId',
-      size: 'small',
-    },
-    {
-      field: 'routeListDate',
+      field: 'date3',
       headerName: 'Дата',
       size: 'small',
       width: 120,
@@ -63,7 +60,7 @@ const InventorizationDetails = () => {
       field: 'routeListDocument',
       headerName: 'Маршрутний лист',
       size: 'small',
-      width: 120,
+      width: 130,
     },
     // {
     //   field: 'routeItem',
@@ -73,11 +70,21 @@ const InventorizationDetails = () => {
     // },
     {
       field: 'lastInventory',
-      headerName: 'lastInventory',
+      headerName: 'Інвенторизація',
       size: 'small',
       width: 100,
     },
+    {
+      field: 'location',
+      headerName: 'Локація',
+      size: 'small',
+      width: 80,
+    },
   ];
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = () => {
     try {
@@ -94,36 +101,57 @@ const InventorizationDetails = () => {
         .then((res) => {
           console.log(res.data);
           setData(res.data.inventoryResultModel);
+
+          const changedData = res.data.inventoryResultModel.map((row) => ({
+            ...row,
+            date3: new Date(row.routeListDate).toLocaleDateString(),
+          }));
+          setData(changedData);
+
+          setDone(true);
         });
     } catch (error) {}
   };
   console.log(data);
   return (
-    <div className="app2">
-      <div className="app__body">
-        <Sidebar />
-        <div className="app__other">
-          <div className="mb-2">
-            <button onClick={getData}>Отримати дані</button>
-          </div>
-          {/* <h3>Inventorization Details</h3> */}
-          <div>
-            <Box>
-              <DataGrid
-                width="510px"
-                className="dataGrid"
-                getRowId={() => Math.floor(Math.random() * 100000000)}
-                getRowHeight={() => 'auto'}
-                getEstimatedRowHeight={() => 200}
-                // width="510px'
-                columns={collums}
-                rows={data}
-              />
-            </Box>
+    <>
+      {!done ? (
+        <ReactLoading
+          className="flex justify-content-center align-items-center"
+          type={'bars'}
+          color={'green'}
+          height={200}
+          width={200}
+        />
+      ) : (
+        <div className="app2">
+          <div className="app__body">
+            <Sidebar />
+            <div className="app__other">
+              <div className="mb-3">
+                {/* <button onClick={getData}>Отримати дані</button> */}
+                <h1>Отримати дані по переоблікам</h1>
+              </div>
+              {/* <h3>Inventorization Details</h3> */}
+              <div>
+                <Box>
+                  <DataGrid
+                    width="510px"
+                    className="dataGrid"
+                    getRowId={() => Math.floor(Math.random() * 100000000)}
+                    getRowHeight={() => 'auto'}
+                    getEstimatedRowHeight={() => 200}
+                    // width="510px'
+                    columns={collums}
+                    rows={data}
+                  />
+                </Box>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 
   // <div>InventorizationDetails</div>;

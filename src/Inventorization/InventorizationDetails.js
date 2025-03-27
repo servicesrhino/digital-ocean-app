@@ -149,14 +149,14 @@ const InventorizationDetails = () => {
       field: 'vehicle',
       headerName: 'Машина',
       size: 'small',
-      width: 150,
+      width: 190,
     },
     {
       field: 'name',
       headerName: 'Назва',
       // cellClassName: 'super-app-theme--cell',
       size: 'small',
-      width: 220,
+      width: 290,
     },
     {
       field: 'rhinoID',
@@ -175,12 +175,12 @@ const InventorizationDetails = () => {
     //   headerName: 'routeListId',
     //   size: 'small',
     // },
-    {
-      field: 'date3',
-      headerName: 'Дата продажу',
-      size: 'small',
-      width: 120,
-    },
+    // {
+    //   field: 'date3',
+    //   headerName: 'Дата продажу',
+    //   size: 'small',
+    //   width: 120,
+    // },
     {
       field: 'routeListManagerName',
       headerName: 'Менеджер',
@@ -221,19 +221,20 @@ const InventorizationDetails = () => {
     try {
       const res = axios
         .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/Inventory/get-result-fromlist',
+          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
           {
-            documentId: '1dPb8FsEhRz8Fd6UD-lVXxVkbOIvSfr_-jEOrfVBMB6s',
+            documentId: inventoryId,
             sheetId: '2020',
-            page: 0,
-            inventoryId: inventoryId,
+            // page: 0,
+            // inventoryId: '67a02a92df14d03d97cdec12',
+            // inventoryId: inventoryId,
           }
         )
         .then((res) => {
           console.log(res.data);
-          setData(res.data.inventoryResultModel);
+          setData(res.data);
 
-          const changedData = res.data.inventoryResultModel.map((row) => ({
+          const changedData = res.data.map((row) => ({
             ...row,
             date3: new Date(row.routeListDate).toLocaleDateString(),
             id: uuidv4(),

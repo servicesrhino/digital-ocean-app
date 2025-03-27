@@ -32,7 +32,7 @@ const Inventorization = () => {
           return {
             ...doc,
             created: doc.created.slice(0, doc.created.indexOf('T')),
-            test: id,
+            test: doc.documentId,
           };
         });
         setContainer(newData);

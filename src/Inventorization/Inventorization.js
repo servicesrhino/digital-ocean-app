@@ -19,7 +19,7 @@ const Inventorization = () => {
         setData(res.data);
       });
   };
-  console.log('some:', data);
+  // console.log('some:', data);
 
   const data2 = (e, id) => {
     const result2 = axios
@@ -33,9 +33,11 @@ const Inventorization = () => {
             ...doc,
             created: doc.created.slice(0, doc.created.indexOf('T')),
             test: doc.documentId,
+            test2: id,
           };
         });
         setContainer(newData);
+        ctxDispatch({ type: 'GET_INVENTORY_DETAILS2', payload: id });
       });
   };
 
@@ -53,7 +55,7 @@ const Inventorization = () => {
   //   data2();
   // }, [data]);
 
-  console.log('container:', container);
+  // console.log('container:', container);
   return (
     <div className="appss">
       <div className="appss__body">

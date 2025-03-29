@@ -138,25 +138,27 @@ const InventorizationDetails = () => {
   const [data, setData] = useState([]);
   const [done, setDone] = useState(undefined);
   const { state } = useContext(Store);
-  const { inventoryId } = state;
-  console.log('inventoryId:', inventoryId);
+  const { inventoryId, inventoryId2 } = state;
+  // console.log('inventoryId:', inventoryId);
+  // console.log('inventoryId2:', inventoryId2);
+
   let some2 = uuidv4();
   // uuidv4(); //
-  console.log(some2);
+  // console.log(some2);
 
   const collums = [
     {
       field: 'vehicle',
       headerName: 'Машина',
       size: 'small',
-      width: 190,
+      width: 140,
     },
     {
       field: 'name',
       headerName: 'Назва',
       // cellClassName: 'super-app-theme--cell',
       size: 'small',
-      width: 290,
+      width: 230,
     },
     {
       field: 'rhinoID',
@@ -175,12 +177,12 @@ const InventorizationDetails = () => {
     //   headerName: 'routeListId',
     //   size: 'small',
     // },
-    // {
-    //   field: 'date3',
-    //   headerName: 'Дата продажу',
-    //   size: 'small',
-    //   width: 120,
-    // },
+    {
+      field: 'date3',
+      headerName: 'Дата продажу',
+      size: 'small',
+      width: 120,
+    },
     {
       field: 'routeListManagerName',
       headerName: 'Менеджер',
@@ -221,20 +223,20 @@ const InventorizationDetails = () => {
     try {
       const res = axios
         .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
+          'https://rhino-api-dyq7j.ondigitalocean.app/Inventory/get-result-fromlist',
           {
             documentId: inventoryId,
             sheetId: '2020',
-            // page: 0,
+            page: 0,
             // inventoryId: '67a02a92df14d03d97cdec12',
-            // inventoryId: inventoryId,
+            inventoryId: inventoryId2,
           }
         )
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data.inventoryResultModel);
           setData(res.data);
 
-          const changedData = res.data.map((row) => ({
+          const changedData = res.data.inventoryResultModel.map((row) => ({
             ...row,
             date3: new Date(row.routeListDate).toLocaleDateString(),
             id: uuidv4(),
@@ -245,7 +247,7 @@ const InventorizationDetails = () => {
         });
     } catch (error) {}
   };
-  console.log(data);
+  // console.log(data);
   return (
     <>
       {!done ? (

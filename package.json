@@ -25,12 +25,13 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "react-uuid": "^2.0.0",
+    "serve": "^14.2.4",
     "short-uuid": "^4.2.2",
     "web-vitals": "^2.1.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

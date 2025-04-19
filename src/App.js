@@ -59,7 +59,7 @@ function App() {
           console.log(response);
         });
     } catch (e) {
-      console.log(e.response.data.message);
+      // console.log(e.response.data.message);
     }
   };
 

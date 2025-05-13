@@ -6,7 +6,7 @@ import Home from './Components/Home';
 import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Store } from './Store';
 import BarcodeGen from './Components/BarcodeGen';
 import AllParts from './Components/AllParts';
@@ -26,11 +26,13 @@ import Reports from './Components/Reports/Reports';
 import GetReports from './Components/GetReports/GetReports';
 import Inventorization from './Inventorization/Inventorization';
 import InventorizationDetails from './Inventorization/InventorizationDetails';
+import Modal from './Components/Modal/Modal';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
   const navigate = useNavigate();
+  const [modalActive, setModalActive] = useState(true);
 
   const checkAuth = async () => {
     const token = localStorage.getItem('token');

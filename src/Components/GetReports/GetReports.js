@@ -22,6 +22,17 @@ import './GetReports.css';
 import * as XLSX from 'xlsx';
 import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 import { LicenseInfo } from '@mui/x-license';
+import Modal from '../Modal/Modal';
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button as newButton,
+  Typography,
+  TextField as newTextField,
+} from '@mui/material';
 
 LicenseInfo.setLicenseKey(
   '907c77a4e512fb294259232fff989342Tz0xMDgyMTIsRT0xNzcxNjMxOTk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI='
@@ -170,6 +181,9 @@ function GetReports() {
   const [dates2, setDates2] = useState([]);
   const [soldMoney, setSoldMoney] = useState([]);
   const [unsoldMoney, setUnsoldMoney] = useState([]);
+  const [modalActive, setModalActive] = useState(false);
+
+  // const {state} = useContext(Store)
 
   let USDollar = new Intl.NumberFormat('usd-US', {
     style: 'currency',
@@ -177,6 +191,54 @@ function GetReports() {
   });
 
   const price = 14340;
+
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [managerName, setManagerName] = useState('');
+
+  const handleViewClick = (row) => {
+    setSelectedRow(row);
+    setManagerName(''); // reset input on each open
+  };
+
+  const handleClose = () => {
+    setSelectedRow(null);
+  };
+
+  const handleSubmit = async () => {
+    // console.log(`Manager for ${selectedRow.name}: ${managerName}`);
+
+    // console.log('Submit button clicked');
+    // console.log('Manager name:', managerName);
+    // console.log('Selected row:', selectedRow);
+    // handleClose();
+
+    if (!selectedRow || !managerName.trim()) return;
+
+    const payload = {
+      // userId: selectedRow.id,
+      scanCode: 'q5flo6ahG9',
+      managerName: managerName.trim(),
+    };
+
+    const token = userInfo.jwtToken;
+
+    try {
+      const response = await axios.post(
+        'https://rhino-api-dyq7j.ondigitalocean.app/Parts/unloadInPast',
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log('Manager assigned successfully:', response.data);
+      handleClose();
+    } catch (error) {
+      console.error('API error:', error.response?.data || error.message);
+    }
+  };
 
   console.log(`The formated version of ${price} is ${USDollar.format(price)}`);
   // The formated version of 14340 is $14,340.00
@@ -217,6 +279,9 @@ function GetReports() {
   console.log('1');
   const dates = ['15.01.2024', '25.01.2024'];
   console.log(dates);
+
+  const { userInfo } = state;
+  console.log(userInfo.jwtToken);
 
   // const handleSelect = (ranges) => {
   //   let arr = [];
@@ -277,7 +342,20 @@ function GetReports() {
                 : { ...row, routeItemVeh: '' } //  row.id === name ? { ...row, defect: true } : row
           );
           console.log(checkedValue);
-          setData(checkedValue);
+
+          const checkedValue2 = checkedValue.map((row) => {
+            const isEmpty = (value) =>
+              value === null || value === '' || value === '0001-01-01T00:00:00';
+
+            const allFieldsEmpty =
+              isEmpty(row.lastInventory) &&
+              isEmpty(row.routeListManagerName) &&
+              isEmpty(row.routeListDate) &&
+              isEmpty(row.routeItemVeh);
+
+            return allFieldsEmpty ? { ...row, test: '233' } : { ...row };
+          });
+          setData(checkedValue2);
 
           const someVal = res.data.reportItemsModel
             .map((row) => {
@@ -352,6 +430,7 @@ function GetReports() {
           //   (value, index, current_value) => current_value.indexOf(value) === index
           // );
           console.log(efectiveManager);
+          console.log(data);
 
           // const raw = efectiveManager.map((row) => {
           //   if (row.routeListManagerName === '') {
@@ -606,6 +685,7 @@ function GetReports() {
       return value[value2] ? ++value[value2] : (value[value2] = 1), value;
     }, {});
   console.log(test);
+  console.log(data);
 
   for (const property in test) {
     console.log(`${property}: ${test[property]}`);
@@ -636,6 +716,36 @@ function GetReports() {
   useEffect(() => {
     solded(sold);
   }, [sold]);
+
+  console.log(data);
+
+  const checkedValue2 = data.map((row) => {
+    const isEmpty = (value) =>
+      value === null || value === '' || value === '0001-01-01T00:00:00';
+
+    const allFieldsEmpty =
+      isEmpty(row.lastInventory) &&
+      isEmpty(row.routeListManagerName) &&
+      isEmpty(row.routeListDate) &&
+      isEmpty(row.routeItemVeh);
+
+    return allFieldsEmpty ? { ...row, test: '233' } : { ...row };
+  });
+  // setData(checkedValue2);
+
+  // const checkedValue2 = data.map(
+  //   (row) =>
+  //     row.lastInvetory
+  //       ? {
+  //           // ...row,
+  //           // routeItemVeh: row.routeItem?.vehicleName,
+  //           // date: new Date(row.routeListDate).toLocaleDateString(),
+  //           // date3: new Date(row.routeListDate),
+  //         }
+  //       : { ...row, test: '233' } //  row.id === name ? { ...row, defect: true } : row
+  // );
+  console.log(checkedValue2);
+  // setData(checkedValue);
 
   function handleOnInput(e) {}
 
@@ -708,7 +818,7 @@ function GetReports() {
     {
       field: 'vehicle',
       headerName: 'Машина',
-      width: 140,
+      width: 130,
       headerAlign: 'left',
       editable: true,
       // flex: 1,
@@ -724,7 +834,7 @@ function GetReports() {
       field: 'name',
       headerName: 'Назва',
       // style: fontSize: '16px',
-      width: 180,
+      width: 150,
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
@@ -810,7 +920,7 @@ function GetReports() {
     {
       field: 'rhinoID',
       headerName: 'Ріно ID',
-      width: 90,
+      width: 80,
       // editable: true,
       renderCell: (params) => {
         return (
@@ -894,7 +1004,7 @@ function GetReports() {
       field: 'scanCode',
       headerName: 'ScanCode',
       //   headerAlign: 'center',
-      width: 92,
+      width: 80,
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
@@ -1026,7 +1136,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 90,
+      width: 80,
     },
 
     {
@@ -1047,6 +1157,61 @@ function GetReports() {
       // flex: 1,
       width: 115,
     },
+    // {
+    //   field: 'test',
+    //   headerName: 'Продаж',
+    //   size: 'small',
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.test && (
+    //           <div>
+    //             <button onClick={() => setModalActive(true)}>Продаж</button>
+    //           </div>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
+
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 80,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.test && (
+              <div>
+                <newButton
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleViewClick(params.row)}
+                >
+                  Продаж
+                </newButton>
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+
+    // {
+    //   field: 'scanCode',
+    //   headerName: 'ScanCode',
+    //   //   headerAlign: 'center',
+    //   width: 92,
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className={`size ${params.row.printed ? 'styled' : ''}`}>
+    //         {params.row.scanCode}
+    //       </div>
+    //     );
+    //   },
+    // },
+
     // {
     //   field: 'routeListManagerName',
     //   headerName: 'Менеджер',
@@ -1209,6 +1374,8 @@ function GetReports() {
     // (params) => params.row.details[0].name,
   ];
 
+  console.log(data);
+
   return (
     <>
       {!done ? (
@@ -1228,6 +1395,7 @@ function GetReports() {
               {/* <button onClick={getDocumentsFromList}>Get reports</button> */}
               <div className="mb-3">
                 <Button type="printAll">Надрукувати все</Button>
+
                 <div className="mt-3">
                   <h6>
                     Продано: {sold}% ({USDollar.format(soldMoney)})
@@ -1312,6 +1480,8 @@ function GetReports() {
                     },
                   }}
                 >
+                  <Modal active={modalActive} setActive={setModalActive} />
+
                   <DataGridPro
                     getRowHeight={() => 'auto'}
                     getEstimatedRowHeight={() => 200}
@@ -1452,7 +1622,43 @@ function GetReports() {
                     disableDensitySelector
                     disableColumnSelector
                   />
+                  {/* <Dialog open={Boolean(selectedRow)} onClose={handleClose}>
+                    <DialogTitle>User Details</DialogTitle>
+                    <DialogContent>
+                      {selectedRow && (
+                        <>
+                          <Typography>Name: {selectedRow.name}</Typography>
+                          <Typography>Age: {selectedRow.age}</Typography>
+                        </>
+                      )}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Close</Button>
+                    </DialogActions>
+                  </Dialog> */}
+                  <Dialog open={Boolean(selectedRow)} onClose={handleClose}>
+                    <DialogTitle>Assign Manager</DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Manager Name"
+                        type="text"
+                        fullWidth
+                        value={managerName}
+                        onChange={(e) => setManagerName(e.target.value)}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Cancel</Button>
+                      <Button onClick={handleSubmit} variant="contained">
+                        Submit
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Box>
+                {/* <Modal active={modalActive} setActive={setModalActive} /> */}
+
                 <div className="mt-2 mb-2">
                   {/* <h6>
                     Загальна вартість завезеного товару:{' '}

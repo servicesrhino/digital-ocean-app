@@ -1637,12 +1637,12 @@ function GetReports() {
                     </DialogActions>
                   </Dialog> */}
                   <Dialog open={Boolean(selectedRow)} onClose={handleClose}>
-                    <DialogTitle>Assign Manager</DialogTitle>
+                    <DialogTitle>Визначити менеджера</DialogTitle>
                     <DialogContent>
                       <TextField
                         autoFocus
                         margin="dense"
-                        label="Manager Name"
+                        label="Ім'я менеджера"
                         type="text"
                         fullWidth
                         value={managerName}
@@ -1650,9 +1650,9 @@ function GetReports() {
                       />
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
+                      <Button onClick={handleClose}>Відмінити</Button>
                       <Button onClick={handleSubmit} variant="contained">
-                        Submit
+                        Відправити
                       </Button>
                     </DialogActions>
                   </Dialog>

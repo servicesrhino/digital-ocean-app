@@ -1647,6 +1647,7 @@ function GetReports() {
                         fullWidth
                         value={managerName}
                         onChange={(e) => setManagerName(e.target.value)}
+                        inputProps={{ maxLength: 15 }}
                       />
                     </DialogContent>
                     <DialogActions>

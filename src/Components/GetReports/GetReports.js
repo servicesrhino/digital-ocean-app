@@ -1672,7 +1672,7 @@ function GetReports() {
                         helperText={
                           managerNameError
                             ? 'Manager name is required'
-                            : 'Max 10 characters'
+                            : 'Max 15 characters'
                         }
                       />
                       <TextField
@@ -1688,12 +1688,12 @@ function GetReports() {
                           setReasons(e.target.value);
                           if (reasonsError) setReasonsError(false); // clear error while typing
                         }}
-                        inputProps={{ maxLength: 20 }}
+                        inputProps={{ maxLength: 25 }}
                         error={reasonsError}
                         helperText={
                           reasonsError
                             ? 'Reasons is required'
-                            : 'Max 10 characters'
+                            : 'Max 25 characters'
                         }
                       />
                     </DialogContent>

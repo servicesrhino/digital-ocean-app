@@ -182,6 +182,8 @@ function GetReports() {
   const [soldMoney, setSoldMoney] = useState([]);
   const [unsoldMoney, setUnsoldMoney] = useState([]);
   const [modalActive, setModalActive] = useState(false);
+  const [managerNameError, setManagerNameError] = useState(false);
+  const [reasonsError, setReasonsError] = useState(false);
 
   // const {state} = useContext(Store)
 
@@ -194,10 +196,12 @@ function GetReports() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [managerName, setManagerName] = useState('');
+  const [reasons, setReasons] = useState('');
 
   const handleViewClick = (row) => {
     setSelectedRow(row);
     setManagerName(''); // reset input on each open
+    setReasons('');
   };
 
   const handleClose = () => {
@@ -212,12 +216,20 @@ function GetReports() {
     // console.log('Selected row:', selectedRow);
     // handleClose();
 
-    if (!selectedRow || !managerName.trim()) return;
+    if (!selectedRow || !managerName.trim()) {
+      setManagerNameError(true);
+      setReasonsError(true);
+      return;
+    }
+
+    setManagerNameError(false);
+    setReasonsError(false); // clear error if valid
 
     const payload = {
       // userId: selectedRow.id,
       scanCode: 'q5flo6ahG9',
       managerName: managerName.trim(),
+      reasons: reasons.trim(),
     };
 
     const token = userInfo.jwtToken;
@@ -232,12 +244,14 @@ function GetReports() {
           },
         }
       );
+      if (!response.ok) throw new Error('Failed to assign manager');
 
       console.log('Manager assigned successfully:', response.data);
       handleClose();
     } catch (error) {
       console.error('API error:', error.response?.data || error.message);
     }
+    handleClose();
   };
 
   console.log(`The formated version of ${price} is ${USDollar.format(price)}`);
@@ -1646,8 +1660,41 @@ function GetReports() {
                         type="text"
                         fullWidth
                         value={managerName}
-                        onChange={(e) => setManagerName(e.target.value)}
+                        // onChange={(e) => setManagerName(e.target.value)}
+                        // inputProps={{ maxLength: 15 }}
+                        // disabled={!managerName.trim()}
+                        onChange={(e) => {
+                          setManagerName(e.target.value);
+                          if (managerNameError) setManagerNameError(false); // clear error while typing
+                        }}
                         inputProps={{ maxLength: 15 }}
+                        error={managerNameError}
+                        helperText={
+                          managerNameError
+                            ? 'Manager name is required'
+                            : 'Max 10 characters'
+                        }
+                      />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Причини"
+                        type="text"
+                        fullWidth
+                        value={reasons}
+                        // onChange={(e) => setReasons(e.target.value)}
+                        // inputProps={{ maxLength: 15 }}
+                        onChange={(e) => {
+                          setReasons(e.target.value);
+                          if (reasonsError) setReasonsError(false); // clear error while typing
+                        }}
+                        inputProps={{ maxLength: 20 }}
+                        error={reasonsError}
+                        helperText={
+                          reasonsError
+                            ? 'Reasons is required'
+                            : 'Max 10 characters'
+                        }
                       />
                     </DialogContent>
                     <DialogActions>

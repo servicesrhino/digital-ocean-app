@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button as newButton,
+  // Button as newButton,
   Typography,
   TextField as newTextField,
 } from '@mui/material';
@@ -1169,7 +1169,7 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
-      width: 115,
+      width: 100,
     },
     // {
     //   field: 'test',
@@ -1192,19 +1192,29 @@ function GetReports() {
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 80,
+      width: 95,
       renderCell: (params) => {
         return (
           <div>
             {params.row.test && (
               <div>
-                <newButton
+                <Button
+                  // variant="contained"
+                  size="small"
+                  onClick={() => handleViewClick(params.row)}
+                  type="printAll"
+                >
+                  Продаж
+                </Button>
+                {/* <Button
+                  Button
+                  // type="printAll"
                   variant="contained"
                   size="small"
                   onClick={() => handleViewClick(params.row)}
                 >
                   Продаж
-                </newButton>
+                </Button> */}
               </div>
             )}
           </div>

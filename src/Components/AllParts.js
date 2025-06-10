@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import $api from './http';
 import Sidebar from './Sidebar/Sidebar';
+import axios from 'axios';
 // import { Button } from '@mui/material';
 
 function AllParts() {
   const [allData, setAllData] = useState([]);
   const getParts = () => {
     try {
-      const res = $api
-        .get('https://rhino-api-alquo.ondigitalocean.app/Parts/all')
+      const res = axios
+        .post('https://rhino-api-dyq7j.ondigitalocean.app/Parts/all', {
+          page: 0, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
+          pageSize: 0,
+          searchTerm: 'фара',
+        })
         .then((res) => {
           const response = res.data;
           setAllData(response);
@@ -24,8 +29,12 @@ function AllParts() {
   useEffect(() => {
     const getParts = () => {
       try {
-        const res = $api
-          .get('https://rhino-api-alquo.ondigitalocean.app/Parts/all')
+        const res = axios
+          .post('https://rhino-api-alquo.ondigitalocean.app/Parts/all', {
+            page: 0, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
+            pageSize: 0,
+            searchTerm: 'фара',
+          })
           .then((res) => {
             const response = res.data;
             console.log(res.data);

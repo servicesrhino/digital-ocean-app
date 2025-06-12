@@ -33,7 +33,7 @@ function AllParts() {
     // { field: 'id', headerName: 'ID', width: 90 },
     {
       field: 'name',
-      headerName: 'name',
+      headerName: 'Назва',
       width: 200,
       editable: true,
     },
@@ -41,41 +41,43 @@ function AllParts() {
       field: 'rhinoID',
       headerName: 'rhinoID',
       width: 190,
+      type: 'number',
+
       editable: true,
     },
     {
       field: 'originalIDs',
       headerName: 'originalIDs',
       type: 'number',
-      width: 170,
+      width: 160,
       editable: true,
     },
     {
       field: 'qrCode',
       headerName: 'qrCode',
       type: 'number',
-      width: 110,
+      width: 120,
       editable: true,
     },
-    // {
-    //   field: 'defect',
-    //   headerName: 'defect',
-    //   type: 'number',
-    //   width: 110,
-    //   editable: true,
-    // },
+
     {
       field: 'status',
-      headerName: 'status',
+      headerName: 'Статус',
       type: 'number',
       width: 110,
       editable: true,
     },
     {
       field: 'location',
-      headerName: 'location',
+      headerName: 'Локація',
       type: 'number',
       width: 130,
+      editable: true,
+    },
+    {
+      field: 'routeItemVeh',
+      headerName: 'Машина',
+      width: 200,
       editable: true,
     },
     // {
@@ -110,7 +112,19 @@ function AllParts() {
         })
         .then((res) => {
           const response = res.data;
-          setAllData(response);
+          const checkedValue = res.data.map(
+            (row) =>
+              row.actions[0].item.vehicle
+                ? {
+                    ...row,
+                    routeItemVeh: row.actions[0].item.vehicle,
+                    date: new Date(row.routeListDate).toLocaleDateString(),
+                    date3: new Date(row.routeListDate),
+                  }
+                : { ...row, routeItemVeh: '' } //  row.id === name ? { ...row, defect: true } : row
+          );
+          console.log(checkedValue);
+          setAllData(checkedValue);
 
           console.log(res.data);
         });

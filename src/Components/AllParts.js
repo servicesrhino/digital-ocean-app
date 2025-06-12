@@ -30,24 +30,24 @@ function AllParts() {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    // { field: 'id', headerName: 'ID', width: 90 },
     {
       field: 'name',
       headerName: 'name',
-      width: 150,
+      width: 200,
       editable: true,
     },
     {
       field: 'rhinoID',
       headerName: 'rhinoID',
-      width: 150,
+      width: 190,
       editable: true,
     },
     {
       field: 'originalIDs',
       headerName: 'originalIDs',
       type: 'number',
-      width: 110,
+      width: 170,
       editable: true,
     },
     {
@@ -75,7 +75,7 @@ function AllParts() {
       field: 'location',
       headerName: 'location',
       type: 'number',
-      width: 110,
+      width: 130,
       editable: true,
     },
     // {
@@ -169,6 +169,18 @@ function AllParts() {
           <DataGridPro
             rows={allData}
             columns={columns}
+            sx={{
+              '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
+                py: '8px',
+              },
+              '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
+                py: '15px',
+              },
+              '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
+                py: '22px',
+              },
+            }}
+            className="dataGrid"
             slots={{ toolbar: CustomToolbar }}
             slotProps={{
               toolbar: {
@@ -217,12 +229,14 @@ function AllParts() {
               const input = model.quickFilterValues?.join(' ') || '';
               setQuickFilter(input);
             }}
-            checkboxSelection
+            // checkboxSelection
             disableRowSelectionOnClick
             pageSizeOptions={[5]}
             // checkboxSelection
             // disableRowSelectionOnClick
             disableColumnResize
+            disableColumnMenu
+            // disabledC
           />
         </div>
       </div>

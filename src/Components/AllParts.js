@@ -7,27 +7,89 @@ import axios from 'axios';
 import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 import { Button as Button2, Box } from '@mui/material';
 // import { Button } from '@mui/material';
+import { TextField } from '@mui/material';
 
 import { GridToolbarQuickFilter } from '@mui/x-data-grid-pro';
 // import { Box } from '@mui/material';
+
+// const CustomToolbar = ({ quickFilter, setQuickFilter }) => {
+//   return (
+//     <Box sx={{ display: 'flex', justifyContent: 'flex-start', p: 1 }}>
+//       <TextField
+//         variant="outlined"
+//         size="small"
+//         placeholder="Search..."
+//         value={quickFilter}
+//         onChange={(e) => setQuickFilter(e.target.value)}
+//         sx={{ width: 300 }}
+//       />
+//     </Box>
+//   );
+// };
+
+const CustomToolbar = (props) => {
+  const { quickFilter, setQuickFilter } = props;
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'flex-start', p: 1 }}>
+      <TextField
+        variant="outlined"
+        size="small"
+        placeholder="Search..."
+        value={quickFilter}
+        onChange={(e) => setQuickFilter(e.target.value)}
+        sx={{ width: 300 }}
+      />
+    </Box>
+  );
+};
 
 function AllParts() {
   const [allData, setAllData] = useState([]);
   const [quickFilter, setQuickFilter] = useState('');
 
-  const CustomToolbar = () => {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-start', // 👈 aligns to the left
-          p: 1,
-        }}
-      >
-        <GridToolbarQuickFilter debounceMs={500} />
-      </Box>
-    );
-  };
+  // const CustomToolbar = () => {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         display: 'flex',
+  //         justifyContent: 'flex-start', // 👈 aligns to the left
+  //         p: 1,
+  //       }}
+  //     >
+  //       <GridToolbarQuickFilter debounceMs={500} />
+  //     </Box>
+  //   );
+  // };
+
+  // const CustomToolbar = React.useMemo(() => {
+  //   return () => (
+  //     <Box sx={{ display: 'flex', justifyContent: 'flex-start', p: 1 }}>
+  //       <TextField
+  //         variant="outlined"
+  //         size="small"
+  //         placeholder="Search..."
+  //         value={quickFilter}
+  //         onChange={(e) => setQuickFilter(e.target.value)}
+  //         sx={{ width: 300 }}
+  //       />
+  //     </Box>
+  //   );
+  // }, [quickFilter]);
+
+  // const CustomToolbar = () => {
+  //   return (
+  //     <Box sx={{ display: 'flex', justifyContent: 'flex-start', p: 1 }}>
+  //       <TextField
+  //         variant="outlined"
+  //         size="small"
+  //         placeholder="Search..."
+  //         value={quickFilter}
+  //         onChange={(e) => setQuickFilter(e.target.value)}
+  //         sx={{ width: 300 }}
+  //       />
+  //     </Box>
+  //   );
+  // };
 
   const columns = [
     // { field: 'id', headerName: 'ID', width: 90 },
@@ -91,18 +153,11 @@ function AllParts() {
     // },
   ];
 
-  // const rows = [
-  //   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-  //   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-  //   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-  //   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-  //   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  //   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  //   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  //   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  //   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  // ];
   const getParts = (searchTerm) => {
+    // if (searchTerm.length < 4) {
+    //   console.warn('Search term too short. Minimum 4 characters required.');
+    //   return;
+    // }
     try {
       const res = axios
         .post('https://rhino-api-dyq7j.ondigitalocean.app/Parts/all', {
@@ -113,10 +168,11 @@ function AllParts() {
         .then((res) => {
           const response = res.data;
           const checkedValue = res.data.map(
-            (row) =>
+            (row, index) =>
               row.actions[0].item.vehicle
                 ? {
                     ...row,
+                    id: row.id || index,
                     routeItemVeh: row.actions[0].item.vehicle,
                     date: new Date(row.routeListDate).toLocaleDateString(),
                     date3: new Date(row.routeListDate),
@@ -132,6 +188,22 @@ function AllParts() {
       console.log(error);
     }
   };
+
+  // useEffect(() => {
+  //   const delay = setTimeout(() => {
+  //     getParts(quickFilter.trim().slice(0, 50)); // allow empty string, but still limit max length
+  //   }, 500); // debounce
+
+  //   return () => clearTimeout(delay);
+  // }, [quickFilter]);
+
+  // useEffect(() => {
+  //   const delay = setTimeout(() => {
+  //     getParts(quickFilter.trim().slice(0, 50));
+  //   }, 500);
+
+  //   return () => clearTimeout(delay);
+  // }, [quickFilter]);
 
   // useEffect(() => {
   //   const getParts = () => {
@@ -163,6 +235,10 @@ function AllParts() {
   //   return () => clearTimeout(delayDebounce);
   // }, [quickFilter]);
 
+  const handleGetParts = () => {
+    getParts(quickFilter.trim().slice(0, 50));
+  };
+
   return (
     <div className="app">
       <div className="app__body">
@@ -172,11 +248,7 @@ function AllParts() {
             {/* <Button onClick={getParts}>Get parts</Button> */}
           </div>
 
-          <Button2
-            variant="contained"
-            onClick={() => getParts(quickFilter)}
-            sx={{ mb: 2 }}
-          >
+          <Button2 variant="contained" onClick={handleGetParts} sx={{ mb: 2 }}>
             Get parts
           </Button2>
 
@@ -197,11 +269,16 @@ function AllParts() {
             className="dataGrid"
             slots={{ toolbar: CustomToolbar }}
             slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-                quickFilterProps: { debounceMs: 0 },
-              },
+              toolbar: { quickFilter, setQuickFilter },
             }}
+            // slotProps={{
+            //   toolbar: {
+            //     toolbar: { quickFilter, setQuickFilter },
+            //     // showQuickFilter: true,
+            //     // quickFilterProps: { debounceMs: 0 },
+            //   },
+            // }}
+
             // components={{ Toolbar: GridToolbar }}
             // componentsProps={{
             //   toolbar: {
@@ -239,10 +316,12 @@ function AllParts() {
             //   const input = model.quickFilterValues?.[0] || '';
             //   setQuickFilter(input);
             // }}
-            onFilterModelChange={(model) => {
-              const input = model.quickFilterValues?.join(' ') || '';
-              setQuickFilter(input);
-            }}
+
+            // onFilterModelChange={(model) => {
+            //   const input = model.quickFilterValues?.join(' ') || '';
+            //   setQuickFilter(input);
+            // }}
+
             // checkboxSelection
             disableRowSelectionOnClick
             pageSizeOptions={[5]}

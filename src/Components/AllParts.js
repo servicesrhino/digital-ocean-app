@@ -235,9 +235,32 @@ function AllParts() {
   //   return () => clearTimeout(delayDebounce);
   // }, [quickFilter]);
 
+  // const handleGetParts = () => {
+  //   getParts(quickFilter.trim().slice(0, 50));
+  // };
+
   const handleGetParts = () => {
-    getParts(quickFilter.trim().slice(0, 50));
+    const trimmed = quickFilter.trim();
+
+    if (trimmed.length < 4 && trimmed.length !== 0) {
+      alert('Введите хотя бы 4 символа для поиска.');
+      return;
+    }
+
+    getParts(trimmed.slice(0, 50));
   };
+
+  // useEffect(() => {
+  //   const trimmed = quickFilter.trim();
+
+  //   if (trimmed.length < 4 && trimmed.length !== 0) return;
+
+  //   const delay = setTimeout(() => {
+  //     getParts(trimmed.slice(0, 50));
+  //   }, 500); // debounce
+
+  //   return () => clearTimeout(delay);
+  // }, [quickFilter]);
 
   return (
     <div className="app">

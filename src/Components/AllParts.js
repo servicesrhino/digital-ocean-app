@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button as Button2, Box, TextField } from '@mui/material';
 import axios from 'axios';
 import Sidebar from './Sidebar/Sidebar';
@@ -6,7 +6,7 @@ import { DataGridPro } from '@mui/x-data-grid-pro';
 
 function AllParts() {
   const [allData, setAllData] = useState([]);
-  const [quickFilter, setQuickFilter] = useState('');
+  const inputRef = useRef(null); // Reference to the input field
 
   const columns = [
     { field: 'routeItemVeh', headerName: 'Машина', width: 200 },
@@ -33,7 +33,7 @@ function AllParts() {
       .post('https://rhino-api-dyq7j.ondigitalocean.app/Parts/all', {
         page: 0,
         pageSize: 0,
-        searchTerm: searchTerm,
+        searchTerm,
       })
       .then((res) => {
         const processed = res.data.map((row, index) =>
@@ -53,12 +53,11 @@ function AllParts() {
   };
 
   const handleGetParts = () => {
-    const trimmed = quickFilter.trim();
+    const trimmed = inputRef.current?.value.trim() || '';
     if (trimmed.length < 4 && trimmed.length !== 0) {
       alert('Введите хотя бы 4 символа для поиска.');
       return;
     }
-
     getParts(trimmed);
   };
 
@@ -68,13 +67,17 @@ function AllParts() {
         <Sidebar />
         <div className="app__other">
           <Box display="flex" gap={2} alignItems="center" mb={2}>
-            <TextField
-              variant="outlined"
-              size="small"
+            <input
+              ref={inputRef}
+              type="text"
               placeholder="Search..."
-              value={quickFilter}
-              onChange={(e) => setQuickFilter(e.target.value)}
-              sx={{ width: 300 }}
+              style={{
+                padding: '8px',
+                fontSize: '14px',
+                width: '300px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+              }}
             />
             <Button2 variant="contained" onClick={handleGetParts}>
               Get parts

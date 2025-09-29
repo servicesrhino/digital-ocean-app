@@ -27,6 +27,7 @@ import GetReports from './Components/GetReports/GetReports';
 import Inventorization from './Inventorization/Inventorization';
 import InventorizationDetails from './Inventorization/InventorizationDetails';
 import Modal from './Components/Modal/Modal';
+import Oblik from './Components/Oblik/Oblik';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -145,6 +146,7 @@ function App() {
               path="inventorization-details"
               element={<InventorizationDetails />}
             />
+            <Route path="oblik" element={<Oblik />} />
           </Routes>
         </Container>
       </main>

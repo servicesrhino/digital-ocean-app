@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 // import Oblik from './Oblik.css'
 import './Oblik.css';
 import axios from 'axios';
+import { Store } from '../../Store';
 
 function Oblik() {
-  const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjYzZjI0YzE3Y2EyZWYxNWMxNjM4ZTJhMyIsInJvbGUiOiJVc2VyIiwianRpIjoiMTA3MWNmOGItMTAyMS00YmZiLTkwZTctYTU4YmJkYzJlYzU0IiwiaWQiOiI2M2YyNGMxN2NhMmVmMTVjMTYzOGUyYTMiLCJuYmYiOjE3NTkxNjM2NjUsImV4cCI6MTc1OTE2Mzk2NSwiaWF0IjoxNzU5MTYzNjY1fQ.S5JePvpav_qm9VrJUDq2FOlFmfAd0SZsD748T0MbXBE`;
-
+  const [data, setData] = useState([]);
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+  const { jwtToken } = userInfo;
+  const token = jwtToken;
+  // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjYzZjI0YzE3Y2EyZWYxNWMxNjM4ZTJhMyIsInJvbGUiOiJVc2VyIiwianRpIjoiMTA3MWNmOGItMTAyMS00YmZiLTkwZTctYTU4YmJkYzJlYzU0IiwiaWQiOiI2M2YyNGMxN2NhMmVmMTVjMTYzOGUyYTMiLCJuYmYiOjE3NTkxNjM2NjUsImV4cCI6MTc1OTE2Mzk2NSwiaWF0IjoxNzU5MTYzNjY1fQ.S5JePvpav_qm9VrJUDq2FOlFmfAd0SZsD748T0MbXBE`;
+  console.log(jwtToken);
   const getData = async () => {
     try {
       const res = await axios.post(
@@ -19,10 +25,12 @@ function Oblik() {
         }
       );
       console.log(res.data);
+      setData(res.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+  console.log(data);
 
   return <button onClick={getData}>Oblik</button>;
 }

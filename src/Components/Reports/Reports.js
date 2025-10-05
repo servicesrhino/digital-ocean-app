@@ -49,8 +49,8 @@ function Reports() {
   };
 
   return (
-    <div className="app2">
-      <div className="app__body">
+    <div className="app4">
+      <div className="app__body4">
         <Sidebar />
         <div className="app__other mx-4">
           <h1>Отримати звіти</h1>

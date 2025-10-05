@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-// import Oblik from './Oblik.css'
 import './Oblik.css';
 import axios from 'axios';
 import { Store } from '../../Store';
+import Sidebar from '../Sidebar/Sidebar';
+import { Col, Row, Table } from 'react-bootstrap';
 
 function Oblik() {
   const [data, setData] = useState([]);
@@ -32,7 +33,38 @@ function Oblik() {
   };
   console.log(data);
 
-  return <button onClick={getData}>Oblik</button>;
+  return (
+    <div className="app2">
+      <div className="app__body">
+        <Sidebar />
+        <div className="app__other mx-4">
+          <h1>Облік</h1>
+          <button onClick={getData}>Отримати дані</button>
+          <div className="mt-3 ml-3">
+            <Row>
+              <Col>
+                <Table hover bordered className="border">
+                  <thead>
+                    <tr>
+                      <th>Менеджер</th>
+                      {/* <th>12333</th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Oblik;

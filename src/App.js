@@ -28,6 +28,7 @@ import Inventorization from './Inventorization/Inventorization';
 import InventorizationDetails from './Inventorization/InventorizationDetails';
 import Modal from './Components/Modal/Modal';
 import Oblik from './Components/Oblik/Oblik';
+import Kontragents from './Components/Kontragents/Kontragents';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -147,6 +148,7 @@ function App() {
               element={<InventorizationDetails />}
             />
             <Route path="oblik" element={<Oblik />} />
+            <Route path="kontragents" element={<Kontragents />} />
           </Routes>
         </Container>
       </main>

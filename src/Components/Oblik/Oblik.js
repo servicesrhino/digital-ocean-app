@@ -4,10 +4,12 @@ import axios from 'axios';
 import { Store } from '../../Store';
 import Sidebar from '../Sidebar/Sidebar';
 import { Col, Row, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Oblik() {
+  // const {state, dispatch} = useContext(Store)
   const [data, setData] = useState([]);
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const { jwtToken } = userInfo;
   const token = jwtToken;
@@ -33,6 +35,15 @@ function Oblik() {
   };
   console.log(data);
 
+  const getData2 = async (e, info) => {
+    try {
+      console.log(info);
+      ctxDispatch({ type: 'GET_FOR_OBLIK', payload: info });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="app2">
       <div className="app__body">
@@ -53,7 +64,9 @@ function Oblik() {
                   <tbody>
                     {data.map((item, index) => (
                       <tr key={index}>
-                        <td>{item}</td>
+                        <td onClick={(e) => getData2(e, item)}>
+                          <Link to="/oblik2">{item}</Link>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

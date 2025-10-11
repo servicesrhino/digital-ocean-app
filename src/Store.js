@@ -11,11 +11,12 @@ const initialState = {
   lastDocumentsFromList: [],
   inventoryId: [],
   inventoryId2: [],
+  oblik: [],
 
   id: '',
   rhinoID: '',
   isAuth: false,
-  jwtToken: '',
+  jwtToken: [],
   refreshToken: '',
 
   // cart: {
@@ -36,6 +37,9 @@ function reducer(state, action) {
       return { ...state, category: action.payload };
     case 'GET_LAST_DOCUMENTS_FROM_LIST':
       return { ...state, lastDocumentsFromList: action.payload };
+    case 'GET_FOR_OBLIK':
+      return { ...state, oblik: action.payload };
+
     case 'GET_INVENTORY_DETAILS':
       return { ...state, inventoryId: action.payload };
     case 'GET_INVENTORY_DETAILS2':

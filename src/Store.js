@@ -12,6 +12,7 @@ const initialState = {
   inventoryId: [],
   inventoryId2: [],
   oblik: [],
+  month: [],
 
   id: '',
   rhinoID: '',
@@ -39,6 +40,8 @@ function reducer(state, action) {
       return { ...state, lastDocumentsFromList: action.payload };
     case 'GET_FOR_OBLIK':
       return { ...state, oblik: action.payload };
+    case 'GET_MONTH':
+      return { ...state, month: action.payload };
 
     case 'GET_INVENTORY_DETAILS':
       return { ...state, inventoryId: action.payload };

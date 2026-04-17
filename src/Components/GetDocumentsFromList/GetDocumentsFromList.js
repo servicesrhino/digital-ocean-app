@@ -15,7 +15,7 @@ import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 import { LicenseInfo } from '@mui/x-license';
 
 LicenseInfo.setLicenseKey(
-  '907c77a4e512fb294259232fff989342Tz0xMDgyMTIsRT0xNzcxNjMxOTk5MDAwLFM9cHJvLExNPXN1YnNjcmlwdGlvbixQVj1RMy0yMDI0LEtWPTI='
+  '098919564072b5983286dc144fb661a0Tz0xMjgzNzcsRT0xODA4MDkyNzk5MDAwLFM9cHJvLExNPWFubnVhbCxQVj1RMS0yMDI2LFE9MSxBVD1zaW5nbGUsS1Y9Mg=='
 );
 
 function GetDocumentsFromList() {

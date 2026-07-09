@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './GetLastDocuments.css';
-import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import { Store } from '../../Store';
+import $api from '../http';
 
 function GetLastDocuments() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // const [documentId, setDocumentID] = useState('');
   // const [sheetId, setSheetID] = useState('');
@@ -18,54 +21,26 @@ function GetLastDocuments() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
 
   const getData = async () => {
+    setLoading(true);
     try {
-      const res = axios
-        .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-documents-list'
-        )
-        .then((res) => {
-          console.log(res.data);
-          const newData = res.data.map((row) => {
-            return {
-              ...row,
-              // created: data.map((item) => item.created),
-              created: row.created.slice(0, row.created.indexOf('T')),
-            };
-          });
-          setData(newData);
-        });
+      const { data: rows } = await $api.post(
+        '/GoogleSheet/get-last-documents-list'
+      );
+      setData(
+        rows.map((row) => ({
+          ...row,
+          created: row.created.slice(0, row.created.indexOf('T')),
+        }))
+      );
     } catch (error) {
-      console.log(error);
+      toast.error('Не вдалося отримати останні документи');
+    } finally {
+      setLoading(false);
     }
   };
-  console.log(data.map((item) => new Date(item.created).getMonth()));
-  console.log(data.map((item) => new Date(item.created).getUTCFullYear()));
-  console.log(data.map((item) => new Date(item.created).getDay()));
-
-  let text = '2024-02-14T14:01:44.613Z';
-  let result = text.indexOf('T');
-  console.log(text.slice(0, result));
-
-  const newData = data.map((row) => {
-    return {
-      ...row,
-      // created: data.map((item) => item.created),
-      created: row.created.slice(0, row.created.indexOf('T')),
-    };
-  });
-
-  console.log(newData);
-  // setData(newData);
 
   const getDocumentsFromList = async (e, info) => {
     try {
-      // const result = axios.post(
-      //   'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
-      //   {
-      //     documentId: documentId,
-      //     sheetId: sheetId,
-      //   }
-      // );
       console.log(info);
       ctxDispatch({ type: 'GET_LAST_DOCUMENTS_FROM_LIST', payload: info });
     } catch (error) {
@@ -86,7 +61,18 @@ function GetLastDocuments() {
         <div className="app__other mx-4">
           <h1>Отримати останні дані по документу</h1>
           <div>
-            <Button onClick={getData}>Отримати останні дані</Button>
+            <Button onClick={getData} disabled={loading}>
+              Отримати останні дані
+            </Button>
+            {loading && (
+              <ReactLoading
+                className="d-inline-block ms-2"
+                type="spin"
+                color="green"
+                height={24}
+                width={24}
+              />
+            )}
           </div>
           <div className="mt-3 ml-3">
             <Row>

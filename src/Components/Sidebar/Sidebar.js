@@ -24,6 +24,9 @@ function Sidebar() {
           <Link to="/inventorization">Переучеты</Link>
         </div>
         <div className="link">
+          <Link to="/edit-income">Редагувати приходи</Link>
+        </div>
+        <div className="link">
           <Link to="/reports">Звіти</Link>
         </div>
         <div className="link">

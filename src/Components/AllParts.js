@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button as Button2, Box, TextField } from '@mui/material';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
+import $api from './http';
 import Sidebar from './Sidebar/Sidebar';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 
 function AllParts() {
   const [allData, setAllData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef(null); // Reference to the input field
 
   const columns = [
@@ -23,33 +26,36 @@ function AllParts() {
     { field: 'location', headerName: 'Локація', width: 130, type: 'number' },
   ];
 
-  const getParts = (searchTerm) => {
+  const getParts = async (searchTerm) => {
     if (searchTerm.length < 4 && searchTerm.length !== 0) {
       alert('Введите хотя бы 4 символа для поиска.');
       return;
     }
 
-    axios
-      .post('https://rhino-api-dyq7j.ondigitalocean.app/Parts/all', {
+    setLoading(true);
+    try {
+      const { data } = await $api.post('/Parts/all', {
         page: 0,
         pageSize: 0,
         searchTerm,
-      })
-      .then((res) => {
-        const processed = res.data.map((row, index) =>
-          row.actions?.[0]?.item?.vehicle
-            ? {
-                ...row,
-                id: row.id || index,
-                routeItemVeh: row.actions[0].item.vehicle,
-                date: new Date(row.routeListDate).toLocaleDateString(),
-                date3: new Date(row.routeListDate),
-              }
-            : { ...row, id: row.id || index, routeItemVeh: '' }
-        );
-        setAllData(processed);
-      })
-      .catch(console.error);
+      });
+      const processed = data.map((row, index) =>
+        row.actions?.[0]?.item?.vehicle
+          ? {
+              ...row,
+              id: row.id || index,
+              routeItemVeh: row.actions[0].item.vehicle,
+              date: new Date(row.routeListDate).toLocaleDateString(),
+              date3: new Date(row.routeListDate),
+            }
+          : { ...row, id: row.id || index, routeItemVeh: '' }
+      );
+      setAllData(processed);
+    } catch (error) {
+      toast.error('Не удалось загрузить список деталей');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGetParts = () => {
@@ -79,9 +85,12 @@ function AllParts() {
                 borderRadius: '4px',
               }}
             />
-            <Button2 variant="contained" onClick={handleGetParts}>
+            <Button2 variant="contained" onClick={handleGetParts} disabled={loading}>
               Get parts
             </Button2>
+            {loading && (
+              <ReactLoading type="spin" color="green" height={24} width={24} />
+            )}
           </Box>
 
           <DataGridPro

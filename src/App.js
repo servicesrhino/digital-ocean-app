@@ -1,16 +1,15 @@
 import './App.css';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './Components/Home';
-import ParseExcel from './Components/ParseExcel';
 import { Container, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 import { Store } from './Store';
 import BarcodeGen from './Components/BarcodeGen';
 import AllParts from './Components/AllParts';
-import axios from 'axios';
+import $api, { cleanToken } from './Components/http';
 import GetDocuments from './Components/GetDocuments/GetDocuments';
 
 import GetDocumentsPrint from './Components/GetDocumentsPrint/GetDocumentsPrint';
@@ -30,41 +29,25 @@ import Modal from './Components/Modal/Modal';
 import Oblik from './Components/Oblik/Oblik';
 import Kontragents from './Components/Kontragents/Kontragents';
 import Oblik2 from './Components/Oblik2/Oblik2';
+import EditIncomeList from './Components/EditIncome/EditIncomeList';
+import EditIncomeItems from './Components/EditIncome/EditIncomeItems';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
-  const navigate = useNavigate();
   const [modalActive, setModalActive] = useState(true);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    //const newToken = token.replace(/['"«»]/g, '');
-
-    const token2 = localStorage.getItem('refreshToken');
-    //const newToken2 = token2.replace(/['"«»]/g, '');
     try {
-      const response = await axios
-        .post(
-          `https://rhino-api-alquo.ondigitalocean.app/Users/refresh-token`,
-          {
-            token: token,
-            //password,
-            refreshToken: token2,
-            udid: 'test67',
-            //parentId: '',
-          }
-        )
-        .then((res) => {
-          const response = res.data;
-          localStorage.setItem('token', response.jwtToken);
-          ctxDispatch({ type: 'IS_AUTH' });
-          console.log(isAuth);
-
-          console.log(response);
-        });
+      const { data } = await $api.post('/Users/refresh-token', {
+        token: cleanToken(localStorage.getItem('token')),
+        refreshToken: cleanToken(localStorage.getItem('refreshToken')),
+        udid: 'test67',
+      });
+      localStorage.setItem('token', data.jwtToken);
+      ctxDispatch({ type: 'IS_AUTH' });
     } catch (e) {
-      // console.log(e.response.data.message);
+      // refresh failed — leave the user as-is, the next authenticated request will 401 normally
     }
   };
 
@@ -72,20 +55,8 @@ function App() {
     if (localStorage.getItem('token')) {
       checkAuth();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-
-    navigate('/');
-  };
-
-  // setTimeout(function () {
-  //   localStorage.removeItem('userInfo');
-  // }, 480 * 1000);
 
   return (
     <div className="app">
@@ -151,6 +122,8 @@ function App() {
             <Route path="oblik" element={<Oblik />} />
             <Route path="kontragents" element={<Kontragents />} />
             <Route path="oblik2" element={<Oblik2 />} />
+            <Route path="/edit-income" element={<EditIncomeList />} />
+            <Route path="/edit-income-items" element={<EditIncomeItems />} />
           </Routes>
         </Container>
       </main>

@@ -1,44 +1,49 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import { Col, Row, Table } from 'react-bootstrap';
 import './Inventorization.css';
 import { Link } from 'react-router-dom';
 import { Store } from '../Store';
+import $api from '../Components/http';
 
 const Inventorization = () => {
   const [data, setData] = useState([]);
   const [container, setContainer] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { state, dispatch: ctxDispatch } = useContext(Store);
 
-  const getData = () => {
-    const result = axios
-      .get('https://rhino-api-dyq7j.ondigitalocean.app/Inventory/gelList')
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-      });
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const { data: rows } = await $api.get('/Inventory/gelList');
+      setData(rows);
+    } catch (error) {
+      toast.error('Не вдалося отримати переобліки');
+    } finally {
+      setLoading(false);
+    }
   };
   // console.log('some:', data);
 
-  const data2 = (e, id) => {
-    const result2 = axios
-      .post(
-        'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-documents-list'
-      )
-      .then((res) => {
-        console.log(res.data);
-        const newData = res.data.map((doc) => {
-          return {
-            ...doc,
-            created: doc.created.slice(0, doc.created.indexOf('T')),
-            test: doc.documentId,
-            test2: id,
-          };
-        });
-        setContainer(newData);
-        ctxDispatch({ type: 'GET_INVENTORY_DETAILS2', payload: id });
-      });
+  const data2 = async (e, id) => {
+    try {
+      const { data: rows } = await $api.post(
+        '/GoogleSheet/get-last-documents-list'
+      );
+      setContainer(
+        rows.map((doc) => ({
+          ...doc,
+          created: doc.created.slice(0, doc.created.indexOf('T')),
+          test: doc.documentId,
+          test2: id,
+        }))
+      );
+      ctxDispatch({ type: 'GET_INVENTORY_DETAILS2', payload: id });
+    } catch (error) {
+      toast.error('Не вдалося отримати документи переобліку');
+    }
   };
 
   const some = (e, info) => {
@@ -62,9 +67,18 @@ const Inventorization = () => {
         <Sidebar />
         <div className="app__other">
           <div>
-            <button className="btn btn-primary" onClick={getData}>
+            <button className="btn btn-primary" onClick={getData} disabled={loading}>
               Переобліки
             </button>
+            {loading && (
+              <ReactLoading
+                className="d-inline-block ms-2"
+                type="spin"
+                color="green"
+                height={24}
+                width={24}
+              />
+            )}
 
             {data.status === 'open' ? (
               <button className="m-2">open</button>

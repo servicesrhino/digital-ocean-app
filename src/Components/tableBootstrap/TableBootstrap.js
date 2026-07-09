@@ -1,119 +1,28 @@
 import React, { useContext, useState } from 'react';
 import './TableBootstrap.css';
 import { Col, Row, Table } from 'react-bootstrap';
-import PrintedService from '../../services/PrintedService';
-import $api from '../http';
 import { Store } from '../../Store';
-import RemoveCheckService from '../../services/RemoveCheckService';
+import { usePrintableTable } from '../../hooks/usePrintableTable';
 
 function TableBootstrap(props) {
   const [data, setData] = useState([]);
 
   const tes2 =
     'https://docs.google.com/spreadsheets/d/1_j-WNAwx21E6XFeE2gs62eH5P2YdYASQmouMaR7dvmM';
-  const tes3 = '2020';
 
   const { state } = useContext(Store);
   const { lastDocumentsFromList } = state;
   console.log(lastDocumentsFromList);
 
-  // const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo, isAuth } = state;
-  let { printerUrl } = userInfo;
+  const { userInfo } = state;
 
-  const [styled, setStyled] = useState(false);
-
-  function handleChecked(e) {
-    //e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = RemoveCheckService.remove(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-    console.log(value);
-
-    setData(value);
-    //return value;
-  }
-
-  const newPrintFunc2 = async (e, item) => {
-    e.preventDefault();
-    try {
-      const res = $api
-        .post('https://rhino-api-alquo.ondigitalocean.app/Parts/print', {
-          documentId: tes2, // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
-          sheetId: '2020', // '2020',
-          barCode: item.id,
-        })
-        .then((res) => {
-          const response = res.data;
-          //setData(response);
-          console.log(res.data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const barcodeNew = async (e, item) => {
-    e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = PrintedService.handlePrinted(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-
-    setData(value);
-
-    try {
-      console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
-      );
-
-      await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-          item.name + ' ' + item.rhinoID
-        }`
-      ).then((res) => {
-        console.log(res.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    //newPrintFunc2();
-  };
-
-  const togle = (e, item) => {
-    e.preventDefault();
-    console.log(item);
-    console.log(data);
-    console.log(data.filter((el) => el.id === item.id));
-    const newVal = data.map((el) =>
-      el.id === item.id ? { ...el, togle: true } : { ...el }
-    );
-    console.log(newVal);
-    setStyled(!styled);
-    console.log(styled);
-    return newVal;
-  };
+  const { handleChecked, barcodeNew, newPrintFunc2, togle } =
+    usePrintableTable({
+      data,
+      setData,
+      printerUrl: userInfo.printerUrl,
+      documentId: tes2,
+    });
 
   return (
     <div>

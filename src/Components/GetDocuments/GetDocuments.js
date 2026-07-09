@@ -9,6 +9,8 @@ import {
   Table,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import $api from '../http';
 import Sidebar from '../Sidebar/Sidebar';
 import './GetDocuments.css';
@@ -16,15 +18,14 @@ import BarcodeGen from '../BarcodeGen';
 import { Store } from '../../Store';
 import axios from 'axios';
 import CheckedService from '../../services/CheckedService';
-import PrintedService from '../../services/PrintedService';
 import Checkbox from '../Checkbox/Checkbox';
-import RemoveCheckService from '../../services/RemoveCheckService';
+import { usePrintableTable } from '../../hooks/usePrintableTable';
 
 function GetDocuments() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
 
-  const [styled, setStyled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [urlID, setUrlID] = useState([]);
   //const [sheetID, setSheetID] = useState([])
@@ -36,12 +37,14 @@ function GetDocuments() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
-  let { printerUrl } = userInfo;
-  // printerUrl =
-  //   'http://desktop-an879b6/Integration/WebServiceIntegration/Execute';
 
-  // let userInfo.printerUrl = 'http://desktop-an879b6/Integration/WebServiceIntegration/Execute'
-  console.log(userInfo.printerUrl);
+  const { handleChecked, barcodeNew, newPrintFunc2, togle, printAll } =
+    usePrintableTable({
+      data,
+      setData,
+      printerUrl: userInfo.printerUrl,
+      documentId: tes2,
+    });
 
   const [documentID, setDocumentID] = useState('');
   const [sheetID, setSheetID] = useState('');
@@ -49,52 +52,17 @@ function GetDocuments() {
 
   const getDocument = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = $api
-        .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-documents',
-          {
-            documentId: tes2, // documentID // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
-            sheetId: tes3, // sheetID   // '2020',
-          }
-        )
-        .then((res) => {
-          const response = res.data;
-          setData(response);
-          console.log(res.data);
-        });
+      const { data: response } = await $api.post('/GoogleSheet/get-documents', {
+        documentId: tes2, // documentID // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
+        sheetId: tes3, // sheetID   // '2020',
+      });
+      setData(response);
     } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // useEffect(() => {
-  //   document.addEventListener('click', commit);
-
-  //   // return () => {
-  //   //   document.removeEventListener('click', commit);
-  //   // };
-  // }, [data]);
-
-  const commit = (event) => {
-    const { name, checked } = event.target;
-    //   console.log(name);
-    //   console.log(checked);
-
-    const value = RemoveCheckService.remove(name, checked, data);
-
-    const printed = data.map((row) =>
-      row.id === name ? { ...row, printed: checked } : { ...row }
-    );
-    setData(printed);
-    console.log(printed);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    console.log(value);
-
-    if (event.key === 'a') {
-      console.log('Enter key pressed', event.key);
+      toast.error('Не вдалося отримати документ');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,123 +84,14 @@ function GetDocuments() {
   //   handleChecked( e);
   // }, [, e]);
 
-  const getData4 = (item) => {
+  const getData4 = async (item) => {
     try {
-      const res = axios
-        .get(
-          `http://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
-        )
-        .then((res) => {
-          const response = res.data;
-          console.log(response);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const barcodeNew = async (e, item) => {
-    e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = PrintedService.handlePrinted(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-
-    setData(value);
-
-    try {
-      console.log(
-        '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
+      await axios.get(
+        `http://desktop-an879b6/Integration/WebServiceIntegration/Execute?id=${item.id}&veh=${item.vehicle}&name=${item.name}`
       );
-
-      await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-          item.name + ' ' + item.rhinoID
-        }`
-      ).then((res) => {
-        console.log(res.data);
-      });
     } catch (error) {
-      console.log(error);
+      toast.error('Не вдалося звернутися до принтера');
     }
-    //newPrintFunc2();
-  };
-
-  const printAll = async (e) => {
-    e.preventDefault();
-
-    // data.forEach(item => {
-    for (const item of data) {
-      //   const contents = await fs.readFile(file, 'utf8');
-      //     console.log(contents);
-
-      try {
-        console.log(
-          '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
-        );
-
-        await fetch(
-          `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-            item.name + ' ' + item.rhinoID
-          }`
-        ).then((res) => {
-          console.log(res.data);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-
-      await timer(1000);
-    }
-    // });
-
-    //newPrintFunc2();
-  };
-  function timer(ms) {
-    return new Promise((res) => setTimeout(res, ms));
-  }
-
-  const newPrintFunc2 = async (e, item) => {
-    e.preventDefault();
-    try {
-      const res = $api
-        .post('https://rhino-api-alquo.ondigitalocean.app/Parts/print', {
-          documentId: tes2, // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
-          sheetId: '2020', // '2020',
-          barCode: item.id,
-        })
-        .then((res) => {
-          const response = res.data;
-          //setData(response);
-          console.log(res.data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const togle = (e, item) => {
-    e.preventDefault();
-    console.log(item);
-    console.log(data);
-    console.log(data.filter((el) => el.id === item.id));
-    const newVal = data.map((el) =>
-      el.id === item.id ? { ...el, togle: true } : { ...el }
-    );
-    console.log(newVal);
-    setStyled(!styled);
-    console.log(styled);
-    return newVal;
   };
 
   const barcodeNew2 = async (e, item) => {
@@ -282,26 +141,6 @@ function GetDocuments() {
     //return <BarcodeGen id={item} />;
   };
 
-  function handleChecked(e) {
-    //e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = RemoveCheckService.remove(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-
-    setData(value);
-    //return value;
-  }
   console.log(data);
   // console.log(handleChecked);
 
@@ -338,7 +177,18 @@ function GetDocuments() {
                 />
               </FormGroup>
               <div className="mb-3">
-                <Button type="submit">Отримати дані по документу</Button>
+                <Button type="submit" disabled={loading}>
+                  Отримати дані по документу
+                </Button>
+                {loading && (
+                  <ReactLoading
+                    className="d-inline-block ms-2"
+                    type="spin"
+                    color="green"
+                    height={24}
+                    width={24}
+                  />
+                )}
               </div>
               <div className="mb-3">
                 <Button type="printAll" onClick={printAll}>

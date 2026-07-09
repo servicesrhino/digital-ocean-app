@@ -157,15 +157,10 @@ function Kontragents() {
     setLoading(true);
     setError(null);
     try {
-      // If $api has baseURL configured, prefer relative path:
-      // const res = await $api.post('/Counterparty/get-all', { page: 1, pageSize: 50 });
-      const res = await $api.post(
-        'https://rhino-api-dyq7j.ondigitalocean.app/Сounterparty/get-all',
-        {
-          page: 1,
-          pageSize: 50,
-        }
-      );
+      const res = await $api.post('/Counterparty/get-all', {
+        page: 1,
+        pageSize: 50,
+      });
       // Ensure the API returns an array. If it wraps, adjust accordingly (e.g., res.data.items)
       setData(Array.isArray(res.data) ? res.data : res.data?.items ?? []);
     } catch (err) {
@@ -224,10 +219,7 @@ function Kontragents() {
     setSubmitting(true);
     try {
       // 3) await the call
-      await $api.post(
-        'https://rhino-api-dyq7j.ondigitalocean.app/Сounterparty/add',
-        { name, phone, email, details }
-      );
+      await $api.post('/Counterparty/add', { name, phone, email, details });
 
       // refresh list (await so errors surface)
       await getKontragents();

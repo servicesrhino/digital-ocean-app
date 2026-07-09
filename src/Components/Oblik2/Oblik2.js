@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import { Store } from '../../Store';
 import $api from '../http';
 import Sidebar from '../Sidebar/Sidebar';
@@ -6,6 +8,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 function Oblik2() {
   const [data, setData] = useState([]);
+  const [done, setDone] = useState(undefined);
   const { state, oblik } = useContext(Store);
   const { userInfo } = state;
   const { jwtToken } = userInfo;
@@ -21,6 +24,7 @@ function Oblik2() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [
@@ -68,24 +72,32 @@ function Oblik2() {
 
   const getData = async () => {
     try {
-      const res = await $api.post(
-        `https://rhino-api-dyq7j.ondigitalocean.app/Reports/get-report-by-month`,
-        {
-          mounth: state.month,
-          managerName: state.oblik,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
+      const res = await $api.post('/Reports/get-report-by-month', {
+        mounth: state.month,
+        managerName: state.oblik,
+      });
       console.log(res.data);
       setData(res.data.reportItemsModel);
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Не вдалося отримати дані обліку');
+    } finally {
+      setDone(true);
+    }
   };
   console.log(data);
   // console.log(data.reportItemsModel);
+
+  if (!done) {
+    return (
+      <ReactLoading
+        className="flex justify-content-center align-items-center"
+        type="bars"
+        color="green"
+        height={200}
+        width={200}
+      />
+    );
+  }
 
   return (
     <div className="appss">

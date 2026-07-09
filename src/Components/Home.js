@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
-import $api from './http';
+import $api, { cleanToken } from './http';
 import './Home.css';
 import Sidebar from './Sidebar/Sidebar';
 
@@ -17,27 +17,6 @@ const Home = () => {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        'https://rhino-api-alquo.ondigitalocean.app/Users/sendPinCodeViaPhone',
-        {
-          phone,
-          password,
-          udid: 'test',
-        }
-      );
-      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      navigate('/parse-excel');
-      console.log(data);
-    } catch (err) {
-      //alert('Invalid email or password')
-      toast.error('Invalid email or password');
-    }
-  };
 
   const submitHandler2 = async (e) => {
     e.preventDefault();
@@ -110,11 +89,8 @@ const Home = () => {
   };
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    const newToken = token.replace(/['"«»]/g, '');
-
-    const token2 = localStorage.getItem('refreshToken');
-    const newToken2 = token2.replace(/['"«»]/g, '');
+    const newToken = cleanToken(localStorage.getItem('token'));
+    const newToken2 = cleanToken(localStorage.getItem('refreshToken'));
     const response2 = await $api
       .post(`/Users/refresh-token`, {
         token: newToken,

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Form, FormGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import $api from '../../http';
 import Sidebar from '../../Sidebar/Sidebar';
 import './AddRouteSheet.css';
@@ -12,55 +13,18 @@ function AddRouteSheet() {
   const getData = async (e) => {
     e.preventDefault();
     try {
-      const res = $api
-        .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/add-route-list',
-          {
-            documentID: documentID,
-            sheetID: sheetID,
-          }
-        )
-        .then((res) => {
-          const response = res.data;
-          //setData(res.data);
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          console.log(error.response.status);
-          if (error.response.status === 400) {
-            alert('Document already exist');
-          }
-        });
+      await $api.post('/GoogleSheet/add-route-list', {
+        documentID: documentID,
+        sheetID: sheetID,
+      });
     } catch (error) {
-      console.log(error);
+      if (error.response?.status === 400) {
+        toast.error('Document already exist');
+      } else {
+        toast.error('Не вдалося завантажити маршрутний лист');
+      }
     }
   };
-
-  // useEffect(() => {
-  //   const getData = () => {
-  //     try {
-  //       const res = $api
-  //         .post(
-  //           'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/add-route-list',
-  //           {
-  //             documentId: '1BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
-  //             sheetId: 'Sheet1',
-  //           }
-  //         )
-  //         .then((res) => {
-  //           const response = res.data;
-  //           console.log(res.data);
-  //           //setAllData(response);
-  //         });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getData();
-  // }, []);
 
   return (
     <div className="app">

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import $api from '../../http';
 import './GetLastRouteSheet.css';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import {
   Button,
   Col,
@@ -24,30 +25,28 @@ function GetLastRouteSheet() {
   const [final6, setFinal6] = useState([]);
   const [documentName, setDocumentName] = useState([]);
   const [targetDocName, setTargetDocName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getData = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = axios
-        .post(
-          // 'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-last-route-lists',
-          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-last-route-lists',
-
-          {
-            // documentId: 'BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
-            // sheetId: 'Sheet1',
-            //documentId: documentID,
-            // sheetId: sheetID,
+      const res = await $api.post(
+        '/GoogleSheet/get-last-route-lists',
+        {
+          // documentId: 'BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
+          // sheetId: 'Sheet1',
+          //documentId: documentID,
+          // sheetId: sheetID,
+        },
+        {
+          headers: {
+            Accept: '/',
           },
-          {
-            headers: {
-              Accept: '/',
-            },
-          }
-        )
-        .then((res) => {
-          const response = res.data;
-          setData(res.data);
+        }
+      );
+        const response = res.data;
+        setData(res.data);
           // navigate('/get-route-sheet-data');
           console.log(res.data);
 
@@ -143,10 +142,11 @@ function GetLastRouteSheet() {
             // res.data.map((item) => item.routeListItems.map((item) => item))
             res.data.map((item) => item.routeListItems)
           );
-        });
       // dataShow(final2);
     } catch (error) {
-      console.log(error);
+      toast.error('Не вдалося отримати маршрутні листи');
+    } finally {
+      setLoading(false);
     }
   };
   console.log(data);
@@ -539,9 +539,18 @@ function GetLastRouteSheet() {
         <Sidebar />
         <div className="app__other">
           <h1>Отримати останні дані по листу</h1>
-          <button className="mb-3" onClick={getData}>
+          <button className="mb-3" onClick={getData} disabled={loading}>
             Отримати останні данні
           </button>
+          {loading && (
+            <ReactLoading
+              className="d-inline-block ms-2"
+              type="spin"
+              color="green"
+              height={24}
+              width={24}
+            />
+          )}
 
           <p>
             {/* <form> */}

@@ -9,6 +9,8 @@ import {
   Table,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import $api from '../../http';
 import Sidebar from '../../Sidebar/Sidebar';
 import Getmodal from './Getmodal';
@@ -27,77 +29,54 @@ function GetRouteSheet() {
   const [final2, setFinal2] = useState([]);
   const [final4, setFinal4] = useState([]);
   const [final8, setFinal8] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getData = async (e) => {
     e.preventDefault();
-    try {
-      const res = $api
-        .post(
-          'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-route-list',
-          {
-            // documentId: 'BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
-            // sheetId: 'Sheet1',
-            documentId: documentID,
-            sheetId: sheetID,
-          }
-        )
-        .then((res) => {
-          const response = res.data;
-          setData(res.data);
-          // navigate('/get-route-sheet-data');
-          console.log(res.data);
-          console.log(res.data.id);
-          console.log(res.data.routeListItems);
-          //console.log(res.data.routeListItems.routeItems);
+    setLoading(true);
+    $api
+      .post('/GoogleSheet/get-route-list', {
+        // documentId: 'BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
+        // sheetId: 'Sheet1',
+        documentId: documentID,
+        sheetId: sheetID,
+      })
+      .then((res) => {
+        const response = res.data;
+        setData(res.data);
+        // navigate('/get-route-sheet-data');
+        console.log(res.data);
+        console.log(res.data.id);
+        console.log(res.data.routeListItems);
+        //console.log(res.data.routeListItems.routeItems);
 
-          // setRouteListItems(res.data.routeListItems);
-          setFinal(
-            Object.values(res.data.routeListItems).map(
-              (item) => item.managerName
-            )
-          );
-          setFinal2(
-            Object.values(res.data.routeListItems).map(
-              (item) => item.routeItems
-            )
-            //.flat()
-          );
-          setFinal4(
-            Object.values(res.data.routeListItems).map((item) => ({
-              length: item.routeItems.length,
-              manager: item.managerName,
-            }))
-          );
-        });
-      dataShow(final2);
-    } catch (error) {
-      console.log(error);
-    }
+        // setRouteListItems(res.data.routeListItems);
+        setFinal(
+          Object.values(res.data.routeListItems).map(
+            (item) => item.managerName
+          )
+        );
+        setFinal2(
+          Object.values(res.data.routeListItems).map(
+            (item) => item.routeItems
+          )
+          //.flat()
+        );
+        setFinal4(
+          Object.values(res.data.routeListItems).map((item) => ({
+            length: item.routeItems.length,
+            manager: item.managerName,
+          }))
+        );
+      })
+      .catch((error) => {
+        toast.error('Не вдалося отримати маршрутний лист');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    dataShow(final2);
   };
-
-  // useEffect(() => {
-  //   const getData = () => {
-  //     try {
-  //       const res = $api
-  //         .post(
-  //           'https://rhino-api-alquo.ondigitalocean.app/GoogleSheet/get-route-list',
-  //           {
-  //             documentId: '1BKOkLeHb-zF99JnZE8PtpTOa2UukgqpxjV6ske740qc',
-  //             sheetId: 'Sheet1',
-  //           }
-  //         )
-  //         .then((res) => {
-  //           const response = res.data;
-  //           console.log(res.data);
-  //           //setAllData(response);
-  //         });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getData();
-  // }, []);
 
   useEffect(() => {
     // 👇️ some condition here
@@ -406,7 +385,18 @@ function GetRouteSheet() {
                   />
                 </FormGroup>
                 <div className="mb-2">
-                  <Button type="submit">Відправити</Button>
+                  <Button type="submit" disabled={loading}>
+                    Відправити
+                  </Button>
+                  {loading && (
+                    <ReactLoading
+                      className="d-inline-block ms-2"
+                      type="spin"
+                      color="green"
+                      height={24}
+                      width={24}
+                    />
+                  )}
                 </div>
               </Form>
             </Container>

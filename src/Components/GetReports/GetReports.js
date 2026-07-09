@@ -1,7 +1,8 @@
 // import { Store } from '@mui/x-data-grid/utils/Store';
 import { useContext, useEffect, useState, useCallback } from 'react';
 import { Store } from '../../Store';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import $api from '../http';
 import { Box, MenuItem, TextField } from '@mui/material';
 import Sidebar from '../Sidebar/Sidebar';
 // import { Button } from 'bootstrap';
@@ -232,24 +233,11 @@ function GetReports() {
       reasons: reasons.trim(),
     };
 
-    const token = userInfo.jwtToken;
-
     try {
-      const response = await axios.post(
-        'https://rhino-api-dyq7j.ondigitalocean.app/Parts/unloadInPast',
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error('Failed to assign manager');
-
-      console.log('Manager assigned successfully:', response.data);
+      await $api.post('/Parts/unloadInPast', payload);
       handleClose();
     } catch (error) {
-      console.error('API error:', error.response?.data || error.message);
+      toast.error('Не вдалося призначити менеджера');
     }
     handleClose();
   };
@@ -294,9 +282,6 @@ function GetReports() {
   const dates = ['15.01.2024', '25.01.2024'];
   console.log(dates);
 
-  const { userInfo } = state;
-  console.log(userInfo.jwtToken);
-
   // const handleSelect = (ranges) => {
   //   let arr = [];
   //   let dateBegin = ranges.selection.startDate;
@@ -328,19 +313,15 @@ function GetReports() {
     // get reports data logic here
   }, []);
 
-  const getDocumentsFromList = useCallback(() => {
+  const getDocumentsFromList = useCallback(async () => {
     try {
-      const res = axios
-        .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/Reports/get-report-fromlist',
-          {
-            documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
-            sheetId: '2020',
-            page: 1,
-          }
-        )
-        .then((res) => {
-          console.log(res.data.reportItemsModel);
+      const res = await $api.post('/Reports/get-report-fromlist', {
+        documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
+        sheetId: '2020',
+        page: 1,
+      });
+      {
+        console.log(res.data.reportItemsModel);
           console.log(res.data);
           const length = res.data.reportItemsModel.length;
           // setData(res.data.reportItemsModel);
@@ -569,10 +550,11 @@ function GetReports() {
           setEfective(manager1);
           setEfectiveNum((percent[1] / newSold) * 100);
           // setData2(res.data);
-          setDone(true);
-        });
+      }
     } catch (error) {
-      console.log(error);
+      toast.error('Не вдалося отримати звіти');
+    } finally {
+      setDone(true);
     }
   }, [lastDocumentsFromList]);
   console.log(data);

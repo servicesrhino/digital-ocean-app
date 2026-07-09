@@ -1,8 +1,7 @@
 export default class RemoveCheckService {
   static remove(name, checked, data) {
-    const printed = data.map((row) =>
-      row.id === name ? { ...row, printed: false } : { ...row }
+    return data.map((row) =>
+      row.id === name ? { ...row, printed: checked } : { ...row }
     );
-    return printed;
   }
 }

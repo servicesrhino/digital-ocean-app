@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './GetDocumentsFromList.css';
-import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar';
 import { Button, Col, Row, Table } from 'react-bootstrap';
 import { Store } from '../../Store';
-import PrintedService from '../../services/PrintedService';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 import $api from '../http';
-import RemoveCheckService from '../../services/RemoveCheckService';
+import { usePrintableTable } from '../../hooks/usePrintableTable';
 import DataTable from '../dataTable/DataTable';
 // import { GridToolbar } from '@mui/x-data-grid';
 import TableBootstrap from '../tableBootstrap/TableBootstrap';
@@ -34,10 +34,16 @@ function GetDocumentsFromList() {
 
   // const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo, isAuth } = state;
-  let { printerUrl } = userInfo;
-  console.log('printerURL:', printerUrl);
 
-  const [styled, setStyled] = useState(false);
+  const [done, setDone] = useState(undefined);
+
+  const { handleChecked, barcodeNew, newPrintFunc2, togle, printAll } =
+    usePrintableTable({
+      data,
+      setData,
+      printerUrl: userInfo.printerUrl,
+      documentId: tes2,
+    });
 
   const actionColumn = {
     field: 'action',
@@ -254,386 +260,26 @@ function GetDocumentsFromList() {
   //   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   // ];
 
-  const togle = (e, item) => {
-    e.preventDefault();
-    console.log(item);
-    console.log(data);
-    console.log(data.filter((el) => el.id === item.id));
-    const newVal = data.map((el) =>
-      el.id === item.id ? { ...el, togle: true } : { ...el }
-    );
-    console.log(newVal);
-    setStyled(!styled);
-    console.log(styled);
-    return newVal;
-  };
-  const OnToggleMeHandler2 = () => {
-    console.log('handler');
-    //setStyled (styled => !styled);
-    //setStyled(!styled);
-    setStyled((styled) => (styled === 'true' ? 'false' : ''));
-    console.log('handler3');
-  };
-
-  const proxy = {
-    host: 'your-proxy-server.com',
-    port: 8080,
-  };
-
-  const testHttp = () => {
-    // Make HTTP request using proxy
-    axios
-      .get(`${printerUrl}`, { proxy })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  // const testHttp = () => {
-  //   const instance = axios.create({
-  //     protocol: 'http',
-  //   });
-
-  //   instance
-  //     .get('http://jsonplaceholder.typicode.com/todos/1')
-  //     .then((response) => {
-  //       const data = response.data;
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  // const httpProtocol = 'http://';
-
-  // const testHttp = () => {
-  //   axios
-  //     .get(`${httpProtocol}jsonplaceholder.typicode.com/todos/1`)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  // const testHttp = () => {
-  //   axios
-  //     .get('http://jsonplaceholder.typicode.com/todos/1')
-  //     .then((response) => {
-  //       const data = response.data;
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-
-  // };
-
-  const getDocumentsFromList = () => {
+  const getDocumentsFromList = async () => {
     try {
-      const res = axios
-        .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/GoogleSheet/get-documents-fromlist',
-          {
-            documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
-            sheetId: '2020',
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-          setData(res.data);
-          setData2(res.data);
-        });
+      const { data: rows } = await $api.post(
+        '/GoogleSheet/get-documents-fromlist',
+        {
+          documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
+          sheetId: '2020',
+        }
+      );
+      setData(rows);
+      setData2(rows);
     } catch (error) {
-      console.log(error);
+      toast.error('Не вдалося отримати дані з листа');
+    } finally {
+      setDone(true);
     }
   };
-  console.log(data);
   useEffect(() => {
     getDocumentsFromList();
   }, []);
-
-  // useEffect(() => {
-  //   document.addEventListener('click', commit);
-
-  //   // return () => {
-  //   //   document.removeEventListener('click', commit);
-  //   // };
-  // }, [data]);
-
-  const commit = (event) => {
-    const { name, checked } = event.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = RemoveCheckService.remove(name, checked, data);
-
-    const printed = data.map((row) =>
-      row.id === name ? { ...row, printed: checked } : { ...row }
-    );
-    setData(printed);
-    console.log(printed);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    console.log(value);
-
-    if (event.key === 'a') {
-      console.log('Enter key pressed', event.key);
-    }
-  };
-
-  const barcodeNew = async (e, item) => {
-    e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = PrintedService.handlePrinted(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-
-    setData(value);
-
-    try {
-      console.log(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-          item.name + item.rhinoID
-        }`
-      );
-
-      await fetch(
-        `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-          item.name + ' ' + item.rhinoID
-        }`,
-        {
-          // ...
-          referrerPolicy: 'unsafe-url',
-        }
-      ).then((res) => {
-        console.log(res.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    //newPrintFunc2();
-  };
-
-  const newPrintFunc2 = async (e, item) => {
-    e.preventDefault();
-    try {
-      const res = $api
-        .post('https://rhino-api-alquo.ondigitalocean.app/Parts/print', {
-          documentId: tes2, // '1FCiBDrLDD6wllgVLILHo8Z9hEFmMfPCJMPrrBQ7ITB0',
-          sheetId: '2020', // '2020',
-          barCode: item.id,
-        })
-        .then((res) => {
-          const response = res.data;
-          //setData(response);
-          console.log(res.data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  function handleChecked(e) {
-    //e.preventDefault();
-    const { name, checked } = e.target;
-    console.log(name);
-    console.log(checked);
-
-    const value = RemoveCheckService.remove(name, checked, data);
-    console.log(name);
-    console.log(checked);
-    console.log(data);
-    //setSheetData2(value);
-
-    // const checkedValue = data.map((row) =>
-    //   row.id === name ? { ...row, printed: true } : { ...row, printed: false }
-    // );
-    // console.log(checkedValue);
-    console.log(value);
-
-    setData(value);
-    //return value;
-  }
-
-  const printAll = async (e) => {
-    e.preventDefault();
-
-    try {
-      const printRequests = data.map((item) => {
-        // Ensure printerUrl doesn't have any protocol and force it to HTTP
-        const cleanPrinterUrl = userInfo.printerUrl.replace(/^https?:\/\//, '');
-        const printUrl = `http://${cleanPrinterUrl}?id=${encodeURIComponent(
-          item.id
-        )}&veh=${encodeURIComponent(item.vehicle)}&name=${encodeURIComponent(
-          item.name
-        )}%20${encodeURIComponent(item.rhinoID)}`;
-
-        return fetch(printUrl, {
-          referrerPolicy: 'unsafe-url',
-          mode: 'no-cors',
-          credentials: 'include',
-        }).then((res) => res.json().catch(() => null)); // Handle non-JSON responses safely
-      });
-
-      const responses = await Promise.all(printRequests);
-      console.log('Print responses:', responses);
-    } catch (error) {
-      console.error('Error printing documents:', error);
-    }
-  };
-
-  // const printAll = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const printRequests = data.map((item) => {
-  //       let printUrl = `http://${userInfo.printerUrl.replace(
-  //         /^https?:\/\//,
-  //         ''
-  //       )}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
-
-  //       return fetch(printUrl, {
-  //         referrerPolicy: 'unsafe-url',
-  //         mode: 'no-cors',
-  //         credentials: 'include',
-  //       }).then((res) => res.json().catch(() => null)); // Handle potential JSON parse errors
-  //     });
-
-  //     const responses = await Promise.all(printRequests);
-  //     console.log('Print responses:', responses);
-  //   } catch (error) {
-  //     console.error('Error printing documents:', error);
-  //   }
-  // };
-
-  // const printAll = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const printRequests = data.map((item) => {
-  //       let printUrl = `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
-
-  //       // Force HTTP by replacing 'https' with 'http'
-  //       if (printUrl.startsWith('https://')) {
-  //         printUrl = printUrl.replace('https://', 'http://');
-  //       }
-
-  //       return fetch(printUrl, {
-  //         referrerPolicy: 'unsafe-url',
-  //         mode: 'no-cors',
-  //         credentials: 'include',
-  //       }).then((res) => res.json());
-  //     });
-
-  //     const responses = await Promise.all(printRequests);
-  //     console.log('Print responses:', responses);
-  //   } catch (error) {
-  //     console.error('Error printing documents:', error);
-  //   }
-  // };
-
-  // const printAll = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const printRequests = data.map((item) => {
-  //       const printUrl = `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name} ${item.rhinoID}`;
-
-  //       return fetch(printUrl, {
-  //         referrerPolicy: 'unsafe-url',
-  //       }).then((res) => res.json()); // Assuming the response is JSON
-  //     });
-
-  //     const responses = await Promise.all(printRequests);
-  //     console.log('Print responses:', responses);
-  //   } catch (error) {
-  //     console.error('Error printing documents:', error);
-  //   }
-  // };
-
-  // const printAll = async (e) => {
-  //   e.preventDefault();
-
-  //   // data.forEach(item => {
-  //   for (const item of data) {
-  //     //   const contents = await fs.readFile(file, 'utf8');
-  //     //     console.log(contents);
-
-  //     try {
-  //       console.log(
-  //         '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}'
-  //       );
-  //       if (window.location.protocol == 'http:') {
-  //         console.log('You are not connected with a secure connection.');
-  //         console.log('Reloading the page to a Secure Connection...');
-  //         window.location = document.URL.replace('http://', 'https://');
-  //       }
-  //       await fetch(
-  //         `${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${
-  //           item.name + ' ' + item.rhinoID
-  //         }`,
-  //         {
-  //           // ...
-  //           referrerPolicy: 'unsafe-url',
-  //         }
-  //       ).then((res) => {
-  //         console.log(res.data);
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-
-  //     await timer(1000);
-  //   }
-  //   // });
-
-  //   //newPrintFunc2();
-  // };
-
-  const testing = async () => {
-    for (const item of data) {
-      try {
-        const res = axios
-          .get(
-            '${userInfo.printerUrl}?id=${item.id}&veh=${item.vehicle}&name=${item.name+item.rhinoID}',
-            {
-              // documentId: lastDocumentsFromList, // '1IWS5aNEnsJdPG7y2GxMZJkxSNP0wov1bhezsi6hWWx0',
-              // sheetId: '2020',
-            }
-          )
-          .then((res) => {
-            console.log(res.data);
-            // setData(res.data);
-            // setData2(res.data);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    await timer(1000);
-  };
-
-  function timer(ms) {
-    return new Promise((res) => setTimeout(res, ms));
-  }
 
   // useEffect(() => {
   //   filtration();
@@ -715,7 +361,17 @@ function GetDocumentsFromList() {
       getDocumentsFromList();
     }
   };
-  console.log(data);
+  if (!done) {
+    return (
+      <ReactLoading
+        className="flex justify-content-center align-items-center"
+        type="bars"
+        color="green"
+        height={200}
+        width={200}
+      />
+    );
+  }
 
   return (
     <div className="appss">
@@ -723,8 +379,6 @@ function GetDocumentsFromList() {
         <Sidebar />
         <div className="app__other">
           <h1>Отримати дані з листа</h1>
-          {/* <button onClick={getDocumentsFromList}>helo</button> */}
-          <div>{/* <button onClick={testHttp}>test me</button> */}</div>
           <div className="mb-3">
             <Button type="printAll" onClick={printAll}>
               Надрукувати все

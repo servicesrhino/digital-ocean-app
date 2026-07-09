@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import { Store } from '../Store';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import $api from '../Components/http';
 import { Box, MenuItem } from '@mui/material';
 // import { DataGrid } from '@mui/x-data-grid';
 import ReactLoading from 'react-loading';
@@ -219,33 +220,27 @@ const InventorizationDetails = () => {
     getData();
   }, []);
 
-  const getData = () => {
+  const getData = async () => {
     try {
-      const res = axios
-        .post(
-          'https://rhino-api-dyq7j.ondigitalocean.app/Inventory/get-result-fromlist',
-          {
-            documentId: inventoryId,
-            sheetId: '2020',
-            page: 0,
-            // inventoryId: '67a02a92df14d03d97cdec12',
-            inventoryId: inventoryId2,
-          }
-        )
-        .then((res) => {
-          // console.log(res.data.inventoryResultModel);
-          setData(res.data);
-
-          const changedData = res.data.inventoryResultModel.map((row) => ({
-            ...row,
-            date3: new Date(row.routeListDate).toLocaleDateString(),
-            id: uuidv4(),
-          }));
-          setData(changedData);
-
-          setDone(true);
-        });
-    } catch (error) {}
+      const res = await $api.post('/Inventory/get-result-fromlist', {
+        documentId: inventoryId,
+        sheetId: '2020',
+        page: 0,
+        // inventoryId: '67a02a92df14d03d97cdec12',
+        inventoryId: inventoryId2,
+      });
+      // console.log(res.data.inventoryResultModel);
+      const changedData = res.data.inventoryResultModel.map((row) => ({
+        ...row,
+        date3: new Date(row.routeListDate).toLocaleDateString(),
+        id: uuidv4(),
+      }));
+      setData(changedData);
+    } catch (error) {
+      toast.error('Не вдалося отримати результати переобліку');
+    } finally {
+      setDone(true);
+    }
   };
   // console.log(data);
   return (

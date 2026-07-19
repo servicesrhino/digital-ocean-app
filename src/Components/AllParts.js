@@ -22,8 +22,20 @@ function AllParts() {
       type: 'number',
     },
     { field: 'qrCode', headerName: 'qrCode', width: 120, type: 'number' },
-    { field: 'status', headerName: 'Статус', width: 110, type: 'number' },
-    { field: 'location', headerName: 'Локація', width: 130, type: 'number' },
+    {
+      field: 'status',
+      headerName: 'Статус',
+      width: 110,
+      type: 'number',
+      valueGetter: (value, row) => (row.status === 'unloaded' ? 'ПРОДАНО' : row.status),
+    },
+    {
+      field: 'location',
+      headerName: 'Локація',
+      width: 130,
+      type: 'number',
+      valueGetter: (value, row) => (row.status === 'unloaded' ? '' : row.location),
+    },
   ];
 
   const getParts = async (searchTerm) => {

@@ -812,6 +812,32 @@ function GetReports() {
     // },
   ];
 
+  // Full Продано/Повернено timeline for one physical item (row.history, built server-side
+  // in ReportsService.GetReportFromList) — a part can be sold, returned and resold multiple
+  // times, so this is the detail panel content behind the DataGrid's row-expand arrow.
+  const getDetailPanelContent = useCallback(({ row }) => {
+    if (!row.history || row.history.length === 0) {
+      return (
+        <Box sx={{ p: 2, fontSize: '13px' }}>
+          <em>Історії продаж/повернень немає</em>
+        </Box>
+      );
+    }
+    return (
+      <Box sx={{ p: 2, fontSize: '13px' }}>
+        {row.history.map((h, idx) => (
+          <div key={idx}>
+            {new Date(h.date).toLocaleDateString()} —{' '}
+            <b>{h.type}</b>
+            {h.label ? `: ${h.label}` : ''}
+          </div>
+        ))}
+      </Box>
+    );
+  }, []);
+
+  const getDetailPanelHeight = useCallback(() => 'auto', []);
+
   const columns = [
     {
       field: 'vehicle',
@@ -1449,7 +1475,7 @@ function GetReports() {
                   </h6>
                 </div>
                 <div>
-                  <Box>
+                  <Box sx={{ width: 'fit-content', maxWidth: '100%' }}>
                     <DataGridPro
                       width="510px"
                       className="dataGrid"
@@ -1478,6 +1504,8 @@ function GetReports() {
               <div>
                 <Box
                   sx={{
+                    width: 'fit-content',
+                    maxWidth: '100%',
                     '& .super-app-theme--cell': {
                       // backgroundColor: 'rgba(224, 183, 60, 0.55)',
                       // color: '#1a3e72',
@@ -1516,6 +1544,8 @@ function GetReports() {
                       ...columns,
                       // { field: 'scanCode2', filterable: true },
                     ]}
+                    getDetailPanelContent={getDetailPanelContent}
+                    getDetailPanelHeight={getDetailPanelHeight}
                     initialState={{
                       // ...data.initialState,
                       // filter: {

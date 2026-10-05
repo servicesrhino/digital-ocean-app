@@ -69,6 +69,7 @@ const config2 = {
     // 'ldljfkdj',
     'Назва транспорту',
     'Менеджер',
+    'Повернено',
   ],
   keys2: [
     'vehicle',
@@ -83,6 +84,7 @@ const config2 = {
     // 'vehicle',
     'routeItemVeh',
     'routeListManagerName',
+    'returnedInfo',
   ],
   fileName: 'reports.xlsx',
   sheetName: 'Reports Info',
@@ -1151,6 +1153,13 @@ function GetReports() {
       size: 'small',
       cellClassName: 'super-app-theme--cell',
       // flex: 1,
+      width: 100,
+    },
+    {
+      field: 'returnedInfo',
+      headerName: 'Повернено',
+      size: 'small',
+      cellClassName: 'super-app-theme--cell',
       width: 100,
     },
     // {

@@ -389,7 +389,7 @@ function GetReports() {
           // let some = [];
           const some = res.data.reportItemsModel
             .map((row) => {
-              return row.incomePrice;
+              return row.stockPrice;
             })
             .reduce((total, val) => (total += val), 0);
           // const someFin = some.map((row) =>
@@ -1445,7 +1445,7 @@ function GetReports() {
                 </div>
                 <div className="mt-2">
                   <h6>
-                    Залишилось на складі: {100 - sold}% (
+                    Залишилось на складі: {(100 - parseFloat(sold)).toFixed(1)}% (
                     {USDollar.format(unsoldMoney)})
                   </h6>
                 </div>

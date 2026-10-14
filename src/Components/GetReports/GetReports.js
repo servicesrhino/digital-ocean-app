@@ -812,6 +812,12 @@ function GetReports() {
     // },
   ];
 
+  // Money columns come back as raw numbers (165, 45.82, 0) — always show 2 decimal places.
+  const formatMoney = (value) => {
+    const num = Number(value);
+    return Number.isFinite(num) ? num.toFixed(2) : value;
+  };
+
   // Full Продано/Повернено timeline for one physical item (row.history, built server-side
   // in ReportsService.GetReportFromList) — a part can be sold, returned and resold multiple
   // times, so this is the detail panel content behind the DataGrid's row-expand arrow.
@@ -963,7 +969,7 @@ function GetReports() {
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.stockPrice}
+            {formatMoney(params.row.stockPrice)}
           </div>
         );
       },
@@ -976,7 +982,7 @@ function GetReports() {
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.incomePrice}
+            {formatMoney(params.row.incomePrice)}
           </div>
         );
       },
@@ -990,7 +996,7 @@ function GetReports() {
       renderCell: (params) => {
         return (
           <div className={`size ${params.row.printed ? 'styled' : ''}`}>
-            {params.row.priceWithDepreciation}
+            {formatMoney(params.row.priceWithDepreciation)}
           </div>
         );
       },

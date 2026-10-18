@@ -389,7 +389,7 @@ function GetReports() {
           // let some = [];
           const some = res.data.reportItemsModel
             .map((row) => {
-              return row.stockPrice;
+              return row.incomePrice;
             })
             .reduce((total, val) => (total += val), 0);
           // const someFin = some.map((row) =>

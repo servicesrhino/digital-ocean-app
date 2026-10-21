@@ -366,7 +366,7 @@ function GetReports() {
           const someVal2 = res.data.reportItemsModel
             .map((row) => {
               if (row.routeListManagerName) {
-                return row.stockPrice;
+                return row.incomePrice;
               }
             })
             .filter((row) => row !== undefined)
@@ -378,7 +378,7 @@ function GetReports() {
           const unsoldMoney = res.data.reportItemsModel
             .map((row) => {
               if (!row.routeListManagerName) {
-                return row.stockPrice;
+                return row.incomePrice;
               }
             })
             .filter((row) => row !== undefined)
@@ -417,7 +417,7 @@ function GetReports() {
               ) {
                 return {
                   name: row.routeListManagerName,
-                  price: row.stockPrice,
+                  price: row.incomePrice,
                 };
               }
               return;
